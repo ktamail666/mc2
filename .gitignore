@@ -1,5 +1,6 @@
 .ccls-cache/
 tags
+install/*
 CMakeCache.txt
 out/
 bin/

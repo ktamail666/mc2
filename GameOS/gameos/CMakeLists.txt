@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.10)
 project(gameos)
 
-set(SOURCES ${SOURCES}
+add_library(gameos
     gameos.cpp
     gameos_graphics.cpp
     gameos_res.cpp
@@ -25,15 +25,12 @@ set(SOURCES ${SOURCES}
     utils/timing.cpp
     utils/string_utils.cpp
     utils/file_utils.cpp
+)
+target_include_directories(gameos PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../include ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_library(gameos_main gameosmain.cpp)
+target_include_directories(gameos_main PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../include ${CMAKE_CURRENT_SOURCE_DIR})
+
+target_link_libraries(gameos PRIVATE
+    SDL2::SDL2
     )
-
-set(MAIN_SRC gameosmain.cpp)
-
-#find_package(SDL2 REQUIRED PATHS "/opt" NO_DEFAULT_PATH)
-#include_directories("${SDL2_PREFIX}/include")
-
-include_directories("../include"  ".")
-
-add_library(gameos ${SOURCES})
-add_library(gameos_main ${MAIN_SRC})
-
