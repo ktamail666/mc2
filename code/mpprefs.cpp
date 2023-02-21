@@ -79,7 +79,7 @@ int MPPrefs::init( FitIniFile& file )
 		FitIniFile tmpFile;
 		FullPathFileName path;
 		path.init( artPath, blockName, ".fit" );
-		
+
 		if ( NO_ERR != tmpFile.open( path ) )
 		{
 			char error[256];
@@ -108,7 +108,7 @@ int MPPrefs::init( FitIniFile& file )
 
 
 	comboBox[2].EditBox().setReadOnly(true);
-	
+
 
 	camera.init( rects[2].left(), rects[2].top(), rects[2].right(), rects[2].bottom() );
 
@@ -144,7 +144,7 @@ void MPPrefs::begin()
 	{
 		if ( strlen( prefs.unitName[i] ) )
 		{
-			
+
 			comboBox[1].AddItem( prefs.unitName[i], 0xffffffff );
 		}
 		else
@@ -162,7 +162,7 @@ void MPPrefs::begin()
 	sprintf(findString,"%s*.tga",path2insignia);
 
 	WIN32_FIND_DATA	findResult;
-	HANDLE searchHandle = FindFirstFile(findString,&findResult); 
+	HANDLE searchHandle = FindFirstFile(findString,&findResult);
 	do
 	{
 		// 24 or 32 bit files
@@ -196,7 +196,7 @@ void MPPrefs::begin()
 	{
 		comboBox[2].SelectItem( 0 );
 	}
-	
+
 
 	MC2Player* player = MPlayer->getPlayerInfo( MPlayer->commanderID );
 	long mySeniority = player->teamSeniority;
@@ -225,14 +225,14 @@ void MPPrefs::begin()
 		getButton( MP_PREFS_STRIPE )->press( 0 );
 	}
 
-	
 
 
-	camera.setMech( "Bushwacker", MPlayer->colors[player->baseColor[BASECOLOR_SELF]], 
+
+	camera.setMech( "Bushwacker", MPlayer->colors[player->baseColor[BASECOLOR_SELF]],
 						MPlayer->colors[player->stripeColor], MPlayer->colors[player->stripeColor] );
 
 	camera.zoomIn( 1.5 );
-									
+
 
 
 }
@@ -249,7 +249,7 @@ void MPPrefs::update()
 	MC2Player* player = MPlayer->getPlayerInfo( MPlayer->commanderID );
 	long mySeniority = player->teamSeniority;
 	bool bMostSenior = true;
-	
+
 	long playerCount;
 	const MC2Player* players = MPlayer->getPlayers(playerCount);
 	for( int i = 0; i < playerCount; i++ )
@@ -266,7 +266,7 @@ void MPPrefs::update()
 	}
 	else
 		getButton( MP_PREFS_BASE )->disable( false );
-	
+
 
 	if ( !ChatWindow::instance()->pointInside(userInput->getMouseX(), userInput->getMouseY()) )
 		LogisticsScreen::update();
@@ -283,7 +283,7 @@ void MPPrefs::update()
 		}
 		comboBox[i].update();
 
-		
+
 	}
 	int newSel = comboBox[2].GetSelectedItem();
 
@@ -298,7 +298,7 @@ void MPPrefs::update()
 
 		MPlayer->sendPlayerUpdate( 0, 5, -1 );
 
-	
+
 		FullPathFileName path;
 		path.init( path2insignia, pName, ".tga" );
 		insigniaBmp.setTexture( path );
@@ -337,17 +337,17 @@ void MPPrefs::update()
 
 
 				break;
-	
+
 			}
-		}			
+		}
 	}
 
 	if ( MPlayer && ChatWindow::instance() )
 		ChatWindow::instance()->update();
 
-	
 
- 
+
+
 
 }
 
@@ -361,10 +361,10 @@ void MPPrefs::setColor( unsigned long color )
 		{
 			soundSystem->playDigitalSample(LOG_WRONGBUTTON);
 			return;
-			
+
 		}
 	}
-					
+
 	//GD:MPlayer->setPlayerBaseColor( MPlayer->commanderID, getColorIndex( color ) );
 	MC2Player* player = MPlayer->getPlayerInfo( MPlayer->commanderID );
 	player->baseColor[BASECOLOR_PREFERENCE] = getColorIndex(color);
@@ -418,7 +418,7 @@ void MPPrefs::updateBaseColors( const MC2Player* players, long playerCount, bool
 							drawEmptyRect( rect, 0xffffffff, 0xffffffff );
 						break;
 					}
-				}					
+				}
 			}
 			else
 			{
@@ -432,15 +432,15 @@ void MPPrefs::updateBaseColors( const MC2Player* players, long playerCount, bool
 					}
 				}
 			}
-		}	
+		}
 	}
 
 	MC2Player* pInfo = MPlayer->getPlayerInfo( MPlayer->commanderID );
 
 	rects[BASE_RECT].setColor(  MPlayer->colors[pInfo->baseColor[BASECOLOR_PREFERENCE]] );
 
-	
-	
+
+
 }
 
 void MPPrefs::updateStripeColors(const MC2Player* players, long playerCount, bool bDrawRect)
@@ -462,9 +462,9 @@ void MPPrefs::updateStripeColors(const MC2Player* players, long playerCount, boo
 							drawEmptyRect( rect, 0xffffffff, 0xffffffff );
 						break;
 					}
-				}					
+				}
 			}
-		}	
+		}
 	}
 
 	MC2Player* pInfo = MPlayer->getPlayerInfo( MPlayer->commanderID );
@@ -485,9 +485,9 @@ void MPPrefs ::render(int OffsetX, int OffsetY )
 
 		for ( int i = 0; i < 3; i++ )
 		{
-			if ( !comboBox[i].ListBox().isShowing() )			
+			if ( !comboBox[i].ListBox().isShowing() )
 				comboBox[i].render();
-			else 
+			else
 				pObject = &comboBox[i];
 		}
 
@@ -569,10 +569,10 @@ void MPPrefs::saveSettings()
 	{
 		prefs.setNewName( txt );
 	}
-	
+
 	MC2Player* pInfo = MPlayer->getPlayerInfo( MPlayer->commanderID );
 
-	strcpy( pInfo->name, txt );
+	strncpy( pInfo->name, txt, strlen(txt));
 
 	// check and see if name has changed
 	comboBox[1].EditBox().getEntry( txt );
@@ -583,7 +583,9 @@ void MPPrefs::saveSettings()
 	}
 
 	if ( txt )
-		strcpy( pInfo->unitName, txt );
+	{
+		strncpy( pInfo->unitName, txt, strlen(txt) );
+	}
 
 
 	// colors should already be updated by now
@@ -595,8 +597,8 @@ void MPPrefs::saveSettings()
 		if ( pItem )
 		{
 			const char* pName = pItem->getBmp();
-			strcpy( prefs.insigniaFile, pName );
-			strcpy( pInfo->insigniaFile, pName );
+			strncpy( prefs.insigniaFile, pName, strlen(pName));
+			strncpy( pInfo->insigniaFile, pName, strlen(pName));
 		}
 	}
 
@@ -617,15 +619,12 @@ void MPPrefs::saveSettings()
 void MPPrefs::cancelSettings()
 {
 	MC2Player* pInfo = MPlayer->getPlayerInfo( MPlayer->commanderID );
-	strcpy( pInfo->name, prefs.playerName[0] );
-
-	strcpy( pInfo->unitName, prefs.unitName[0] );
-	strcpy( pInfo->insigniaFile, prefs.insigniaFile );
+	strncpy( pInfo->name, prefs.playerName[0], strlen(prefs.unitName[0]));
+	strncpy( pInfo->unitName, prefs.unitName[0], strlen(prefs.unitName[0]));
+	strncpy( pInfo->insigniaFile, prefs.insigniaFile, strlen(prefs.insigniaFile));
 
 	MPlayer->sendPlayerUpdate( 0, 5, -1 );
 	prefs.save();
-
-
 }
 
 void MPPrefs::initColors()
@@ -658,13 +657,13 @@ int aBmpListItem::setBmp( const char* pFileName )
 		return 0;
 
 	file.close();
-		
+
 	bmp.moveTo( 2, 2 );
 	bmp.resize( 32, 32 );
 	bmp.setTexture( path );
 	bmp.setUVs( 0, 0, 32, 32 );
 	bmp.setColor( 0xffffffff );
-	
+
 	resize( 64, 36 );
 
 	addChild( &bmp );

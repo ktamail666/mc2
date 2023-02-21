@@ -17,7 +17,7 @@ class gosAudio {
             audio->mix_chunk_.allocated = 0;
             audio->mix_chunk_.abuf = pdata;
             audio->mix_chunk_.alen = size;
-            audio->mix_chunk_.volume = 50; // just something default 
+            audio->mix_chunk_.volume = 50; // just something default
             return audio;
         }
 
@@ -54,7 +54,7 @@ class gosAudio {
 class SoundEngine {
 
     public:
-        SoundEngine():frequency_(0), format_(0), channels_(0), chunksize_(0), is_initialized_(false) {} 
+        SoundEngine():frequency_(0), format_(0), channels_(0), chunksize_(0), is_initialized_(false) {}
         bool init(int frequency, bool b_fmt_16_bit, bool b_fmt_signed, bool b_stereo);
         void destroy();
 
@@ -143,12 +143,12 @@ bool SoundEngine::init(int frequency, bool b_fmt_16_bit, bool b_fmt_signed, bool
         int audio_channels;
         int audio_buffers = chunksize_;
 
-        Mix_QuerySpec(&audio_rate, &audio_format, &audio_channels);             
+        Mix_QuerySpec(&audio_rate, &audio_format, &audio_channels);
         printf("Opened audio at %d Hz %d bit %s (%s), %d bytes audio buffer\n", audio_rate,
-                (audio_format&0xFF),                                                
+                (audio_format&0xFF),
                 (audio_channels > 2) ? "surround" : (audio_channels > 1) ? "stereo" : "mono",
-                (audio_format&0x1000) ? "Big-Endian" : "Little-Endian",                                
-                audio_buffers);  
+                (audio_format&0x1000) ? "Big-Endian" : "Little-Endian",
+                audio_buffers);
     }
 
     int num_allocated_chanels = Mix_AllocateChannels(NUM_CHANNELS);
@@ -472,7 +472,7 @@ void __stdcall gosAudio_SetChannelSlider( int Channel, enum gosAudio_Properties 
             ci->fPanning = value1; // -1 ... +1
             // TODO: looks like panning sets level of volume in channels (like max. posssible)
             // so if we set Panning(0,0) and then changes volume, we will not hear anyting!
-            // probably we need to uodate panning each time we set volume...  
+            // probably we need to uodate panning each time we set volume...
             // like check dwProperties if panning property allocated and then do our dirty stuff
             /*
             uint8_t cur_volume = (uint8_t)(2*ci->fVolume * MAX_VOLUME);
@@ -540,7 +540,7 @@ void __stdcall gosAudio_SetChannelPlayMode( int Channel, enum gosAudio_PlayMode 
             if(audio) {
                 int loops = ci->ePlayMode == gosAudio_Loop  ? -1 : 0;
                 Mix_PlayChannel(Channel, &audio->mix_chunk_, loops);
-                printf("Mix_PlayChannel(%d)\n", Channel);
+                //printf("Mix_PlayChannel(%d)\n", Channel); // DEBUG ONLY
             }
             break;
         }

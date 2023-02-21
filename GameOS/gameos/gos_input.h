@@ -1,5 +1,6 @@
-#ifndef GOS_INPUT_H
-#define GOS_INPUT_H
+#pragma once
+
+#include <SDL2/SDL.h>
 
 namespace input {
 
@@ -48,5 +49,3 @@ void updateKeyboardState();
 void resetKeypress();
 
 }
-
-#endif //GOS_INPUT_H

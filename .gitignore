@@ -1,12 +1,13 @@
+.cache
 .ccls-cache/
 tags
+install/*
 CMakeCache.txt
 out/
 bin/
 build*/
 .clangd/
 *.exe
-*.cmake
 Makefile
 CMakeFiles/
 .vscode/
@@ -14,6 +15,7 @@ CMakeFiles/
 *.swp
 *.dll
 *.exe
+.vs
 *.cfg
 *.tga
 Editor

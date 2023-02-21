@@ -8,6 +8,7 @@
 
 #ifndef PLATFORM_WINDOWS
 #include <sys/statvfs.h> // statvfs
+
 #else
 #include <Shlobj.h> // SHGetFolderPath
 #include <Objbase.h> // CoTaskMemFree

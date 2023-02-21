@@ -48,7 +48,7 @@ typedef struct
 	BYTE			Size;						// Size of block (note pools are always <64K)
 #endif
 #ifdef _DEBUG
-	DOUBLE			dTimeStamp;					// at what time was the block alloc'd
+	double			dTimeStamp;					// at what time was the block alloc'd
 	DWORD			pContext[0];				// we'll allocate the right size based on gMemoryStackWalkLevel
 #endif
 } SMALLPOOLBLOCK;
@@ -62,7 +62,7 @@ typedef struct
 	WORD			Size;						// Size of block (note pools are always <64K)
 #endif
 #ifdef _DEBUG
-	DOUBLE			dTimeStamp;					// at what time was the block alloc'd
+	double			dTimeStamp;					// at what time was the block alloc'd
 	DWORD			pContext[0];				// we'll allocate the right size based on gMemoryStackWalkLevel
 #endif
 } POOLBLOCK;
@@ -77,7 +77,7 @@ typedef struct _LARGEBLOCK
 	_LARGEBLOCKHEADER*	pNext;					// Pointer to next large memory block
 	BYTE				Heap;
 #ifdef _DEBUG
-	DOUBLE				dTimeStamp;				// at what time was the block alloc'd
+	double				dTimeStamp;				// at what time was the block alloc'd
 	DWORD				pContext[0];			// we'll allocate the right size based on gMemoryStackWalkLevel
 #endif
 } LARGEBLOCK;

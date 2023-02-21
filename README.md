@@ -2,7 +2,7 @@
 [website](https://alariq.github.io/mc2-website/)
 
  ## !NB: as russia conducts war in Ukraine I have no time to support this project until we will get rid of orcs. You are encouraged to help.
- 
+
 
 Disclaimer: I consider this project finished for now, there is a lot more to do for someone who wants to improve the game, but all functionality (except networking) is implemented and I've passed the game on my Linux box. Also found original game bugs and crashes are fixed.
 
@@ -12,7 +12,7 @@ Currently game can be run on both Linux and Windows in 64bit mode.
 Fixed a lot of bugs (including ones present in original game).
 Sound system is not fully implemented (panning, doppler, etc. not supported yet)
 
-## TODO: 
+## TODO:
 * fix remaining memory leaks (finish implementation of memory heaps)
 * make nice data packs, so not only me can play the game :-) (in progress, see [data repo](https://github.com/alariq/mc2srcdata)
 * ~~actually finish all missions in the game~~
@@ -32,70 +32,14 @@ My code is licenced under GPL v.3 (see license.txt)
 Building on Windows
 ===================
 
-To build on windows use CMake
+To build on windows use CMake, Python 3.x for Conan
 
 Ensure, that you have all necessary dependencies: SDL2, SDL_mixer, zlib, glew
-I recommend to get zlib sources and build them by hand (do not forget to copy zconf.h)
-
-Just for a reference here is how my 3rdparty tree looks like
 ```
-|   
-+---bin
-+---include
-|   |   zconf.h
-|   |   zlib.h
-|   |   
-|   +---GL
-|   |       eglew.h
-|   |       glew.h
-|   |       glxew.h
-|   |       wglew.h
-|   |       
-|   \---SDL2
-|           all sdl headers (SDL_mixer shiuld be there as well)
-|           
-\---lib
-    +---x64
-    |       glew32.lib
-    |       glew32s.lib
-    |       libFLAC-8.dll
-    |       libmodplug-1.dll
-    |       libmpg123-0.dll
-    |       libogg-0.dll
-    |       libvorbis-0.dll
-    |       libvorbisfile-3.dll
-    |       SDL2.dll
-    |       SDL2.lib
-    |       SDL2main.lib
-    |       SDL2test.lib
-    |       SDL2_mixer.dll
-    |       SDL2_mixer.lib
-    |       zlib.dll
-    |       zlib.lib
-    |       zlibstatic.lib
-    |       
-    \---x86
-            glew32.lib
-            glew32s.lib
-            libFLAC-8.dll
-            libmodplug-1.dll
-            libmpg123-0.dll
-            libogg-0.dll
-            libvorbis-0.dll
-            libvorbisfile-3.dll
-            LICENSE.FLAC.txt
-            LICENSE.modplug.txt
-            LICENSE.mpg123.txt
-            LICENSE.ogg-vorbis.txt
-            SDL2.dll
-            SDL2.lib
-            SDL2main.lib
-            SDL2test.lib
-            SDL2_mixer.dll
-            SDL2_mixer.lib
-            zlib.dll
-            zlib.lib
-            zlibstatic.lib
+$ pip install conan==1.57
+$ conan profile detect
+$ conan install conanfile.txt --build=missing -if $PWD/install
+$ cmake -H. -Bbuild -DCMAKE_MODULE_PATH=$PWD/install/ -G "Visual Studio 17 2022" -A x64
 ```
 
 You may already have your dependencies installed in other place(s), so just make sure CMake knows where to find them.
@@ -106,13 +50,9 @@ git clone https://github.com/alariq/mc2.git
 cd mc2
 md build64
 cd build64
-cmake.exe -G "Visual Studio 15 2017 Win64" -DCMAKE_PREFIX_PATH=c:/path_to_your_dependencies/ -DCMAKE_LIBRARY_ARCHITECTURE=x64 ..
+cmake.exe -G "Visual Studio 15 2017 Win64" -DCMAKE_PREFIX_PATH=c:/path_to_your_dependencies/ ..
 ```
-(to generate project for VS1027 for 64bit build)
-
-or for 32bit build:
-
-`cmake.exe -G "Visual Studio 15 2017 Win64" -DCMAKE_PREFIX_PATH=c:/path_to_your_dependencies/ -DCMAKE_LIBRARY_ARCHITECTURE=x86 ..`
+(to generate project for VS2017 for 64bit build)
 
 Now run generated solution and try to build it!
 
@@ -128,7 +68,7 @@ Then:
 cd res
 md build64
 cd build 64
-cmake.exe -G "Visual Studio 15 2017 Win64" -DCMAKE_LIBRARY_ARCHITECTURE=x64 ..
+cmake.exe -G "Visual Studio 15 2017 Win64" ..
 ```
 put resulting dll along with executable file
 
@@ -139,7 +79,7 @@ Data files are located in a separate [repository](https://github.com/alariq/mc2s
 Building data is just a matter of executing ```make``` command. You can find instruction on how to do it there.
 But first one needs to build all necessary tools. There are 2 projects which have to be built:
 
-* data_tools 
+* data_tools
 * text_tool
 
 All steps are same as for the main application. As a result you'll have next binaries: ```aseconv, makefst, makersp, mpak, text_tool```. Copy those to the ```build_scripts``` folder in ```mc2srcdata``` repository.
@@ -150,5 +90,18 @@ Once everything in place, you can launch build scripts as described in correspon
 Building on Linux
 =================
 
-You, probably already know hot to do it. If not, please, see windows building section, the process is quite similar.
+On Debian 11:
 
+ $ sudo apt install libsdl2-mixer-dev libsdl2-ttf-dev libglew-dev
+ $ git submodule update --init
+ $ cmake -H. -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install
+ $ cmake --build build --target install # install target is optional if you wanna do a package
+ $ export MC2_BIN=$PWD/build/bin
+ $ cd mc2srcdata/build_scripts
+ $ make all
+ $ cpack -G DEB # optional
+ $ cd ../../bin/build
+ $ ./mc2 # this will make a configuration
+ $ ./mc2
+
+# TODO RelWithDebInfo,Release looks like doesnt work just debug :(

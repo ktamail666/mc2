@@ -12,24 +12,19 @@
 #ifndef HEAP_H
 #define HEAP_H
 
-#ifdef LINUX_BUILD
-#define USE_GOS_HEAP
-#endif
-
-
 //---------------------------------------------------------------------------
 // Include Files
 #ifndef DSTD_H
-#include"dstd.h"
+#include "dstd.h"
 #endif
 
 #ifndef DHEAP_H
-#include"dheap.h"
+#include "dheap.h"
 #endif
 
-#include<memory.h>
+#include <memory.h>
 
-#include"gameos.hpp"
+#include <gameos.hpp>
 //---------------------------------------------------------------------------
 // Macro Definitions
 #ifndef NO_ERR
@@ -165,8 +160,7 @@ class UserHeap : public HeapManager
 		char				*heapName;
 
 		bool				useGOSGuardPage;
-		
-        HGOSHEAP			gosHeap;
+		HGOSHEAP			gosHeap;
 
 		#ifdef _DEBUG
 		memRecord			*recordArray;

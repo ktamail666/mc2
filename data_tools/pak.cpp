@@ -1,11 +1,11 @@
-#include <queue>
-#include "gameos.hpp"
 #include "toolos.hpp"
 
 #include "mclib.h"
-#include <stdio.h>
-
 #include "common.hpp"
+#include "gameos.hpp"
+
+#include <queue>
+#include <stdio.h>
 
 UserHeapPtr systemHeap = NULL;
 FastFile** fastFiles = NULL;

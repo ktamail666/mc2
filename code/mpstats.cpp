@@ -15,7 +15,6 @@ MPStats.cpp			: Implementation of the MPStats component.
 
 #define MP_STATS_SAVE	400
 
-
 MPStats::MPStats(  )
 {
 	helpTextArrayID = 8;
@@ -23,13 +22,9 @@ MPStats::MPStats(  )
 	bHostLeftDlg = 0;
 }
 
-//-------------------------------------------------------------------------------------------------
-
 MPStats::~MPStats()
 {
 }
-
-
 
 int MPStats::init()
 {
@@ -41,12 +36,12 @@ int MPStats::init()
 		char buffer2[512];
 		sprintf( buffer2, "couldn't open file %s", (const char*)path );
 		Assert( 0, 0, buffer2 );
-		return false;	
+		return false;
 
 	}
 
-	LogisticsScreen::init( file, "Static", "Text", "Rect", "Button", "Edit" );	
-	
+	LogisticsScreen::init( file, "Static", "Text", "Rect", "Button", "Edit" );
+
 	entries[0].init( );
 	entries[0].moveTo( rects[1].globalX(), rects[1].globalY() );
 	entries[0].resize( rects[1].width(), rects[1].height() );
@@ -72,7 +67,7 @@ int __cdecl sortStats( const void* pPlayer1, const void* pPlayer2 )
 	MC2Player* player1 = *(MC2Player**)pPlayer1;
 	MC2Player* player2 = *(MC2Player**)pPlayer2;
 
-	
+
 	if ( player1->rank > player2->rank )
 		return 1;
 	else if ( (player1)->rank < (player2)->rank )
@@ -96,7 +91,6 @@ void MPStats::end()
 
 void MPStats::begin()
 {
-
 	MPlayer->setMode( MULTIPLAYER_MODE_RESULTS );
 	bSavingStats = 0;
 	status = RUNNING;
@@ -111,7 +105,7 @@ void MPStats::begin()
 
 	// need to set up map name
 
-	bool bRes = 0;
+
 	char text2[256];
 	char text[256];
 
@@ -123,7 +117,7 @@ void MPStats::begin()
 	cLoadString( IDS_MP_LM_MAP_LIST_TYPE, text, 255 );
 	char mType[128];
 	cLoadString( IDS_MP_LM_TYPE0 + type, mType, 127 );
-	
+
 	sprintf( text2, text, mType );
 	textObjects[6].setText( text2 );
 
@@ -181,8 +175,6 @@ void MPStats::render( int xOffset, int yOffset )
 	{
 		LogisticsOneButtonDialog::instance()->render();
 	}
-
-
 }
 
 void MPStats::update()
@@ -216,7 +208,7 @@ void MPStats::update()
 
 		qsort( sorted, playerCount, sizeof( MC2Player*), sortStats );
 
-	
+
 
 		for ( int i = 0; i < MAX_MC_PLAYERS; i++ )
 		{
@@ -245,7 +237,7 @@ void MPStats::update()
 			oldPath.init(path, "transcript", ".txt" );
 
 			LogisticsVariantDialog::instance()->end();
-			
+
 			CopyFile(oldPath, newPath,0);
 
 			bSavingStats = 0;
@@ -300,7 +292,7 @@ void MPStatsEntry::render( int x, int y )
 {
 
 	LogisticsScreen::render( x, y );
-	
+
 }
 
 MPStatsEntry::~MPStatsEntry()
@@ -317,15 +309,15 @@ void MPStatsEntry::init()
 		char buffer2[512];
 		sprintf( buffer2, "couldn't open file %s", (const char*)path );
 		Assert( 0, 0, buffer2 );
-		return;	
+		return;
 
 	}
 
-	LogisticsScreen::init( file, "Static", "Text", "Rect", "Button", "Edit" );	
+	LogisticsScreen::init( file, "Static", "Text", "Rect", "Button", "Edit" );
 
 	aObject::init( rects[2].left(), rects[2].top(), rects[5].right() - rects[0].left(), rects[2].height() );
 
-	overlayColor = 0; 
+	overlayColor = 0;
 
 
 
@@ -442,15 +434,13 @@ void MPStatsResultsEntry::init()
 		char buffer2[512];
 		sprintf( buffer2, "couldn't open file %s", (const char*)path );
 		Assert( 0, 0, buffer2 );
-		return;	
+		return;
 
 	}
 
-	LogisticsScreen::init( file, "Static", "Text", "Rect", "Button", "Edit" );	
+	LogisticsScreen::init( file, "Static", "Text", "Rect", "Button", "Edit" );
 
 	aObject::init( 0, 0, rects[0].width(), rects[0].height() );
-
-
 }
 
 void MPStatsResultsEntry::setData(const MC2Player* data, unsigned long laurelColor, bool bShowScore )
@@ -460,18 +450,22 @@ void MPStatsResultsEntry::setData(const MC2Player* data, unsigned long laurelCol
 	rects[4].setColor( MPlayer->colors[data->baseColor[BASECOLOR_TEAM]] );
 	rects[2].setColor( MPlayer->colors[data->stripeColor] );
 
-	if ( data &&  MPlayer->allUnitsDestroyed[data->commanderID] )
-		overlayColor = 0x7f000000;
-	else
-		overlayColor = 0;
-
+        if ( data &&  MPlayer->allUnitsDestroyed[data->commanderID] )
+        {
+                overlayColor = 0x7f000000;
+        }
+        else
+        {
+                overlayColor = 0;
+        }
 
 	long color = MPlayer->colors[data->baseColor[BASECOLOR_TEAM]];
 	long textColor = 0xff000000;
 
 	if ( ((color & 0xff) + ( (color & 0xff00)>>8 ) + ( (color & 0xff0000)>>16 ))/3 < 85 )
+	{
 		textColor = 0xffffffff;
-
+	}
 	textObjects[3].setText( data->name );
 	textObjects[4].setText( data->unitName );
 
@@ -479,24 +473,27 @@ void MPStatsResultsEntry::setData(const MC2Player* data, unsigned long laurelCol
 	textObjects[4].setColor( textColor );
 
 	char text[64];
-	sprintf( text, "%ld", MPlayer->teamScore[data->team] );
+        sprintf( text, "%d", MPlayer->teamScore[data->team] );
 	if ( MPlayer->missionSettings.missionType == MISSION_TYPE_KING_OF_THE_HILL )
 	{
 		sprintf( text, "%ld:%.2ld", MPlayer->teamScore[data->team]/60, MPlayer->teamScore[data->team] % 60 );
 	}
 	if ( bShowScore )
+	{
 		textObjects[0].setText( text );
+	}
 	else
+	{
 		textObjects[0].setText( "" );
-
-	sprintf( text, "%ld", data->kills );
+	}
+        sprintf( text, "%d", data->kills );
 	textObjects[1].setText( text );
 
-	sprintf( text, "%ld", data->losses );
+        sprintf( text, "%d", data->losses );
 	textObjects[2].setText( text );
 
 
-	sprintf( text, "%ld", data->teamSelected + 1);
+        sprintf( text, "%d", data->teamSelected + 1);
 	textObjects[5].setText( text );
 
 	char path[256];
@@ -521,19 +518,17 @@ void MPStatsResultsEntry::setData(const MC2Player* data, unsigned long laurelCol
 	}
 	else
 	{
-		TGAFileHeader*  pData = (TGAFileHeader*)MPlayer->insigniaList[data->commanderID];
+                TGAFileHeader* pData = (TGAFileHeader*)MPlayer->insigniaList[data->commanderID]; // TODO MPlayer->insigniaList[data->commanderID] is bool not TGA header
 		if ( pData )
 		{
-			int size = pData->pixel_depth/8;
-			int ID = mcTextureManager->textureFromMemory( (DWORD*)(pData+1), gos_Texture_Solid, 0, pData->width, size  );
+                        abort();
+                        /*
+                        int bit_depth = pData->pixel_depth / 8;
+                        unsigned int width = static_cast<unsigned int>(pData->width);
+                        int ID = mcTextureManager->textureFromMemory( (DWORD*)(pData+1), gos_Texture_Solid, 0, width, bit_depth);
 			statics[0].setTexture( ID );
 			statics[0].setUVs( 0, 32, 32, 0 );
+                        */
 		}
 	}
-
-
 }
-
-
-//*************************************************************************************************
-// end of file ( MPStats.cpp )

@@ -1,0 +1,3 @@
+[submodule "mc2srcdata"]
+	path = mc2srcdata
+	url = https://github.com/alariq/mc2srcdata

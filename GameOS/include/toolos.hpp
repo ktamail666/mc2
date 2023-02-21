@@ -241,7 +241,3 @@ DWORD __stdcall gos_WriteFile( HGOSFILE hfile, const void* buf, DWORD size );
 // Move the current file position in filestream <hfile> to offset <offset> using
 // the seek type specified by <type>.
 DWORD __stdcall gos_SeekFile( HGOSFILE hfile, gosEnum_FileSeekType type, int offset );
-
-
-
-

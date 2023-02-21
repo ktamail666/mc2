@@ -11,19 +11,19 @@
 //---------------------------------------------------------------------------
 // Include files
 #ifndef MCLIB_H
-#include"mclib.h"
+#include "mclib.h"
 #endif
 
 #ifndef APPEAR_H
-#include"appear.h"
+#include "appear.h"
 #endif
 
 #ifndef APPRTYPE_H
-#include"apprtype.h"
+#include "apprtype.h"
 #endif
 
 #ifndef TGATXM_H
-#include"tgatxm.h"
+#include "tgatxm.h"
 #endif
 
 

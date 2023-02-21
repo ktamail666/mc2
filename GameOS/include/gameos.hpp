@@ -11,7 +11,7 @@
 // Pragmas needed to compile at Warning 4
 //
 //
-#pragma pack(push,4)
+#pragma pack(push,16) // TODO I replaced to 16 from 4 because this is defauln on x64
 #ifdef PLATFORM_WINDOWS
 #pragma warning( disable: 4725 )					// fdiv generates a warning
 #pragma warning( disable: 4127 )					// conditional expression is constant eg: Asserts will not work otherwise
@@ -53,7 +53,13 @@ static __inline__ unsigned long long rdtsc(void)
 #else
 #include <memory.h> // memcmp
 #include <inttypes.h>
+
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN 1
+#endif
 #include <windows.h>
+#include <timeapi.h> // timeGetTime
+
 #ifdef _WIN64
 static inline unsigned long long rdtsc(void)
 {
@@ -3334,4 +3340,3 @@ public:
 };
 
 #endif // __cplusplus
-

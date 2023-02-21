@@ -49,7 +49,7 @@ void* AppearanceType::operator new (size_t memSize)
 		result = AppearanceTypeList::appearanceHeap->Malloc(memSize);
 	}
 		
-	return(result);
+        return result;
 }
 
 //---------------------------------------------------------------------------

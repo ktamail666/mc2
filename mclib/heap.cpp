@@ -12,31 +12,24 @@
 //---------------------------------------------------------------------------
 // Include Files
 #ifndef HEAP_H
-#include"heap.h"
+#include "heap.h"
 #endif
 
 #ifndef FILE_H
-#include"file.h"
+#include "file.h"
 #endif
 
 #include"platform_windows.h"
-#ifndef USE_GOS_HEAP
-#include<imagehlp.h>
-#endif
 
-#include<gameos.hpp>
-
-#ifndef USE_GOS_HEAP
-#include<tchar.h>
-#endif
+#include <gameos.hpp>
 
 #include"platform_str.h" 
 #include <ctype.h> // toupper
 
 //---------------------------------------------------------------------------
 // Static Globals
-static const char CorruptMsg[] = "Heap check failed.\n";
-static const char pformat[] = "%s %s\n";
+//static const char CorruptMsg[] = "Heap check failed.\n"; // TODO dead code
+//static const char pformat[] = "%s %s\n"; // TODO dead code
 
 GlobalHeapRec HeapList::heapRecords[MAX_HEAPS];
 HeapListPtr globalHeapList = NULL;
@@ -48,7 +41,7 @@ unsigned long totalSize = 0;
 unsigned long totalCoreLeft = 0;
 unsigned long totalLeft = 0;
 
-bool HeapList::heapInstrumented = 0;
+bool HeapList::heapInstrumented = false;
 
 #ifndef USE_GOS_HEAP
 //
@@ -105,29 +98,32 @@ HeapManager::~HeapManager (void)
 //---------------------------------------------------------------------------
 void HeapManager::destroy (void)
 {
-	long result = 0;
-	
-	//-----------------------------
-	// Remove this from the UEBER HEAP 
+    long result = 0;
+
+    // Remove this from the UEBER HEAP
 #ifdef CHECK_HEAP
-	globalHeapList->removeHeap(this);
+    globalHeapList->removeHeap(this);
 #endif
-	
-	if (committedSize)
-	{
-		result = VirtualFree(heap,totalSize,MEM_DECOMMIT);
-		if (result == FALSE)
-			result = GetLastError();
-	}
 
-	if (totalSize && memReserved && heap)
-	{                 
-		result = VirtualFree(heap, totalSize, MEM_RELEASE);
-		if (result == FALSE)
-			result = GetLastError();
-	}
+    if (committedSize)
+    {
+        result = VirtualFree(heap,totalSize,MEM_DECOMMIT);
+        if (result == FALSE)
+        {
+            result = GetLastError();
+        }
+    }
 
-	init();
+    if (totalSize && memReserved && heap)
+    {
+        result = VirtualFree(heap, totalSize, MEM_RELEASE);
+        if (result == FALSE)
+        {
+            result = GetLastError();
+        }
+    }
+
+    init();
 }
 		
 //---------------------------------------------------------------------------
@@ -155,9 +151,10 @@ HeapManager::operator MemoryPtr (void)
 //---------------------------------------------------------------------------
 MemoryPtr HeapManager::getHeapPtr (void)
 {
-	if (memReserved && totalSize && committedSize && heap)
-		return heap;
-
+        if (memReserved && totalSize && committedSize && heap)
+        {
+                return heap;
+        }
 	return NULL;
 }
 
@@ -374,9 +371,9 @@ long UserHeap::init (unsigned long memSize, const char *heapId, bool useGOS)
 		recordArray = NULL;
 		recordCount = 0;
 		logMallocs = FALSE;
-		#endif;
+                #endif
 		
-		gosHeap = 0;
+                gosHeap = 0;
 	}
 	else
 #endif
@@ -1860,39 +1857,39 @@ void HeapList::removeHeap (HeapManagerPtr oldHeap)
 
 void HeapList::initializeStatistics()
 {
-	if (heapInstrumented == 0)
-	{
-			StatisticFormat( "" );
-			StatisticFormat( "MechCommander 2 Heaps" );
-			StatisticFormat( "======================" );
-			StatisticFormat( "" );
+    if (heapInstrumented == 0)
+    {
+            StatisticFormat( "" );
+            StatisticFormat( "MechCommander 2 Heaps" );
+            StatisticFormat( "======================" );
+            StatisticFormat( "" );
 
-			AddStatistic("Total Memory","bytes",gos_DWORD, &(totalSize), Stat_AutoReset | Stat_Total);
+            AddStatistic("Total Memory","bytes",gos_DWORD, &(totalSize), Stat_AutoReset | Stat_Total);
 
-			AddStatistic("Total Memory Core Left","bytes",gos_DWORD, &(totalCoreLeft), Stat_AutoReset | Stat_Total);
+            AddStatistic("Total Memory Core Left","bytes",gos_DWORD, &(totalCoreLeft), Stat_AutoReset | Stat_Total);
 
-			AddStatistic("Total Memory Left","bytes",gos_DWORD, &(totalLeft), Stat_AutoReset | Stat_Total);
+            AddStatistic("Total Memory Left","bytes",gos_DWORD, &(totalLeft), Stat_AutoReset | Stat_Total);
 
-			StatisticFormat( "" );
-			StatisticFormat( "" );
-	
-			for (long i=0;i<50;i++)
-			{
-				char heapString[255];
-				sprintf(heapString,"Heap %d - HeapSize",i);
-				AddStatistic(heapString,"bytes",gos_DWORD, &(heapRecords[i].heapSize), Stat_AutoReset | Stat_Total);
+            StatisticFormat( "" );
+            StatisticFormat( "" );
 
-				sprintf(heapString,"Heap %d - TotalLeft",i);
-				AddStatistic(heapString,"bytes",gos_DWORD, &(heapRecords[i].totalCoreLeft), Stat_AutoReset | Stat_Total);
+            for (long i=0;i<50;i++)
+            {
+                    char heapString[255];
+                    sprintf(heapString,"Heap %ld - HeapSize",i);
+                    AddStatistic(heapString,"bytes",gos_DWORD, &(heapRecords[i].heapSize), Stat_AutoReset | Stat_Total);
 
-				sprintf(heapString,"Heap %d - CoreLeft",i);
-				AddStatistic(heapString,"bytes",gos_DWORD, &(heapRecords[i].coreLeft), Stat_AutoReset | Stat_Total);
+                    sprintf(heapString,"Heap %ld - TotalLeft",i);
+                    AddStatistic(heapString,"bytes",gos_DWORD, &(heapRecords[i].totalCoreLeft), Stat_AutoReset | Stat_Total);
 
-				StatisticFormat( "" );
-			}
+                    sprintf(heapString,"Heap %ld - CoreLeft",i);
+                    AddStatistic(heapString,"bytes",gos_DWORD, &(heapRecords[i].coreLeft), Stat_AutoReset | Stat_Total);
 
-		heapInstrumented = true;
-	}
+                    StatisticFormat( "" );
+            }
+
+            heapInstrumented = true;
+    }
 }
 	
 //---------------------------------------------------------------------------
@@ -2128,10 +2125,3 @@ bool UserHeap::pointerOnHeap (void *ptr)
 #endif
 	return true;
 }
-
-//---------------------------------------------------------------------------
-//
-// Edit Log
-//
-//---------------------------------------------------------------------------
-

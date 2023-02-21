@@ -15,5 +15,7 @@ DWORD timeGetTime()
     milliseconds += ts.tv_nsec / 1e+6;
     return milliseconds;
 }
+#else
+
 
 #endif // PLATFORM_WINDOWS

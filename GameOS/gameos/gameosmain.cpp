@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <time.h>
 
-#include <SDL2/SDL.h>
 #include "gos_input.h"
 
 #include "utils/camera.h"

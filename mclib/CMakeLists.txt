@@ -1,5 +1,5 @@
-cmake_minimum_required (VERSION 3.10)
-project(mclib)
+cmake_minimum_required (VERSION 3.19)
+project(mclib LANGUAGES CXX)
 
 set(SOURCES ${SOURCES}
     alphapalette.cpp
@@ -85,8 +85,12 @@ set(SOURCES ${SOURCES}
 
 include_directories(${COMMON_INCLUDE_DIRS} "./mclib" "../Editor" "../DirectX8/include" "./")
 
-add_definitions(-DBGR)
-add_library(mclib ${SOURCES})
+if(TRUE)
+    # __asm keyword not supported on this architecture on x64 Windows
+    add_definitions(-DUSE_GOS_HEAP=1)
+endif()
 
-# cat MCLib.vcproj | grep ".cpp" | perl -pe 's/.+\"(\w+\.cpp)\".+/\1/g' >> CMakeLists.txt
-
+add_library(mclib STATIC ${SOURCES})
+add_library(mc2::mclib ALIAS mclib)
+target_compile_definitions(mclib INTERFACE BGR)
+target_link_libraries(mclib PUBLIC ZLIB::ZLIB GLEW::GLEW)

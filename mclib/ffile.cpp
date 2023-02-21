@@ -49,7 +49,7 @@ void *FastFile::operator new (size_t mySize)
 {
 	void *result = NULL;
 	result = malloc(mySize);
-	
+
 	return(result);
 }
 
@@ -74,7 +74,7 @@ FastFile::FastFile (void)
 
 	numWrittenFiles = 0;
 }
-			
+
 //---------------------------------------------------------------------------
 FastFile::~FastFile (void)
 {
@@ -91,7 +91,7 @@ long FastFile::writeVersion(FILE* handle)
 {
 	fseek(handle, 0, SEEK_SET);
 	int version = useLZCompress ? FASTFILE_VERSION_LZ : FASTFILE_VERSION;
-	int result = fwrite(&version, 1, 4, handle);  
+	int result = fwrite(&version, 1, 4, handle);
 	logicalPosition += result;
 
 	if (result != 4)
@@ -131,13 +131,12 @@ long FastFile::writeFileEntries(FILE* handle, FILE_HANDLE* files, int num_files,
 //---------------------------------------------------------------------------
 long FastFile::open (const char* fName)
 {
-	//-------------------------------------------------------------
 	long fNameLength = strlen(fName);
 	fileName = new char [fNameLength+1];
 
-	if (!fileName)
-		return(NO_RAM_FOR_FILENAME);
-		
+        if (!fileName) {
+                return(NO_RAM_FOR_FILENAME);
+        }
 	strncpy(fileName,fName,fNameLength+1);
 
 	handle = fopen(fileName,"rb");
@@ -166,7 +165,8 @@ long FastFile::open (const char* fName)
 				char data[2048];
 				sprintf(data,FileMissingString,fileName,CDMissingString);
 				DWORD result1 = MessageBox(NULL,data,MissingTitleString,MB_OKCANCEL | MB_ICONWARNING);
-				if (result1 == IDCANCEL)
+
+				//if (result1 == IDCANCEL) // TODO always exit when fst is missing
 				{
 					ExitGameOS();
 					return (2);		//File not found.  Never returns though!
@@ -175,8 +175,10 @@ long FastFile::open (const char* fName)
 				handle = fopen(actualPath,"r");
 			}
 
-			if (openFailed && (Environment.fullScreen == 0) && alreadyFullScreen)
-				EnterFullScreenMode();
+                        if (openFailed && (Environment.fullScreen == 0) && alreadyFullScreen)
+                        {
+                                EnterFullScreenMode();
+                        }
 		}
 		else
 		{
@@ -209,12 +211,14 @@ long FastFile::open (const char* fName)
 		return lastError;
 	}
 
-	if (version != FASTFILE_VERSION && version != FASTFILE_VERSION_LZ)
-		return FASTFILE_VERSION;
-
-	if (version == FASTFILE_VERSION_LZ)
-		useLZCompress = true;
-
+        if (version != FASTFILE_VERSION && version != FASTFILE_VERSION_LZ)
+        {
+                return FASTFILE_VERSION;
+        }
+        if (version == FASTFILE_VERSION_LZ)
+        {
+                useLZCompress = true;
+        }
 	//---------------------------------------------
 	//-- Second Long is number of filenames present.
 	result = fread((&numFiles),1, 4,handle);
@@ -243,7 +247,7 @@ long FastFile::open (const char* fName)
 
 	return (0);
 }
-		
+
 //---------------------------------------------------------------------------
 void FastFile::close (void)
 {
@@ -287,7 +291,7 @@ long FastFile::create(const char* fName, bool compressed)
         delete[] fileName;
 		return(NO_RAM_FOR_FILENAME);
     }
-		
+
 	strncpy(fileName,fName,fNameLength+1);
 
 	handle = fopen(fileName, "wb");
@@ -308,7 +312,7 @@ long FastFile::create(const char* fName, bool compressed)
 	res = writeNumFiles(handle, 0);
 
 	logicalPosition = ftell(handle);
-		
+
 	return NO_ERR;
 }
 
@@ -388,14 +392,14 @@ long FastFile::seekFast (DWORD fastFileHandle, DWORD off, DWORD how)
 					return READ_PAST_EOF_ERR;
 				}
 				break;
-	
+
 			case SEEK_END:
 				if (((DWORD)abs((long)off) > files[fastFileHandle].pfe->size) || (off > 0))
 				{
 					return READ_PAST_EOF_ERR;
 				}
 				break;
-	
+
 			case SEEK_CUR:
 				if (off+files[fastFileHandle].pos > files[fastFileHandle].pfe->size)
 				{
@@ -420,7 +424,7 @@ long FastFile::seekFast (DWORD fastFileHandle, DWORD off, DWORD how)
 				newPosition = off+files[fastFileHandle].pos;
 			break;
 		}
-			
+
 		if (newPosition == -1)
 		{
 			return (INVALID_SEEK_ERR);
@@ -475,17 +479,17 @@ long FastFile::readFast (DWORD fastFileHandle, void *bfr, DWORD size)
 				if (!LZPacketBuffer)
 					return 0;
 			}
-				
+
 			if ((DWORD)LZPacketBufferSize < files[fastFileHandle].pfe->size)
 			{
 				LZPacketBufferSize = files[fastFileHandle].pfe->size;
-				
+
 				free(LZPacketBuffer);
 				LZPacketBuffer = (MemoryPtr)malloc(LZPacketBufferSize);
 				if (!LZPacketBuffer)
 					return 0;
 			}
-			
+
 			if (LZPacketBuffer)
 			{
 				result = fread(LZPacketBuffer,1,files[fastFileHandle].pfe->size,handle);
@@ -501,7 +505,7 @@ long FastFile::readFast (DWORD fastFileHandle, void *bfr, DWORD size)
 					{
 						openFailed = true;
 						EnterWindowMode();
-		
+
 						char data[2048];
 						sprintf(data,FileMissingString,fileName,CDMissingString);
 						DWORD result1 = MessageBox(NULL,data,MissingTitleString,MB_OKCANCEL | MB_ICONWARNING);
@@ -510,12 +514,12 @@ long FastFile::readFast (DWORD fastFileHandle, void *bfr, DWORD size)
 							ExitGameOS();
 							return (2);		//File not found.  Never returns though!
 						}
-		
+
 						logicalPosition = fseek(handle,files[fastFileHandle].pos + files[fastFileHandle].pfe->offset,SEEK_SET);
 						result = fread(LZPacketBuffer,1,files[fastFileHandle].pfe->size,handle);
 						logicalPosition += files[fastFileHandle].pfe->size;
 					}
-		
+
 					if (openFailed && (Environment.fullScreen == 0) && alreadyFullScreen)
 						EnterFullScreenMode();
 				}
@@ -554,7 +558,7 @@ long FastFile::writeFast (const char* fastFileName, void* buffer, int nbytes)
 {
 	if(handle == NULL)
 		return FILE_NOT_OPEN;
-	
+
 	if (numWrittenFiles >= numFiles)
 		return TOO_MANY_CHILDREN;
 
@@ -585,11 +589,11 @@ long FastFile::writeFast (const char* fastFileName, void* buffer, int nbytes)
 			if (!LZPacketBuffer)
 				return 0;
 		}
-				
+
 		if (LZPacketBufferSize < workBufferSize)
 		{
 			LZPacketBufferSize = workBufferSize;
-				
+
 			free(LZPacketBuffer);
 			LZPacketBuffer = (MemoryPtr)malloc(LZPacketBufferSize);
 			if (!LZPacketBuffer)
@@ -604,7 +608,7 @@ long FastFile::writeFast (const char* fastFileName, void* buffer, int nbytes)
 			STOP(("fast File size changed after compression.  Was %d is now %d", nbytes, uncompressedSize));
 
 		files[fastFileHandle].pfe->size = compressedSize;
-	
+
 		// write file itself
 		int result = fwrite(LZPacketBuffer, compressedSize, 1, handle);
 		if(result != 1)
@@ -633,7 +637,7 @@ long FastFile::writeFast (const char* fastFileName, void* buffer, int nbytes)
 	else
 	{
 		files[fastFileHandle].pfe->size = nbytes;
-	
+
 		// write file itself
 		int result = fwrite(buffer, nbytes, 1, handle);
 		if(result != 1 && nbytes > 0) // to handle case when input file has zero length

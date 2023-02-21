@@ -1,6 +1,4 @@
-#ifndef GRAPHICS_H
-#define GRAPHICS_H
-
+#pragma once
 
 #include <GL/glew.h>
 #include <GL/gl.h>
@@ -13,7 +11,3 @@
 #else
 	#include<windows.h>
 #endif
-
-
-
-#endif //GRAPHICS_H

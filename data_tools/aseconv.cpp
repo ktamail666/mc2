@@ -342,7 +342,7 @@ long convertASE2TGL(char *file)
 					if (iniFile.seekBlock("Gestures0") == NO_ERR)
 					{
 						//We ARE a mech.  Load all of the animations for this mech and write 'em out.
-						for (long i = 0; i<MaxGestures; i++)
+						for (long i = 0; i < MaxGestures - 1; i++) // TODO check MechAnimationNames array bound
 						{
 							char name[MAX_PATH];
 							_splitpath(findResult.cFileName, NULL, NULL, name, NULL);
@@ -375,7 +375,7 @@ long convertASE2TGL(char *file)
 					if (iniFile.seekBlock("Gestures0") == NO_ERR)
 					{
 						//We ARE a mech.  Load all of the destroyed shapes for this mech and write 'em out.
-						for (long i = MaxGestures; i<MaxGestures + 2; i++)
+						for (long i = MaxGestures; i<MaxGestures -1; i++) // TODO check MechAnimationNames array bound. Why +2 ???
 						{
 							char name[MAX_PATH];
 							_splitpath(findResult.cFileName, NULL, NULL, name, NULL);
@@ -591,5 +591,3 @@ void __stdcall GetGameOSEnvironment(const char* CommandLine)
 
 	Environment.checkCDForFiles = false;
 }
-
-
