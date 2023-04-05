@@ -5,13 +5,13 @@ project(mc2)
 
 include(CMakeToolsHelpers OPTIONAL)
 
+set(CMAKE_FIND_PACKAGE_PREFER_CONFIG ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_PREFIX_PATH}/cmake)
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/sdl2)
+list(APPEND CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 if(NOT MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -ggdb")
@@ -37,10 +37,28 @@ add_definitions(-DUSE_ASSEMBLER_CODE=0)
 add_definitions(-DLINUX_BUILD)
 
 find_package(SDL2 CONFIG REQUIRED)
-find_package(SDL2_mixer CONFIG REQUIRED)
+find_package(SDL2_mixer)
+
+if(NOT TARGET SDL2_mixer)
+    find_package(PkgConfig)
+    pkg_check_modules(SDL2_mixer REQUIRED SDL2_mixer)
+    add_library(SDL2_mixer INTERFACE)
+    add_library(SDL2_mixer::SDL2_mixer ALIAS SDL2_mixer)
+    target_include_directories(SDL2_mixer INTERFACE ${SDL2mixer_INCLUDE_DIRS})
+    target_link_libraries(SDL2_mixer INTERFACE ${SDL2mixer_LIBRARIES})
+endif()
 
 #required by text_tool
-find_package(SDL2_ttf REQUIRED)
+find_package(SDL2_ttf)
+if(NOT TARGET SDL2_ttf)
+    find_package(PkgConfig)
+    pkg_check_modules(SDL2_ttf REQUIRED SDL2_ttf)
+    add_library(SDL2_ttf INTERFACE)
+    add_library(SDL2_ttf::SDL2_ttf ALIAS SDL2_ttf)
+    target_include_directories(SDL2_ttf INTERFACE ${SDL2_ttf_INCLUDE_DIRS})
+    target_link_libraries(SDL2_ttf INTERFACE ${SDL2_ttf_LIBRARIES})
+endif()
+
 find_package(GLEW REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(ZLIB REQUIRED)
