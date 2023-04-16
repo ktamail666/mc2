@@ -349,9 +349,9 @@ void TG_TypeNode::SaveBinaryCopy (File &binFile)
 TG_ShapePtr TG_TypeShape::CreateFrom (void)
 {
 	TG_ShapePtr newShape = NULL;
-	//newShape = (TG_ShapePtr)TG_Shape::tglHeap->Malloc(sizeof(TG_Shape));
 	void* memarea = TG_Shape::tglHeap->Malloc(sizeof(TG_Shape));
-	newShape = ::new(memarea) TG_Shape();
+	newShape = (TG_ShapePtr)TG_Shape::tglHeap->Malloc(sizeof(TG_Shape)); // TODO check???
+	//newShape = ::new(memarea) TG_Shape();
 	gosASSERT(newShape != NULL);
 	
 	//listOfVertices

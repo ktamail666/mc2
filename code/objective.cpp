@@ -244,7 +244,7 @@ static int sReplace(ECharString &ECStr, const char *szOldSub, const char *szNewS
 	if ((!szOldSub) || (0 >= strlen(szOldSub)) || (!szNewSub)) { return -1; }
 	int retval = 0;
 	ECharString newStr;
-	const int lengthOfOldSub = strlen(szOldSub);
+	const int lengthOfOldSub = static_cast<int>(strlen(szOldSub));
 	int endIndexOfLastOldSub = -1;
 	int startIndexOfOldSub = ECStr.Find(szOldSub, endIndexOfLastOldSub + 1);
 	while ((ECharString::INVALID_INDEX != startIndexOfOldSub) && (0 <= startIndexOfOldSub) && (ECStr.Length() - lengthOfOldSub >= startIndexOfOldSub)) {

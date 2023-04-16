@@ -215,15 +215,16 @@ void __stdcall DoGameLogic()
 void __stdcall InitializeGameEngine()
 {
 #ifdef PLATFORM_WINDOWS
-#ifdef _WIN64
-	gosResourceHandle = gos_OpenResourceDLL("mc2res_64.dll", NULL, 0);
-#else
-	gosResourceHandle = gos_OpenResourceDLL("mc2res_32.dll", NULL, 0);
-#endif
+	gosResourceHandle = gos_OpenResourceDLL("mc2res.dll", NULL, 0);
 #else
 	gosResourceHandle = gos_OpenResourceDLL("./libmc2res.so", NULL, 0);
 #endif
 	
+	if (!gosResourceHandle)
+	{
+        abort();
+	}
+
 	char temp[256];
 	cLoadString( IDS_FLOAT_HELP_FONT, temp, 255 );
 	char* pStr = strstr( temp, "," );

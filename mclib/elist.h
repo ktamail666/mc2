@@ -52,11 +52,13 @@ not sufficient).
 
 **************************************************************************************************/
 // sebi: one cannot simply redefine placement new ( c++ standard)
-//#ifndef __PLACEMENT_NEW_INLINE
-//#define __PLACEMENT_NEW_INLINE
-//	inline void *__cdecl operator new(size_t, void *_P)
-//	{return (_P); } // placement new
-//#endif
+#ifdef WIN32
+#ifndef __PLACEMENT_NEW_INLINE
+#define __PLACEMENT_NEW_INLINE
+inline void* __cdecl operator new(size_t, void* _P) noexcept
+	{return (_P); } // placement new
+#endif
+#endif
 
 
 ELIST_TPL_DEF class EList

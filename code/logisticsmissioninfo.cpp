@@ -446,10 +446,10 @@ long LogisticsMissionInfo::load( FitIniFile& file )
 				i++;
 			}
 			else
+			{
 				break;
+			}
 		}
-			
-		
 	}
 	
 	return 0;
@@ -1084,8 +1084,10 @@ int			LogisticsMissionInfo::getAdditionalPurachaseFiles( const char** list, long
 }
 void				LogisticsMissionInfo::addBonusPurchaseFile( const char* fileName )
 {
-	if ( !fileName )
+    if (!fileName)
+    {
 		return;
+    }
 
 	char* pNewFile = new char[strlen( fileName )+1];
 	strcpy( pNewFile, fileName ); 

@@ -11,14 +11,8 @@
 #ifndef TGL_H
 #define TGL_H
 //-------------------------------------------------------------------------------
-// Include Files
-#ifndef HEAP_H
 #include"heap.h"
-#endif
-
-#ifndef FILE_H
 #include"file.h"
-#endif
 
 #include<stuff/stuff.hpp>
 #include<gameos.hpp>

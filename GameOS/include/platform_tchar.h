@@ -31,10 +31,10 @@ wchar_t* _wcsinc( const wchar_t *current);
 //typedef char	_TCHAR;
 
 #define _tcsinc     _strinc
+#ifndef _istdigit
 #define _istdigit   isdigit
-
+#endif
 const char *_strinc( const char *current);
-
 /*
  * __TEXT is a private macro whose specific use is to force the expansion of a
  * macro passed as an argument to the macros _T or _TEXT.  DO NOT use this

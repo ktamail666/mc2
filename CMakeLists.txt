@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.10)
+cmake_minimum_required (VERSION 3.16)
 # select GLVND versus legacy OpenGL libraries
 cmake_policy(SET CMP0072 NEW) # cmake --help-policy CMP0072
 project(mc2)
@@ -252,6 +252,7 @@ add_subdirectory(text_tool out/text_tool)
 add_subdirectory(Viewer out/Viewer)
 
 if(UNIX) # TODO temporarly disable on Windows
+# On Windows symlink creating cause A required privilege is not held by the client.
 add_custom_target(mc2_copy_shaders ALL
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_LIST_DIR}/shaders $<TARGET_FILE_DIR:mc2>/shaders
 )
@@ -259,7 +260,7 @@ add_custom_target(mc2_copy_shaders ALL
 add_custom_target(mc2_copy_data ALL
     #COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_SOURCE_DIR}/mc2srcdata/build_scripts
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_LIST_DIR}/data_scripts ${CMAKE_SOURCE_DIR}/mc2srcdata/build_scripts
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_LIST_DIR}/shaders $<TARGET_FILE_DIR:mc2>/shaders
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_LIST_DIR}/shaders $<TARGET_FILE_DIR:viewer>/shaders
 )
 
 file(GLOB files "${CMAKE_SOURCE_DIR}/mc2srcdata/build_scripts/*.fst" "${CMAKE_SOURCE_DIR}/mc2srcdata/build_scripts/*.cfg")
@@ -267,14 +268,14 @@ foreach(file ${files})
         get_filename_component(FILENAME_WO_NAME ${file} NAME_WE)
         get_filename_component(FILENAME_NAME ${file} NAME)
         add_custom_target(mc2_create_symlinks_${FILENAME_WO_NAME} ALL
-            COMMAND ${CMAKE_COMMAND} -E create_symlink ${file} $<TARGET_FILE_DIR:mc2>/${FILENAME_NAME}
-            COMMAND ${CMAKE_COMMAND} -E create_symlink ${file} $<TARGET_FILE_DIR:mc2>/${FILENAME_NAME}
+            COMMAND ${CMAKE_COMMAND} -E create_symlink ${file} $<TARGET_FILE_DIR:viewer>/${FILENAME_NAME}
+            COMMAND ${CMAKE_COMMAND} -E create_symlink ${file} $<TARGET_FILE_DIR:viewer>/${FILENAME_NAME}
         )
 endforeach()
 
 add_custom_target(mc2_create_symlinks2 ALL
-    COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/mc2srcdata/build_scripts/data $<TARGET_FILE_DIR:mc2>/data
-    COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/mc2srcdata/build_scripts/assets $<TARGET_FILE_DIR:mc2>/assets
+    COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/mc2srcdata/build_scripts/data $<TARGET_FILE_DIR:viewer>/data
+    COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/mc2srcdata/build_scripts/assets $<TARGET_FILE_DIR:viewer>/assets
 )
 endif()
 

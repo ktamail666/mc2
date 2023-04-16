@@ -14,13 +14,8 @@
 
 //---------------------------------------------------------------------------
 // Include Files
-#ifndef DSTD_H
 #include "dstd.h"
-#endif
-
-#ifndef DHEAP_H
 #include "dheap.h"
-#endif
 
 #include <memory.h>
 
@@ -178,11 +173,7 @@ class UserHeap : public HeapManager
 	public:
 	
 		UserHeap (void);
-#ifdef USE_GOS_HEAP
 		long init (unsigned long memSize, const char *heapId = NULL, bool useGOS = true);
-#else
-		long init (unsigned long memSize, const char *heapId = NULL, bool useGOS = false);
-#endif
 		
 		~UserHeap (void);
 		void destroy (void);
@@ -202,11 +193,7 @@ class UserHeap : public HeapManager
 
 		bool heapReady (void)
 		{
-#ifdef USE_GOS_HEAP
             return gosHeap;
-#else
-			return (heapSize != 0);
-#endif
 		}
 
 		void setMallocFatals (bool fatalFlag)
@@ -304,10 +291,3 @@ extern HeapListPtr globalHeapList;
 
 //---------------------------------------------------------------------------
 #endif
-
-//---------------------------------------------------------------------------
-//
-// Edit Log
-//
-//---------------------------------------------------------------------------
-

@@ -1316,20 +1316,18 @@ void	LogisticsData::setMissionCompleted( )
 	rpJustAdded = 0;
 
 	// first set all pilots as not just dead
-	for ( PILOT_LIST::EIterator iter = pilots.Begin(); !iter.IsDone();
-		iter++ )
-		{
-			(*iter).setUsed( 0 );
-		}
-
-	for ( EList< CObjective*, CObjective* >::EIterator oIter =  Team::home->objectives.Begin();
-			!oIter.IsDone(); oIter++ )
+	for ( PILOT_LIST::EIterator iter = pilots.Begin(); !iter.IsDone(); iter++ )
 	{
-		if ( (*oIter)->Status(Team::home->objectives) == OS_SUCCESSFUL )
-		{
-			addCBills( (*oIter)->ResourcePoints() );
-		}
+		(*iter).setUsed( 0 );
 	}
+
+	for (EList<CObjective*, CObjective*>::EIterator oIter = Team::home->objectives.Begin(); !oIter.IsDone(); oIter++)
+    {
+        if ((*oIter)->Status(Team::home->objectives) == OS_SUCCESSFUL)
+        {
+			addCBills((*oIter)->ResourcePoints());
+        }
+    }
 
 	// need to go find out which pilots died.
 	Team* pTeam = Team::home;
@@ -1978,7 +1976,7 @@ void encryptFile (const char *inputFile, const char* outputFile)
 
 	File binFile;
 	binFile.create(outputFile);
-	binFile.writeInt(lzSize);
+	binFile.writeInt(static_cast<int>(lzSize));
 	binFile.writeInt(zlibSize);
 	binFile.writeInt(fileSize);
 	binFile.write(LZData,lzSize);

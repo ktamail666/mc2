@@ -83,14 +83,11 @@ set(SOURCES ${SOURCES}
     utilities.cpp
     )
 
-include_directories(${COMMON_INCLUDE_DIRS} "./mclib" "../Editor" "../DirectX8/include" "./")
-
-if(TRUE)
-    # __asm keyword not supported on this architecture on x64 Windows
-    add_definitions(-DUSE_GOS_HEAP=1)
-endif()
+include_directories(${COMMON_INCLUDE_DIRS} "./mclib" "../Editor" "${CMAKE_CURRENT_LIST_DIR}")
 
 add_library(mclib STATIC ${SOURCES})
 add_library(mc2::mclib ALIAS mclib)
 target_compile_definitions(mclib INTERFACE BGR)
 target_link_libraries(mclib PUBLIC ZLIB::ZLIB GLEW::GLEW)
+
+source_group("Terrain" FILES terrain.cpp terrain.h quad.cpp quad.h) # TODO finalize all of see MCLib.vcproj
