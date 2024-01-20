@@ -16,68 +16,75 @@
 //--------------
 // Include Files
 #ifndef DSTD_H
-#include"dstd.h"
+#include "dstd.h"
 #endif
 
 //--------------------------------
 // Structure and Class Definitions
 
-typedef struct _SortListNode {
-	float			value;			// sort value
-	unsigned long	id;				// item 
+typedef struct _SortListNode
+{
+    float value;       // sort value
+    unsigned long id;  // item
 } SortListNode;
 
-class SortList {
+class SortList
+{
+protected:
+    SortListNode* list;
+    long numItems;
 
-	protected:
+public:
+    void init(void)
+    {
+        list     = NULL;
+        numItems = 0;
+    }
 
-		SortListNode*		list;
-		long				numItems;
+    SortList(void)
+    {
+        init();
+    }
 
-	public:
+    long init(long numItems);
 
-		void init (void) {
-			list = NULL;
-			numItems = 0;
-		}
+    void setId(long index, long id)
+    {
+        if ((index >= 0) && (index < numItems))
+            list[index].id = id;
+    }
 
-		SortList (void) {
-			init();
-		}
+    void setValue(long index, float value)
+    {
+        if ((index >= 0) && (index < numItems))
+            list[index].value = value;
+    }
 
-		long init (long numItems);
+    long getId(long index)
+    {
+        return (list[index].id);
+    }
 
-		void setId (long index, long id) {
-			if ((index >= 0) && (index < numItems))
-				list[index].id = id;
-		}
+    float getValue(long index)
+    {
+        return (list[index].value);
+    }
 
-		void setValue (long index, float value) {
-			if ((index >= 0) && (index < numItems))
-				list[index].value = value;
-		}
+    void clear(bool setToMin = true);
 
-		long getId (long index) {
-			return(list[index].id);
-		}
+    long getNumItems(void)
+    {
+        return (numItems);
+    }
 
-		float getValue (long index) {
-			return(list[index].value);
-		}
+    void sort(bool descendingOrder = true);
 
-		void clear (bool setToMin = true);
+    void destroy(void);
 
-		long getNumItems (void) {
-			return(numItems);
-		}
-
-		void sort (bool descendingOrder = true);
-
-		void destroy (void);
-
-		~SortList (void) {
-			destroy();
-		}
+    ~SortList(void)
+    {
+        destroy();
+    }
 };
 
 typedef SortList* SortListPtr;

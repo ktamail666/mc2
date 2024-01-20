@@ -1,5 +1,4 @@
-#ifndef AANIMOBJECT_H
-#define AANIMOBJECT_H
+#pragma once
 /*************************************************************************************************\
 aAnimObject.h			: Interface for the aAnimObject component of the GUI library.
 //---------------------------------------------------------------------------//
@@ -7,49 +6,40 @@ aAnimObject.h			: Interface for the aAnimObject component of the GUI library.
 //===========================================================================//
 \*************************************************************************************************/
 
-#ifndef ASYSTEM_H
-#include"asystem.h"
-#endif
+#include "asystem.h"
+#include "aanim.h"
 
-#ifndef AANIM_H
-#include"aanim.h"
-#endif
-
-//*************************************************************************************************
-
-/**************************************************************************************************
-CLASS DESCRIPTION
-aAnimObject:
-**************************************************************************************************/
-class aAnimObject: public aObject
+class aAnimObject : public aObject
 {
-	public:
-
-		aAnimObject();
-		virtual ~aAnimObject();
-		aAnimObject& operator=( const aAnimObject& AnimObject );
-
-
-		int init( FitIniFile* file, const char* blockName, DWORD neverFlush = 0);
-
-		virtual void update();
-		virtual void render();
-
-		void begin() { animInfo.begin(); }
-		void end();
-		void reverseBegin() { animInfo.reverseBegin(); }
-
-		bool isDone() { return animInfo.isDone(); }
-
-		aAnimation		animInfo;
+public:
+    aAnimObject();
+    virtual ~aAnimObject();
+    aAnimObject& operator=(const aAnimObject& AnimObject);
 
 
-	private:
-	
-		aAnimObject( const aAnimObject& src );	
+    int init(FitIniFile* file, const char* blockName, DWORD neverFlush = 0);
 
+    virtual void update();
+    virtual void render();
+
+    void begin()
+    {
+        animInfo.begin();
+    }
+    void end();
+    void reverseBegin()
+    {
+        animInfo.reverseBegin();
+    }
+
+    bool isDone()
+    {
+        return animInfo.isDone();
+    }
+
+    aAnimation animInfo;
+
+
+private:
+    aAnimObject(const aAnimObject& src);
 };
-
-
-//*************************************************************************************************
-#endif  // end of file ( aAnimObject.h )

@@ -8,236 +8,238 @@
 // Copyright (C) Microsoft Corporation. All rights reserved.                 //
 //===========================================================================//
 
-#ifndef OBJTYPE_H
-#define OBJTYPE_H
+#pragma once
 
-//---------------------------------------------------------------------------
-// Include Files
-#ifndef MCLIB_H
-#include"mclib.h"
-#endif
+#include "mclib.h"
+#include "dobjtype.h"
+#include "dgameobj.h"
+#include <stuff/stuff.hpp>
 
-#ifndef DOBJTYPE_H
-#include"dobjtype.h"
-#endif
+class ObjectType
+{
+protected:
+    ObjectTypeNumber objTypeNum;       //What exactly am I?
+    long numUsers;                     //How many people love me?
+    long objectTypeClass;              //What type am I?
+    ObjectClass objectClass;           //What object class am I?
+    ObjectTypeNumber destroyedObject;  //What I turn into when I die.
+    ObjectTypeNumber explosionObject;  //How I blow up
+    bool potentialContact;             //Can I can be a contact?
+    char* appearName;                  //Base Name of appearance Files.
+    float extentRadius;                //Smallest sphere which will hold me.
+    bool keepMe;                       //Do not EVER cache this objType out.
+    long iconNumber;                   //my index into the big strip o' icons
+    long teamId;                       //Default for this type
+    unsigned char subType;             //if building, what type of building? etc.
 
-#ifndef DGAMEOBJ_H
-#include"dgameobj.h"
-#endif
+public:
+    void* operator new(size_t ourSize);
+    void operator delete(void* us);
 
-#ifndef STUFF_HPP
-#include<stuff/stuff.hpp>
-#endif
+    void init(void)
+    {
+        objectClass      = INVALID;
+        objectTypeClass  = -1;  //This is an invalid_object
+        destroyedObject  = -1;
+        explosionObject  = -1;
+        potentialContact = false;
 
-#define MAX_NAME		25
+        extentRadius = 0;  //Nothing can hit me if this is zero.
 
-//---------------------------------------------------------------------------
-// Classes
+        keepMe = false;
 
-class ObjectType {
+        iconNumber = -1;  //defaults to no icon
 
-	protected:
-	
-		ObjectTypeNumber		objTypeNum;				//What exactly am I?
-		long					numUsers;				//How many people love me?
-		long					objectTypeClass;		//What type am I?
-		ObjectClass				objectClass;			//What object class am i?
-		ObjectTypeNumber		destroyedObject;		//What I turn into when I die.
-		ObjectTypeNumber		explosionObject;		//How I blow up
-		bool					potentialContact;		//Can I can be a contact?
-		char					*appearName;			//Base Name of appearance Files.
-		float					extentRadius;			//Smallest sphere which will hold me.
-		bool					keepMe;					//Do not EVER cache this objType out.
-		long					iconNumber;				//my index into the big strip o' icons
-		long					teamId;					//DEfault for this type
-		unsigned char			subType;				//if building, what type of building? etc.
+        appearName = NULL;
+        subType    = 0;
+    }
 
-	public:
+    ObjectType(void)
+    {
+        init();
+    }
 
-		void* operator new (size_t ourSize);
-		void operator delete (void *us);
-			
-		void init (void) {
-			objectClass = INVALID;
-			objectTypeClass = -1;			//This is an invalid_object
-			destroyedObject = -1;
-			explosionObject = -1;
-			potentialContact = false;
+    virtual long init(FilePtr objFile, unsigned long fileSize);
 
-			extentRadius = 0;				//Nothing can hit me if this is zero.
-			
-			keepMe = false;
-			
-			iconNumber = -1;				//defaults to no icon
+    long init(FitIniFilePtr objFile);
 
-			appearName = NULL;
-			subType = 0;
-		}
-		
-		ObjectType (void) {
-			init();
-		}
-		
-		virtual long init (FilePtr objFile, unsigned long fileSize);
+    virtual ~ObjectType(void)
+    {
+        destroy();
+    }
 
-		long init (FitIniFilePtr objFile);
-		
-		virtual ~ObjectType (void) {
-			destroy();
-		}
-		
-		virtual void destroy (void);
-		
-		virtual GameObjectPtr createInstance (void);
-		
-		void addUser (void) {
-			numUsers++;
-		}
-		
-		void removeUser (void) {
-			numUsers--;
-		}
-		
-		void noMoreUsers (void) {
-			numUsers = 0;
-		}
+    virtual void destroy(void);
 
-		bool inUse (void) {
-			return (numUsers > 0);
-		}
+    virtual GameObjectPtr createInstance(void);
 
-		bool lovable (void) {
-			return keepMe;
-		}
-		
-		void makeLovable (void) {
-			keepMe = true;
-		}
-		
-		ObjectTypeNumber whatAmI (void) {
-			return(objTypeNum);
-		}
+    void addUser(void)
+    {
+        numUsers++;
+    }
 
-		char * getAppearanceTypeName (void) 
-		{
-			return(appearName);
-		}
-			
-		bool getPotentialContact (void) {
-			return(potentialContact);
-		}
+    void removeUser(void)
+    {
+        numUsers--;
+    }
 
-		long getObjectTypeClass (void) {
-			return(objectTypeClass);
-		}
+    void noMoreUsers(void)
+    {
+        numUsers = 0;
+    }
 
-		ObjectClass getObjectClass (void) {
-			return(objectClass);
-		}
+    bool inUse(void)
+    {
+        return (numUsers > 0);
+    }
 
-		ObjectTypeNumber getDestroyedObject (void) {
-			return(destroyedObject);
-		}
-		
-		ObjectTypeNumber getExplosionObject (void) {
-			return(explosionObject);
-		}
-		
-		float getExtentRadius (void) {
-			return(extentRadius);
-		}
+    bool lovable(void)
+    {
+        return keepMe;
+    }
 
-		void setExtentRadius (float newRadius) {
-			extentRadius = newRadius;
-		}
-		
-		ObjectTypeNumber getObjTypeNum (void) {
-			return(objTypeNum);
-		}
+    void makeLovable(void)
+    {
+        keepMe = true;
+    }
 
-		void setObjTypeNum (ObjectTypeNumber objTNum) {
-			objTypeNum = objTNum;
-		}
+    ObjectTypeNumber whatAmI(void)
+    {
+        return (objTypeNum);
+    }
 
-		void setIconNumber(long newNumber) {
-			iconNumber = newNumber;
-		}
+    char* getAppearanceTypeName(void)
+    {
+        return (appearName);
+    }
 
-		long getIconNumber(void) {
-			return iconNumber;
-		}
-						
-		long getTeamId (void) {
-			return teamId;
-		}
+    bool getPotentialContact(void)
+    {
+        return (potentialContact);
+    }
 
-		void setSubType (unsigned char type) {
-			subType = type;
-		}
+    long getObjectTypeClass(void)
+    {
+        return (objectTypeClass);
+    }
 
-		unsigned char getSubType (void) {
-			return(subType);
-		}
+    ObjectClass getObjectClass(void)
+    {
+        return (objectClass);
+    }
 
-		virtual bool handleCollision (GameObjectPtr collidee, GameObjectPtr collider);
-		
-		virtual bool handleDestruction (GameObjectPtr collidee, GameObjectPtr collider);
+    ObjectTypeNumber getDestroyedObject(void)
+    {
+        return (destroyedObject);
+    }
 
-		virtual float getBurnTime (void) {
-			return(0.0);
-		}
+    ObjectTypeNumber getExplosionObject(void)
+    {
+        return (explosionObject);
+    }
 
-		void createExplosion (Stuff::Vector3D &position, float dmg = 0.0, float rad = 0.0);
+    float getExtentRadius(void)
+    {
+        return (extentRadius);
+    }
+
+    void setExtentRadius(float newRadius)
+    {
+        extentRadius = newRadius;
+    }
+
+    ObjectTypeNumber getObjTypeNum(void)
+    {
+        return (objTypeNum);
+    }
+
+    void setObjTypeNum(ObjectTypeNumber objTNum)
+    {
+        objTypeNum = objTNum;
+    }
+
+    void setIconNumber(long newNumber)
+    {
+        iconNumber = newNumber;
+    }
+
+    long getIconNumber(void)
+    {
+        return iconNumber;
+    }
+
+    long getTeamId(void)
+    {
+        return teamId;
+    }
+
+    void setSubType(unsigned char type)
+    {
+        subType = type;
+    }
+
+    unsigned char getSubType(void)
+    {
+        return (subType);
+    }
+
+    virtual bool handleCollision(GameObjectPtr collidee, GameObjectPtr collider);
+
+    virtual bool handleDestruction(GameObjectPtr collidee, GameObjectPtr collider);
+
+    virtual float getBurnTime(void)
+    {
+        return (0.0);
+    }
+
+    void createExplosion(Stuff::Vector3D& position, float dmg = 0.0, float rad = 0.0);
 };
 
 //---------------------------------------------------------------------------
 
-class ObjectTypeManager {
+class ObjectTypeManager
+{
+public:
+    long numObjectTypes;
+    ObjectTypePtr* table;
 
-	public:
+    static UserHeapPtr objectTypeCache;
+    static UserHeapPtr objectCache;
+    static PacketFilePtr objectFile;
 
-		long					numObjectTypes;
-		ObjectTypePtr*			table;
+    //--------------------------------------------------------
+    // Following is done to maintain compatibility with MC1...
+    static long bridgeTypeHandle;
+    static long forestTypeHandle;
+    static long wallHeavyTypeHandle;
+    static long wallMediumTypeHandle;
+    static long wallLightTypeHandle;
 
-		static UserHeapPtr		objectTypeCache;
-		static UserHeapPtr		objectCache;
-		static PacketFilePtr	objectFile;
+public:
+    void init(void)
+    {
+    }
 
-		//--------------------------------------------------------
-		// Following is done to maintain compatibility with MC1...
-		static long				bridgeTypeHandle;
-		static long				forestTypeHandle;
-		static long				wallHeavyTypeHandle;
-		static long				wallMediumTypeHandle;
-		static long				wallLightTypeHandle;
-			
-	public:
+    ObjectTypeManager(void)
+    {
+        init();
+    }
 
-		void init (void) {
-		}
-			
-		ObjectTypeManager (void) {
-			init();
-		}
+    long init(const char* objectFileName, long objectTypeCacheSize, long objectCacheSize, long maxObjectTypes = 1024);
 
-		long init (const char* objectFileName, long objectTypeCacheSize, long objectCacheSize, long maxObjectTypes = 1024);
-			
-		void destroy (void);
-							
-		~ObjectTypeManager (void) {
-			destroy();
-		}
+    void destroy(void);
 
-		void remove (long objTypeNum);
+    ~ObjectTypeManager(void)
+    {
+        destroy();
+    }
 
-		void remove (ObjectTypePtr ptr);
-			
-		ObjectTypePtr load (ObjectTypeNumber objTypeNum, bool noCacheOut = true, bool forceLoad = false);
+    void remove(long objTypeNum);
 
-		ObjectTypePtr get (ObjectTypeNumber objTypeNum, bool loadIt = true);
+    void remove(ObjectTypePtr ptr);
 
-		GameObjectPtr create (ObjectTypeNumber objTypeNum);
+    ObjectTypePtr load(ObjectTypeNumber objTypeNum, bool noCacheOut = true, bool forceLoad = false);
+
+    ObjectTypePtr get(ObjectTypeNumber objTypeNum, bool loadIt = true);
+
+    GameObjectPtr create(ObjectTypeNumber objTypeNum);
 };
-
-//---------------------------------------------------------------------------
-#endif

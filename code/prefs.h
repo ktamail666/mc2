@@ -2,64 +2,60 @@
 // Copyright (C) Microsoft Corporation. All rights reserved.                 //
 //===========================================================================//
 
-#ifndef PREFS_H
-#define PREFS_H
+#pragma once
+#include "mclib.h"
 
-#ifndef MCLIB_H
-#include"mclib.h"
-#endif
-
-
-class CPrefs {
+class CPrefs
+{
 public:
-	CPrefs();
-	int load( const char* pFileName = "options");
-	int save();
-	int applyPrefs(bool bApplyResolution = 1);
+    CPrefs();
+    int load(const char* pFileName = "options");
+    int save();
+    int applyPrefs(bool bApplyResolution = 1);
 
-	void setNewName( const char* pNewName );
-	void setNewUnit( const char* pNewUnit );
-	void setNewIP( const char* pNewIP );
+    void setNewName(const char* pNewName);
+    void setNewUnit(const char* pNewUnit);
+    void setNewIP(const char* pNewIP);
 
 public:
-	long DigitalMasterVolume;
-	long MusicVolume;
-	long sfxVolume;
-	long RadioVolume;
-	long BettyVolume;
+    long DigitalMasterVolume;
+    long MusicVolume;
+    long sfxVolume;
+    long RadioVolume;
+    long BettyVolume;
 
-	bool useShadows;
-	bool useWaterInterestTexture;
-	bool useHighObjectDetail;
+    bool useShadows;
+    bool useWaterInterestTexture;
+    bool useHighObjectDetail;
 
-	long GameDifficulty;
-	bool useUnlimitedAmmo;
+    long GameDifficulty;
+    bool useUnlimitedAmmo;
 
-	long renderer;
-	//long resolution;
+    long renderer;
+    //long resolution;
     int resolutionX;
     int resolutionY;
 
-	bool fullScreen;
-	long gammaLevel;
-	bool useLeftRightMouseProfile; // if false, use old style commands
-	long baseColor;
-	long highlightColor;
-	long faction;
-	char insigniaFile[256];
-	char unitName[10][256];
-	char playerName[10][256];
-	char ipAddresses[10][24];
+    bool fullScreen;
+    long gammaLevel;
+    bool useLeftRightMouseProfile;  // if false, use old style commands
+    long baseColor;
+    long highlightColor;
+    long faction;
+    char insigniaFile[256];
+    char unitName[10][256];
+    char playerName[10][256];
+    char ipAddresses[10][24];
 
-	bool	pilotVideos;
-	bool	useNonWeaponEffects;
-	bool	useLocalShadows;
-	bool	asyncMouse;
-	long	fogPos;
-	char	bitDepth; // 0 == 16, 1 == 32
+    bool pilotVideos;
+    bool useNonWeaponEffects;
+    bool useLocalShadows;
+    bool asyncMouse;
+    long fogPos;
+    char bitDepth;  // 0 == 16, 1 == 32
 
-	bool	saveTranscripts;
-	bool	tutorials;
+    bool saveTranscripts;
+    bool tutorials;
 
 #if 0
 	long FilterState;
@@ -73,4 +69,3 @@ public:
 };
 
 extern CPrefs prefs;
-#endif /*PREFS_H*/

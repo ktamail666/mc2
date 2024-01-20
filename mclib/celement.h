@@ -6,34 +6,24 @@
 // Copyright (C) Microsoft Corporation. All rights reserved.                 //
 //===========================================================================//
 
-#ifndef CELEMENT_H
-#define CELEMENT_H
-//---------------------------------------------------------------------------
-// Include files
+#pragma once
 
-#ifndef DSTD_H
-#include"dstd.h"
-#endif
+#include "dstd.h"
 
-//---------------------------------------------------------------------------
 class Element
 {
 public:
+    float depth;
+    bool drawNormal;
 
-	float		depth;
-	bool		drawNormal;
+    Element(void)
+    {
+        depth      = 1.0;
+        drawNormal = TRUE;
+    }
 
-	Element (void)
-	{
-		depth = 1.0;
-		drawNormal = TRUE;
-	}
+    Element(long _depth);
+    Element(float _depth);
 
-	Element (long _depth);
-	Element (float _depth);
-
-	virtual void draw (void) = 0;
+    virtual void draw(void) = 0;
 };
-
-//---------------------------------------------------------------------------
-#endif

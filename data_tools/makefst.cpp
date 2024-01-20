@@ -69,6 +69,7 @@ int unpack(const char* fst_file, const char* out_path)
         std::replace(fname.begin(), fname.end(), '\\', PATH_SEPARATOR_AS_CHAR);
 
         char out_file_path[1024];
+        std::string out_file_path2;
         S_snprintf(out_file_path, 1024, "%s" PATH_SEPARATOR "%s" PATH_SEPARATOR "%s", out_path, ff_name, fname.c_str());
 //-----
         const size_t TMP_SIZE = 1024;

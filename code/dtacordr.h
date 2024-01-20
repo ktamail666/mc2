@@ -7,14 +7,7 @@
 //---------------------------------------------------------------------------//
 // Copyright (C) Microsoft Corporation. All rights reserved.                 //
 //===========================================================================//
-
-#ifndef DTACORDR_H
-#define DTACORDR_H
+#pragma once
 
 class TacticalOrder;
 typedef TacticalOrder* TacticalOrderPtr;
-
-#endif
-
-//***************************************************************************
-

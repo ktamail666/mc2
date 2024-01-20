@@ -16,9 +16,9 @@ long maxFastFiles = 0;
 
 void usage(char** argv) {
     printf("%s [-d] [-c] <-f pak_file> [-r rsp_file] [-p path]\n", argv[0]);
-    printf("\\t-d - unpack\n");
-    printf("\\t-c - compress (when packing)\n");
-    printf("\\t-r - rsp file with file list\n");
+    printf("\t-d - unpack\n");
+    printf("\t-c - compress (when packing)\n");
+    printf("\t-r - rsp file with file list\n");
 }
 
 
@@ -36,8 +36,9 @@ int unpack(const char* pak_file, const char* out_path)
 		return -1;
 	}
 
-    if(create_path(out_path))
+    if(create_path(out_path)) {
         return -1;
+	}
 
 	MemoryPtr packet_buffer = NULL;
 	size_t packet_buffer_len = 0;
@@ -49,8 +50,9 @@ int unpack(const char* pak_file, const char* out_path)
             const int messageSize = pakFile->getPacketSize();
             int storage_type = pakFile->getStorageType();
             if(!packet_buffer || packet_buffer_len<messageSize) {
-                if(packet_buffer)
+                if(packet_buffer) {
                     delete[] packet_buffer;
+				}
                 packet_buffer = (MemoryPtr) new unsigned char[messageSize];
                 packet_buffer_len = messageSize;
             }
@@ -77,8 +79,9 @@ int unpack(const char* pak_file, const char* out_path)
 
 int pack(const char* pak_file, const char* rsp_file, bool b_compress) {
 
-	if (!pak_file || !rsp_file)
+	if (!pak_file || !rsp_file) {
 		return -1;
+	}
 
 	PacketFile* pakFile = new PacketFile;
 
@@ -151,7 +154,7 @@ int pack(const char* pak_file, const char* rsp_file, bool b_compress) {
 					break;
 				}
 			}
-            
+
             size_t record_len = strlen(record);
             for(int i=0;i<rec_len;++i) {
                 if(record[i] == '\\') {
@@ -215,9 +218,9 @@ int pack(const char* pak_file, const char* rsp_file, bool b_compress) {
 				pakFile->writePacket(packet++, packet_buffer, len, storage_type);
 			}
 		} else {
-            
+
             if(fpath && !gos_FileExists(fpath)) {
-                SPEW(("DBG", "File %s does not exists though present in .rsp file, will be insluded as NULL packet instead\n", fpath));
+                SPEW(("DBG", "File %s does not exists though present in .rsp file, will be included as NULL packet instead\n", fpath));
             }
 			pakFile->writePacket(packet++, nullptr, 0, STORAGE_TYPE_NUL);
 		}
@@ -235,7 +238,6 @@ int pack(const char* pak_file, const char* rsp_file, bool b_compress) {
 
     return 0;
 }
-
 
 int main(int argc, char** argv)
 {
@@ -285,24 +287,22 @@ int main(int argc, char** argv)
 
     // always compress, because no way to read uncompressed fast files yet
 	b_compress = true;
-	
+
 	if(!pak_file) {
         SPEW(("DBG", "No pack file given\n"));
         usage(argv);
         return 1;
 	}
 
-	if(!rsp_file && false == b_unpack) {
-        SPEW(("DBG", "No rsp file given\n"));
-        usage(argv);
-        return 1;
+	if (!rsp_file && !b_unpack)
+	{
+		SPEW(("DBG", "No rsp file given\n"));
+		usage(argv);
+		return 1;
 	}
 
     if(b_unpack)
         return unpack(pak_file, out_path);
     else
         return pack(pak_file, rsp_file, b_compress);
-
-
 }
-

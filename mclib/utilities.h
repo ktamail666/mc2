@@ -2,85 +2,104 @@
 // Copyright (C) Microsoft Corporation. All rights reserved.                 //
 //===========================================================================//
 
-// stuff I need all over the place
 #ifndef UTILITIES_H
 #define UTILITIES_H
 
-#include<gameos.hpp>
-#include<string.h>
-
-//#include<stdio.h>
+#include <gameos.hpp>
+#include <cstring>
 
 class FitIniFile;
-
 
 class StaticInfo
 {
 public:
+    void init(FitIniFile& file, const char* blockName, long hiResOffsetX = 0, long hiResOffsetY = 0, DWORD neverFlush = 0);
+    void render();
+    bool isInside(int mouseX, int mouseY);
 
-	void init( FitIniFile& file, const char* blockName, long hiResOffsetX = 0, long hiResOffsetY = 0, DWORD neverFlush = 0 );
-	void render();
-	bool isInside( int mouseX, int mouseY );
+    void setLocation(float newX, float newY);
+    void move(float deltaX, float deltaY);
 
-	void setLocation( float  newX, float newY );
-	void move( float deltaX, float deltaY );
+    void setNewUVs(float uLeft, float vTop, float uRight, float vBottom);
 
-	void setNewUVs( float uLeft, float vTop, float uRight, float vBottom );
+    float width()
+    {
+        return location[2].x - location[0].x;
+    }
+    float height()
+    {
+        return location[2].y - location[0].y;
+    }
 
-	float width(){ return location[2].x - location[0].x; }
-	float height(){ return location[2].y - location[0].y; }
-	
-	void getData(unsigned char * buffer);
+    void getData(unsigned char* buffer);
 
-	void showGUIWindow( bool bShow );
+    void showGUIWindow(bool bShow);
 
-	void setColor( long newColor );
+    void setColor(long newColor);
 
-	StaticInfo(){}
-	~StaticInfo();
+    StaticInfo()
+    {
+    }
+    ~StaticInfo();
 
-	unsigned long textureHandle;
-	gos_VERTEX	location[4];
-	long u, v, uWidth, vHeight;
+    unsigned long textureHandle{};
+    gos_VERTEX location[4]{};
+    long u{}, v{}, uWidth{}, vHeight{};
 
-	unsigned long textureWidth; // textures are square
+    unsigned long textureWidth{};  // textures are square
 };
-
 
 
 typedef struct _GUI_RECTd
 {
-	long left;
-	long top;
-	long right;
-	long bottom;
+    long left;
+    long top;
+    long right;
+    long bottom;
 } GUI_RECT;
 
 
-void drawEmptyRect( const GUI_RECT& rect, unsigned long leftBorderColor = 0xffffffff,
-	 unsigned long rightBorderColor = 0xff000000 );
+void drawEmptyRect(const GUI_RECT& rect, unsigned long leftBorderColor = 0xffffffff, unsigned long rightBorderColor = 0xff000000);
 
 
-void drawRect( const GUI_RECT& rect, DWORD color );
+void drawRect(const GUI_RECT& rect, DWORD color);
 
-void drawShadowText( long colorTop, long colorShadow, HGOSFONT3D font, 
-					long left, long top, bool proportional, const char* text, bool bBold, float scale );
+void drawShadowText(long colorTop, long colorShadow, HGOSFONT3D font, long left, long top, bool proportional, const char* text, bool bBold, float scale);
 
-void drawShadowText( long colorTop, long colorShadow, HGOSFONT3D font, 
-					long left, long top, bool proportional, const char* text, bool bold, float scale,
-					long xOffset, long yOffset);
+void drawShadowText(
+    long colorTop,
+    long colorShadow,
+    HGOSFONT3D font,
+    long left,
+    long top,
+    bool proportional,
+    const char* text,
+    bool bold,
+    float scale,
+    long xOffset,
+    long yOffset);
 
-void drawShadowText( long colorTop, long colorShadow, HGOSFONT3D font, 
-					long left, long top, long right, long bottom, bool proportional, const char* text, bool bold, float scale,
-					long xOffset, long yOffset);
+void drawShadowText(
+    long colorTop,
+    long colorShadow,
+    HGOSFONT3D font,
+    long left,
+    long top,
+    long right,
+    long bottom,
+    bool proportional,
+    const char* text,
+    bool bold,
+    float scale,
+    long xOffset,
+    long yOffset);
 
 
+long interpolateColor(long color1, long color2, float percent);
 
-long interpolateColor( long color1, long color2, float percent );
-
-inline long reverseRGB( long oldVal ) 
+inline long reverseRGB(long oldVal)
 {
-	return ( (oldVal & 0xff000000) | ((oldVal & 0xff0000) >> 16) | (oldVal & 0xff00) | ((oldVal & 0xff) << 16) );
+    return ((oldVal & 0xff000000) | ((oldVal & 0xff0000) >> 16) | (oldVal & 0xff00) | ((oldVal & 0xff) << 16));
 }
 
 
@@ -94,30 +113,27 @@ inline long reverseRGB( long oldVal )
 extern HSTRRES gosResourceHandle;
 
 
-
-
 #if 1
 inline int cLoadString(
-  unsigned int uID,             // resource identifier
-  char* lpBuffer,      // pointer to buffer for resource
-  int nBufferMax,        // size of buffer
-  HSTRRES handle = gosResourceHandle
-  )
+    unsigned int uID,  // resource identifier
+    char* lpBuffer,    // pointer to buffer for resource
+    int nBufferMax,    // size of buffer
+    HSTRRES handle = gosResourceHandle)
 {
-	memset(lpBuffer,0,nBufferMax);
-	const char * tmpBuffer = gos_GetResourceString(handle, uID);
-	int stringLength = (int)strlen(tmpBuffer);
-	if (stringLength >= nBufferMax)
-		STOP(("String too long for buffer.  String Id %u, bufferLen %d, StringLen %l",uID,nBufferMax,stringLength));
-	memcpy(lpBuffer,tmpBuffer,stringLength);
-	return stringLength;
+    memset(lpBuffer, 0, nBufferMax);
+    const char* tmpBuffer = gos_GetResourceString(handle, uID);
+    int stringLength      = (int)strlen(tmpBuffer);
+    if (stringLength >= nBufferMax)
+        STOP(("String too long for buffer.  String Id %u, bufferLen %d, StringLen %l", uID, nBufferMax, stringLength));
+    memcpy(lpBuffer, tmpBuffer, stringLength);
+    return stringLength;
 }
 
 #else
 
-inline char * cLoadString (unsigned int uID)
+inline char* cLoadString(unsigned int uID)
 {
-	return gos_GetResourceString(gosResourceHandle, uID);
+    return gos_GetResourceString(gosResourceHandle, uID);
 }
 #endif
 

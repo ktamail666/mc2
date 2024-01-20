@@ -1,10 +1,29 @@
 cmake_minimum_required (VERSION 3.10)
-# select GLVND versus legacy OpenGL libraries
-cmake_policy(SET CMP0072 NEW) # cmake --help-policy CMP0072
+
+# Find mold executable
+find_program(MOLD_EXECUTABLE NAMES mold)
+if(MOLD_EXECUTABLE)
+    set(CMAKE_LINKER ${MOLD_EXECUTABLE})
+endif()
+
+find_program(CLANG_COMPILER clang-${CLANG_VERSION})
+find_program(CLANG_COMPILER_CXX clang++-${CLANG_VERSION})
+if(CLANG_COMPILER)
+    set(CMAKE_C_COMPILER ${CLANG_COMPILER})
+endif()
+if(CLANG_COMPILER_CXX)
+    set(CMAKE_CXX_COMPILER ${CLANG_COMPILER_CXX})
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++ -lc++abi")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -stdlib=libc++ -lc++abi")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_LIBCPP_NO_ABI_TAG -stdlib=libc++ --rtlib=compiler-rt")
+    set(CLANG_VERSION 19)
+endif()
 project(mc2)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 include(CMakeToolsHelpers OPTIONAL)
 
@@ -22,8 +41,6 @@ if(0)
                 endif()
                 set(CMAKE_CXX_CLANG_TIDY ${TIDY}
                         "--extra-arg-before=-std=c++20"
-                        "--extra-arg-before=-I/home/tamas/dev/cmakes/include"
-                        "--extra-arg-before=-I/home/tamas/dev/curl-7.86.0/install/include"
                         "--extra-arg-before=-I${CMAKE_CURRENT_BINARY_DIR}/gen")
         endif()
 
@@ -65,12 +82,11 @@ if(MSVC)
 	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 	message("Compiling on M$ Windows")
 else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -ggdb -fPIC")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-local-typedefs -Werror=array-bounds -Werror=array-bounds -Wno-switch -Wwrite-strings -Wunused-variable -fpermissive")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ggdb")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=x86-64-v3 -Wno-unused-local-typedefs -Werror=array-bounds -Wno-switch -Wwrite-strings -Wunused-variable -fpermissive")
     # -Wno-unused-local-typedefs - to disable "typedef was ignored on this declaration"
 endif()
 
-# to support windows sln file generator as well
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_ARMOR -D_DEBUG -DBUGLOG -DLAB_ONLY")
 if(MSVC)
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd /MP")
@@ -78,11 +94,10 @@ if(MSVC)
 endif()
 
 
-add_definitions(-DUSE_ASSEMBLER_CODE=0)
 add_definitions(-DLINUX_BUILD)
 
 find_package(SDL2 REQUIRED)
-find_package(SDL2_mixer)
+find_package(SDL2_mixer REQUIRED)
 
 if(NOT (TARGET SDL2_mixer OR TARGET SDL2_mixer::SDL2_mixer))
     find_package(PkgConfig REQUIRED)
@@ -98,36 +113,26 @@ if(NOT (TARGET SDL2_ttf OR TARGET SDL2_ttf::SDL2_ttf-static))
     add_library(SDL2_ttf::SDL2_ttf ALIAS PkgConfig::SDL2_ttf)
 endif()
 
-find_package(GLEW REQUIRED)
-find_package(OpenGL REQUIRED)
 find_package(ZLIB REQUIRED)
 
 message("Found SDL2 package ${SDL_LIBS}" )
 message("SDL2 prefix: ${SDL2_PREFIX}")
-message("OPENGL library found in ${OPENGL}")
-message("GLEW library found in ${GLEW}")
 message("Zlib library found in ${ZLIB}")
 
-message("OpenGL library linking: ${OPENGL_gl_LIBRARY}")
-message("OpenGL library include: ${OPENGL_INCLUDE_DIR}")
-
-
-get_filename_component(COM_PATH1 "./GameOS/include" ABSOLUTE)
-get_filename_component(COM_PATH2 "./GameOS/gameos" ABSOLUTE)
+get_filename_component(COM_PATH1 "GameOS/include" ABSOLUTE)
+get_filename_component(COM_PATH2 "GameOS/gameos" ABSOLUTE)
 
 set(COMMON_INCLUDE_DIRS  ${COM_PATH1} ${COM_PATH2})
 
-add_subdirectory("./mclib/" "./out/mclib")
-add_subdirectory("./mclib/mlr" "./out/mclib/mlr")
-add_subdirectory("./mclib/gosfx" "./out/mclib/gosfx")
-add_subdirectory("./mclib/stuff" "./out/mclib/stuff")
-add_subdirectory("./gui" "./out/gui")
-add_subdirectory("./GameOS/gameos" "./out/GameOS/gameos")
-
-add_subdirectory("./GameOS/src" "./out/windows")
+add_subdirectory("mclib/" "out/mclib")
+add_subdirectory("mclib/mlr" "out/mclib/mlr")
+add_subdirectory("mclib/gosfx" "out/mclib/gosfx")
+add_subdirectory("mclib/stuff" "out/mclib/stuff")
+add_subdirectory("gui" "out/gui")
+add_subdirectory("GameOS/gameos" "out/GameOS/gameos")
+add_subdirectory("GameOS/src" "out/windows")
 
 set(SOURCES
-    "code/dw.cpp"
     "code/mechcmd2.cpp"
     "code/artlry.cpp"
     "code/bldng.cpp"
@@ -218,8 +223,12 @@ set(SOURCES
     "code/mc2movie.cpp"
     )
 
-
-include_directories(${COMMON_INCLUDE_DIRS} "./mclib" "./gui" "./code" "./netlib")
+include_directories(${COMMON_INCLUDE_DIRS}
+        "mclib"
+        "gui"
+        "code"
+        "netlib"
+)
 
 if(UNIX)
 	set(ADDITIONAL_LIBS dl)
@@ -240,46 +249,42 @@ target_link_libraries(mc2 PRIVATE
     gameos_main
     windows
     ZLIB::ZLIB
-    GLEW::GLEW
     SDL2::SDL2main
     SDL2_mixer::SDL2_mixer
     ${ADDITIONAL_LIBS}
-    OpenGL::GL)
+)
 
 add_subdirectory(res out/res)
 add_subdirectory(data_tools out/data_tools)
 add_subdirectory(text_tool out/text_tool)
 add_subdirectory(Viewer out/Viewer)
 
-if(UNIX) # TODO temporarly disable on Windows
-add_custom_target(mc2_copy_shaders ALL
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_LIST_DIR}/shaders $<TARGET_FILE_DIR:mc2>/shaders
-)
+if(UNIX) # TODO temporarily disable on Windows
+    add_custom_target(mc2_copy_data ALL
+        #COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_SOURCE_DIR}/build_scripts
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/data_scripts ${CMAKE_SOURCE_DIR}/build_scripts
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/shaders $<TARGET_FILE_DIR:mc2>/shaders
+    )
 
-add_custom_target(mc2_copy_data ALL
-    #COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_SOURCE_DIR}/mc2srcdata/build_scripts
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_LIST_DIR}/data_scripts ${CMAKE_SOURCE_DIR}/mc2srcdata/build_scripts
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_LIST_DIR}/shaders $<TARGET_FILE_DIR:mc2>/shaders
-)
-
-file(GLOB files "${CMAKE_SOURCE_DIR}/mc2srcdata/build_scripts/*.fst" "${CMAKE_SOURCE_DIR}/mc2srcdata/build_scripts/*.cfg")
-foreach(file ${files})
+    file(GLOB files "${CMAKE_SOURCE_DIR}/build_scripts/*.fst" "${CMAKE_SOURCE_DIR}/build_scripts/*.cfg" "${CMAKE_SOURCE_DIR}/build_scripts/testtxm.tga")
+    foreach(file ${files})
         get_filename_component(FILENAME_WO_NAME ${file} NAME_WE)
         get_filename_component(FILENAME_NAME ${file} NAME)
         add_custom_target(mc2_create_symlinks_${FILENAME_WO_NAME} ALL
             COMMAND ${CMAKE_COMMAND} -E create_symlink ${file} $<TARGET_FILE_DIR:mc2>/${FILENAME_NAME}
             COMMAND ${CMAKE_COMMAND} -E create_symlink ${file} $<TARGET_FILE_DIR:mc2>/${FILENAME_NAME}
         )
-endforeach()
+    endforeach()
 
-add_custom_target(mc2_create_symlinks2 ALL
-    COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/mc2srcdata/build_scripts/data $<TARGET_FILE_DIR:mc2>/data
-    COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/mc2srcdata/build_scripts/assets $<TARGET_FILE_DIR:mc2>/assets
-)
+    add_custom_target(mc2_create_symlinks2 ALL
+        COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/shaders $<TARGET_FILE_DIR:mc2>/shaders
+        COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/build_scripts/data $<TARGET_FILE_DIR:mc2>/data
+        COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/build_scripts/assets $<TARGET_FILE_DIR:mc2>/assets
+    )
 endif()
 
 # TODO Debian should create data deb
-# TODO currentlty data installed under /usr/bin/...
+# TODO currently data installed under /usr/bin/...
 # TODO there is many issues with DEB package generation
 
 set(CPACK_PACKAGE_NAME "mc2")

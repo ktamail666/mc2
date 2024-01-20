@@ -767,7 +767,8 @@ class TG_Shape
 	protected:
 
 	public:
-		void * operator new (size_t mySize);
+		void * operator new (size_t mySize) noexcept;
+                void * operator new (size_t mySize, void* where) noexcept;
 		void operator delete (void * us);
 
 		void init (void)

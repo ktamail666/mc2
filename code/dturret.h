@@ -8,18 +8,10 @@
 // Copyright (C) Microsoft Corporation. All rights reserved.                 //
 //===========================================================================//
 
-#ifndef DTURRET_H
-#define DTURRET_H
-
-//---------------------------------------------------------------------------
+#pragma once
 
 class TurretType;
 typedef TurretType* TurretTypePtr;
 
 class Turret;
 typedef Turret* TurretPtr;
-
-//***************************************************************************
-
-#endif
-

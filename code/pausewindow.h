@@ -1,5 +1,4 @@
-#ifndef PAUSEWINDOW_H
-#define PAUSEWINDOW_H
+#pragma once
 /*************************************************************************************************\
 PauseWindow.h			: Interface for the PauseWindow component.
 //---------------------------------------------------------------------------//
@@ -13,11 +12,8 @@ struct ButtonData;
 class StaticInfo;
 class FitIniFile;
 
-#include"utilities.h"
-
-#ifndef AFONT_H
-#include"afont.h"
-#endif
+#include "utilities.h"
+#include "afont.h"
 
 /**************************************************************************************************
 CLASS DESCRIPTION
@@ -25,68 +21,64 @@ PauseWindow:
 **************************************************************************************************/
 struct MoveInfo
 {
-	float time; // in seconds
-	float position; // x pixels
+    float time;      // in seconds
+    float position;  // x pixels
 };
 
 
 class PauseWindow
 {
-	public:
-		
-		PauseWindow();
-		~PauseWindow();
+public:
+    PauseWindow();
+    ~PauseWindow();
 
-		void update();
-		void render();
+    void update();
+    void render();
 
-		void init( FitIniFile& file );
+    void init(FitIniFile& file);
 
-		void handleClick( int ID );
+    void handleClick(int ID);
 
-		bool inRect( int mouseX, int mouseY );
+    bool inRect(int mouseX, int mouseY);
 
-		void begin(){ currentTime = 0.f; }
-		void end();
-		void begin(bool objectivesOn);
+    void begin()
+    {
+        currentTime = 0.f;
+    }
+    void end();
+    void begin(bool objectivesOn);
 
-		enum PAUSEBUTTONS
-		{
-			OBJECTIVES = 0,
-			SAVE = 1,
-			LOAD = 2,
-			OPTIONS = 3,
-			RESTART = 4,
-			EXIT = 5,
-			RETURN = 6
-		};
+    enum PAUSEBUTTONS
+    {
+        OBJECTIVES = 0,
+        SAVE       = 1,
+        LOAD       = 2,
+        OPTIONS    = 3,
+        RESTART    = 4,
+        EXIT       = 5,
+        RETURN     = 6
+    };
 
-	private:
+private:
+    ControlButton* buttons;
+    ButtonData* buttonData;
+    long buttonCount;
+    StaticInfo* statics;
+    long staticCount;
+    GUI_RECT backgrounds[2];
 
-		ControlButton* buttons;
-		ButtonData* buttonData;
-		long		buttonCount;
-		StaticInfo* statics;
-		long		staticCount;
-		GUI_RECT	backgrounds[2];
+    float finalReference;
+    float currentPos;
+    float currentTime;
 
-		float		finalReference;
-		float		currentPos;
-		float		currentTime;
+    aFont font;
+    aFont headerFont;
 
-		aFont	font;
-		aFont	headerFont;
+    bool wasDragging;
+    bool objectivesAlreadyOn;
 
-		bool wasDragging;
-		bool objectivesAlreadyOn;
+    static MoveInfo moveInfo[8];
 
-		static MoveInfo moveInfo[8];
-
-		bool		bPromptToQuit;
-		bool		bPromptToAbort;
-
+    bool bPromptToQuit;
+    bool bPromptToAbort;
 };
-
-
-//*************************************************************************************************
-#endif  // end of file ( PauseWindow.h )

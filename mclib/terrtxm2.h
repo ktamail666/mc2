@@ -51,37 +51,37 @@ class TerrainColorMap
 	//-------------
 	protected:
 		MemoryPtr				ColorMap;
-		
+
 		DWORD					numTextures;
-		
+
 		float					numTexturesAcross;
 		float					fractionPerTexture;
-		
+
 		ColorMapTextures		*textures;
 		ColorMapRAM				*txmRAM;
-		
+
 		UserHeapPtr				colorMapHeap;
 		UserHeapPtr				colorMapRAMHeap;
-		
+
 		MemoryPtr				detailTextureRAM;
 		DWORD					detailTextureNodeIndex;
 		float					detailTextureTilingFactor;
-		
+
 		MemoryPtr				waterTextureRAM;
 		DWORD					waterTextureNodeIndex;
 		float					waterTextureTilingFactor;
-		
+
 		DWORD					numWaterDetailFrames;
 		DWORD					waterDetailNodeIndex[MAX_WATER_DETAIL_TEXTURES];
 		float					waterDetailFrameRate;
 		float					waterDetailTilingFactor;
 
 		static DWORD			terrainTypeIDs[ TOTAL_COLORMAP_TYPES ];
-		
+
 	public:
-	
+
 		bool					colorMapStarted;
-		
+
 		float					hGauss;
 		float					roughDistance;
 
@@ -90,7 +90,7 @@ class TerrainColorMap
 	protected:
 
 	public:
-	
+
 		void init (void);
 
 		TerrainColorMap (void)
@@ -108,7 +108,7 @@ class TerrainColorMap
 		long init (char *fileName);
 
 		void getColorMapData (MemoryPtr ourRAM, long index, long width);
-				
+
 		DWORD getTextureHandle (VertexPtr vMin, VertexPtr vMax, TerrainUVData *uvData);
 
 		DWORD getDetailHandle (void)
@@ -141,7 +141,7 @@ class TerrainColorMap
 		{
 			return numWaterDetailFrames;
 		}
-		
+
 		float getWaterDetailFrameRate (void)
 		{
 			return waterDetailFrameRate;
@@ -161,7 +161,7 @@ class TerrainColorMap
 		{
 			return waterDetailTilingFactor;
 		}
-		
+
 		void setWaterDetailFrameRate (float frameRate)
 		{
 			waterDetailFrameRate = frameRate;
@@ -183,7 +183,7 @@ class TerrainColorMap
 		}
 
 		long saveTilingFactors(FitIniFile *fitFile);
-		
+
  		//Mike, these functions will reload these textures from disk.
 		// This allows us to change them in the editor and reload here.
 		// Pass in the filename of the mission!!!!
@@ -191,12 +191,12 @@ class TerrainColorMap
 		void resetDetailTexture (const char *fileName);
 		void resetWaterTexture (const char *fileName);
 		void resetWaterDetailTextures (const char *fileName);
-		
+
 		//Pass in filename of height map to write new data to.
 		void refractalizeBaseMesh (const char *fileName, long Threshold, long Noise);
-		
+
 		void burnInShadows (bool doBumpPass = true, const char * fileName = NULL);
-		
+
 		void recalcLight(const char *fileName);
 
 		static long getNumTypes (void)

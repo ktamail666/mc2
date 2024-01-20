@@ -25,6 +25,7 @@ include_directories("./window" ${COMMON_INCLUDE_DIRS} "../mclib" "../gui" "../co
 
 add_executable(viewer ${VIEWER_SOURCES})
 target_link_libraries(viewer
+    mc2res
     mclib
     gosfx
     mlr
@@ -34,8 +35,7 @@ target_link_libraries(viewer
     gameos_main
     windows
     ZLIB::ZLIB
-    GLEW::GLEW
     SDL2::SDL2main
     SDL2_mixer::SDL2_mixer
     ${ADDITIONAL_LIBS}
-    OpenGL::GL)
+)

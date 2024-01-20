@@ -13,69 +13,68 @@
 #include <dirent.h>
 #include <fnmatch.h>
 #include <stdint.h>
-#include <libgen.h> // dirname
-#include <stdlib.h> // free
-#include <stdio.h> // free
-#include<wchar.h> // wcscpy
+#include <libgen.h>  // dirname
+#include <stdlib.h>  // free
+#include <stdio.h>   // free
+#include <wchar.h>   // wcscpy
 
-#include"platform_windows.h"
-#include"platform_str.h"
+#include "platform_windows.h"
+#include "platform_str.h"
 
 static int gGetLastError = 0;
 
 DWORD GetTimeZoneInformation(LPTIME_ZONE_INFORMATION tzi)
 {
-
     const wchar_t* tzn = L"EST";
-    wcscpy(tzi -> StandardName, tzn);
-    tzi -> StandardBias = 0;
-    GetSystemTime(&tzi -> StandardDate);
+    wcscpy(tzi->StandardName, tzn);
+    tzi->StandardBias = 0;
+    GetSystemTime(&tzi->StandardDate);
 
     struct timeval tv;
     struct timezone tz;
     gettimeofday(&tv, &tz);
-    tzi -> Bias = tz.tz_minuteswest; // sebi !NB check this
+    tzi->Bias = tz.tz_minuteswest;  // sebi !NB check this
 
     return TIME_ZONE_ID_STANDARD;
-
 }
 
 VOID WINAPI GetSystemTime(LPSYSTEMTIME t)
 {
-    time_t tim = time(NULL);
+    time_t tim              = time(NULL);
     struct tm* gm_time_data = gmtime(&tim);
 
-    t -> wYear = 1900 + gm_time_data -> tm_year;
-    t -> wMonth = 1 + gm_time_data -> tm_mon;
-    t -> wDayOfWeek = gm_time_data -> tm_wday;
-    t -> wDay = gm_time_data -> tm_mday;
-    t -> wHour = gm_time_data -> tm_hour;
-    t -> wMinute = gm_time_data -> tm_min;
-    t -> wSecond = gm_time_data -> tm_sec;
-    t -> wMilliseconds = 0;
+    t->wYear         = 1900 + gm_time_data->tm_year;
+    t->wMonth        = 1 + gm_time_data->tm_mon;
+    t->wDayOfWeek    = gm_time_data->tm_wday;
+    t->wDay          = gm_time_data->tm_mday;
+    t->wHour         = gm_time_data->tm_hour;
+    t->wMinute       = gm_time_data->tm_min;
+    t->wSecond       = gm_time_data->tm_sec;
+    t->wMilliseconds = 0;
 }
 
 BOOL CreateDirectory(LPCSTR dir, LPSECURITY_ATTRIBUTES attr)
 {
     int rv = mkdir(dir, S_IRWXU);
-    if (rv) {
+    if (rv)
+    {
         gGetLastError = errno;
         switch (gGetLastError)
         {
-        case EEXIST:
-            gGetLastError = ERROR_ALREADY_EXISTS;
-            break;
-        case ENOENT:
-            gGetLastError = ERROR_PATH_NOT_FOUND;
-            break;
+            case EEXIST:
+                gGetLastError = ERROR_ALREADY_EXISTS;
+                break;
+            case ENOENT:
+                gGetLastError = ERROR_PATH_NOT_FOUND;
+                break;
         }
     }
-    return rv==0;
+    return rv == 0;
 }
 
 BOOL SetFileAttributes(LPCSTR str, DWORD attr_bits)
 {
-    return TRUE; // sebi: does this means anything for Linux ?
+    return TRUE;  // sebi: does this means anything for Linux ?
 }
 
 BOOL DeleteFile(LPCSTR file)
@@ -83,24 +82,24 @@ BOOL DeleteFile(LPCSTR file)
     return 0 == unlink(file);
 }
 
-BOOL CopyFile(  LPCTSTR lpExistingFileName,
-                LPCTSTR lpNewFileName,
-                BOOL    bFailIfExists)
+BOOL CopyFile(LPCTSTR lpExistingFileName, LPCTSTR lpNewFileName, BOOL bFailIfExists)
 {
     int src = open(lpExistingFileName, O_RDONLY);
-    if(src == -1) {
+    if (src == -1)
+    {
         return FALSE;
     }
 
     /* rw-rw-rw- */
-    int permissions = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;      
+    int permissions = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;
 
     int dst_flags = O_CREAT | O_WRONLY | O_TRUNC;
-    if(bFailIfExists)
+    if (bFailIfExists)
         dst_flags |= O_EXCL;
 
     int dst = open(lpNewFileName, dst_flags, permissions);
-    if(dst == -1) {
+    if (dst == -1)
+    {
         return FALSE;
     }
 
@@ -109,8 +108,10 @@ BOOL CopyFile(  LPCTSTR lpExistingFileName,
     int num_read = 0;
 
     bool error = false;
-    while ((num_read = read(src, buf, BUF_SIZE)) > 0) {
-        if(write(dst, buf, num_read) != num_read) {
+    while ((num_read = read(src, buf, BUF_SIZE)) > 0)
+    {
+        if (write(dst, buf, num_read) != num_read)
+        {
             error = true;
             break;
         }
@@ -119,11 +120,11 @@ BOOL CopyFile(  LPCTSTR lpExistingFileName,
 
     if (num_read != -1 && !error)
     {
-        struct stat file_info = {0};
+        struct stat file_info = { 0 };
         fstat(src, &file_info);
 
         struct utimbuf ut;
-        ut.actime = file_info.st_atim.tv_sec;
+        ut.actime  = file_info.st_atim.tv_sec;
         ut.modtime = file_info.st_mtim.tv_sec;
         utime(lpExistingFileName, &ut);
     }
@@ -158,31 +159,32 @@ int lstrcmpiW(LPCWSTR str1, LPCWSTR str2)
 
 WINBASEAPI PVOID WINAPI VirtualAlloc(PVOID lpAddress, DWORD dwSize, DWORD flAllocationType, DWORD flProtect)
 {
-    if(flAllocationType == MEM_RESERVE)
-    {       
+    if (flAllocationType == MEM_RESERVE)
+    {
         // to RESERVE memory in Linux, use mmap with a private, anonymous, non-accessible mapping.
         // The following line reserves 1gb of ram starting at 0x10000000.
         void* result = mmap(0, dwSize, PROT_NONE, MAP_PRIVATE | MAP_ANON, -1, 0);
-        if(result == MAP_FAILED)
+        if (result == MAP_FAILED)
             gGetLastError = errno;
 
         return result == MAP_FAILED ? 0 : result;
     }
-    else if(flAllocationType == MEM_COMMIT)
+    else if (flAllocationType == MEM_COMMIT)
     {
         void* memptr;
-        if(lpAddress == 0) {
+        if (lpAddress == 0)
+        {
             memptr = mmap(0, dwSize, PROT_NONE, MAP_PRIVATE | MAP_ANON, -1, 0);
-            if(memptr == MAP_FAILED)
+            if (memptr == MAP_FAILED)
                 gGetLastError = errno;
 
-            if(memptr == MAP_FAILED)
-               return 0;
+            if (memptr == MAP_FAILED)
+                return 0;
 
             lpAddress = memptr;
         }
 
-        assert(lpAddress!=0);
+        assert(lpAddress != 0);
 
         // to COMMIT memory in Linux, use mprotect on the range of memory you'd like to commit, and
         // grant the memory READ and/or WRITE access.
@@ -190,13 +192,13 @@ WINBASEAPI PVOID WINAPI VirtualAlloc(PVOID lpAddress, DWORD dwSize, DWORD flAllo
         //
         int flags = 0;
 
-        if(flProtect == PAGE_READONLY)
+        if (flProtect == PAGE_READONLY)
             flags = PROT_READ;
-        else if(flProtect == PAGE_READWRITE)
+        else if (flProtect == PAGE_READWRITE)
             flags = PROT_READ | PROT_WRITE;
 
         int result = mprotect((void*)lpAddress, dwSize, flags);
-        if(result == -1)
+        if (result == -1)
         {
             gGetLastError = errno;
             return NULL;
@@ -213,15 +215,16 @@ WINBASEAPI PVOID WINAPI VirtualAlloc(PVOID lpAddress, DWORD dwSize, DWORD flAllo
 WINBASEAPI BOOL WINAPI VirtualFree(PVOID lpAddress, DWORD dwSize, DWORD dwFreeType)
 {
     //assert(dwFreeType == MEM_RELEASE);
-    if(dwFreeType == MEM_RELEASE) {
-
+    if (dwFreeType == MEM_RELEASE)
+    {
         int rv = munmap(lpAddress, dwSize);
-        if(rv == -1) {
+        if (rv == -1)
+        {
             gGetLastError = errno;
             return FALSE;
         }
         return TRUE;
-    } 
+    }
     /*
     else if(deFreeType == MEM_DECOMMIT) {
 
@@ -233,10 +236,11 @@ WINBASEAPI BOOL WINAPI VirtualFree(PVOID lpAddress, DWORD dwSize, DWORD dwFreeTy
         mmap(lpAddress, dwSize, PROT_NONE, MAP_FIXED|MAP_PRIVATE|MAP_ANON, -1, 0);
         msync(lpAddress, dwSize, MS_SYNC|MS_INVALIDATE);
     }*/
-    else if(dwFreeType == MEM_DECOMMIT) {
-
+    else if (dwFreeType == MEM_DECOMMIT)
+    {
         int result = mprotect((void*)lpAddress, dwSize, PROT_NONE);
-        if(result == -1) {
+        if (result == -1)
+        {
             gGetLastError = errno;
             return FALSE;
         }
@@ -245,7 +249,6 @@ WINBASEAPI BOOL WINAPI VirtualFree(PVOID lpAddress, DWORD dwSize, DWORD dwFreeTy
 
     assert(0 && "VirtualFree: Unsupported dwFreeType");
     return FALSE;
-
 }
 
 WINBASEAPI DWORD WINAPI GetLastError()
@@ -254,10 +257,12 @@ WINBASEAPI DWORD WINAPI GetLastError()
 }
 
 static const char* g_current_wildcard = NULL;
-static int path_filter(const struct dirent* e) {
+static int path_filter(const struct dirent* e)
+{
     return 0 == fnmatch(g_current_wildcard, e->d_name, FNM_PATHNAME);
 }
-struct FindFileData {
+struct FindFileData
+{
     struct dirent* entries;
     int last_retrieved_entry;
     int num_entries;
@@ -265,74 +270,76 @@ struct FindFileData {
     bool initialized;
 };
 
-static void FillFindData(const char* dir_name, const char* entry_name, LPWIN32_FIND_DATAA lpFindFileData) {
+static void FillFindData(const char* dir_name, const char* entry_name, LPWIN32_FIND_DATAA lpFindFileData)
+{
+    char entry_path[MAX_PATH];
+    snprintf(entry_path, MAX_PATH - 1, "%s/%s", dir_name, entry_name);
 
-        char entry_path[MAX_PATH];
-        snprintf(entry_path, MAX_PATH-1, "%s/%s", dir_name, entry_name);
+    struct stat s;
+    stat(entry_path, &s);
 
-        struct stat s;
-        stat(entry_path, &s);
+    if (S_ISDIR(s.st_mode))
+        lpFindFileData->dwFileAttributes = FILE_ATTRIBUTE_DIRECTORY;
+    if (S_ISREG(s.st_mode))
+        lpFindFileData->dwFileAttributes = FILE_ATTRIBUTE_NORMAL;
+    if (S_ISBLK(s.st_mode))
+        lpFindFileData->dwFileAttributes = FILE_ATTRIBUTE_DEVICE;
 
-        if(S_ISDIR(s.st_mode))
-            lpFindFileData->dwFileAttributes = FILE_ATTRIBUTE_DIRECTORY;
-        if(S_ISREG(s.st_mode))
-            lpFindFileData->dwFileAttributes = FILE_ATTRIBUTE_NORMAL;
-        if(S_ISBLK(s.st_mode))
-            lpFindFileData->dwFileAttributes = FILE_ATTRIBUTE_DEVICE;
+    // Contains a 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601 (UTC).
+    uint64_t sec_since = 60 * 60 * 24 * 365 * 1601L;  // well approximately
 
-        // Contains a 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601 (UTC).
-        uint64_t sec_since = 60*60*24*365*1601L; // well approximately
+    // all date setting is incorrect
+    uint64_t sec                                    = s.st_atim.tv_sec - sec_since;
+    uint64_t nsec                                   = sec * 1e9 + s.st_atim.tv_sec;
+    lpFindFileData->ftLastAccessTime.dwLowDateTime  = (DWORD)nsec & 0xffffffff;
+    lpFindFileData->ftLastAccessTime.dwHighDateTime = (DWORD)(nsec >> 32) & 0xffffffff;
 
-        // all date setting is incorrect
-        uint64_t sec = s.st_atim.tv_sec - sec_since;
-        uint64_t nsec = sec*1e9 + s.st_atim.tv_sec;
-	    lpFindFileData->ftLastAccessTime.dwLowDateTime = (DWORD)nsec&0xffffffff;
-	    lpFindFileData->ftLastAccessTime.dwHighDateTime = (DWORD)(nsec>>32)&0xffffffff;
+    sec                                           = s.st_ctim.tv_sec - sec_since;
+    nsec                                          = sec * 1e9 + s.st_ctim.tv_sec;
+    lpFindFileData->ftCreationTime.dwLowDateTime  = (DWORD)nsec & 0xffffffff;
+    lpFindFileData->ftCreationTime.dwHighDateTime = (DWORD)(nsec >> 32) & 0xffffffff;
 
-        sec = s.st_ctim.tv_sec - sec_since;
-        nsec = sec*1e9 + s.st_ctim.tv_sec;
-	    lpFindFileData->ftCreationTime.dwLowDateTime = (DWORD)nsec&0xffffffff;
-	    lpFindFileData->ftCreationTime.dwHighDateTime = (DWORD)(nsec>>32)&0xffffffff;
+    sec                                            = s.st_ctim.tv_sec - sec_since;
+    nsec                                           = sec * 1e9 + s.st_ctim.tv_sec;
+    lpFindFileData->ftLastWriteTime.dwLowDateTime  = (DWORD)nsec & 0xffffffff;
+    lpFindFileData->ftLastWriteTime.dwHighDateTime = (DWORD)(nsec >> 32) & 0xffffffff;
 
-        sec = s.st_ctim.tv_sec - sec_since;
-        nsec = sec*1e9 + s.st_ctim.tv_sec;
-	    lpFindFileData->ftLastWriteTime.dwLowDateTime = (DWORD)nsec&0xffffffff;
-	    lpFindFileData->ftLastWriteTime.dwHighDateTime = (DWORD)(nsec>>32)&0xffffffff;
 
-        
-	    lpFindFileData->nFileSizeHigh = s.st_size&0xffffffff;
-	    lpFindFileData->nFileSizeLow = (s.st_size>>32)&0xffffffff;;
+    lpFindFileData->nFileSizeHigh = s.st_size & 0xffffffff;
+    lpFindFileData->nFileSizeLow  = (s.st_size >> 32) & 0xffffffff;
+    ;
 
-        int copy_size = strlen(entry_name);
-        copy_size = copy_size < MAX_PATH ? copy_size : MAX_PATH-1;
-        strncpy(lpFindFileData->cFileName, entry_name, copy_size);
-        lpFindFileData->cFileName[copy_size] = '\0';
+    int copy_size = strlen(entry_name);
+    copy_size     = copy_size < MAX_PATH ? copy_size : MAX_PATH - 1;
+    strncpy(lpFindFileData->cFileName, entry_name, copy_size);
+    lpFindFileData->cFileName[copy_size] = '\0';
 }
 
-HANDLE WINAPI FindFirstFileA( LPCTSTR lpFileName, LPWIN32_FIND_DATAA lpFindFileData)
+HANDLE WINAPI FindFirstFileA(LPCTSTR lpFileName, LPWIN32_FIND_DATAA lpFindFileData)
 {
     struct dirent** entries;
     int n = 0;
 
     // this will NOT work correctly if directory has wildcard
 
-    char* dn = strdup(lpFileName);
-    char* bn = strdup(lpFileName);
-    char* dir_name = dirname(dn);
+    char* dn        = strdup(lpFileName);
+    char* bn        = strdup(lpFileName);
+    char* dir_name  = dirname(dn);
     char* base_name = basename(bn);
 
     g_current_wildcard = base_name;
-    n = scandir(dir_name, &entries, path_filter, alphasort);
+    n                  = scandir(dir_name, &entries, path_filter, alphasort);
     g_current_wildcard = NULL;
 
 
     FindFileData* ffd = NULL;
 
-    if(n > 0) {
-
-        ffd = new FindFileData();
+    if (n > 0)
+    {
+        ffd          = new FindFileData();
         ffd->entries = new dirent[n];
-        for(int i=0;i<n;++i) {
+        for (int i = 0; i < n; ++i)
+        {
             //memcpy(ffd->entries+i, entries[i], sizeof(struct dirent));
             // sebi: for some reason AddressSanitizer and valgrind complain about memcpy :-/
             const int len = sizeof(ffd->entries[i].d_name);
@@ -341,14 +348,13 @@ HANDLE WINAPI FindFirstFileA( LPCTSTR lpFileName, LPWIN32_FIND_DATAA lpFindFileD
             free(entries[i]);
         }
         free(entries);
-        entries = NULL;
+        entries                   = NULL;
         ffd->last_retrieved_entry = 0;
-        ffd->num_entries = n;
-        ffd->initialized = true;
-        ffd->dir_name = strdup(dir_name);
+        ffd->num_entries          = n;
+        ffd->initialized          = true;
+        ffd->dir_name             = strdup(dir_name);
 
         FillFindData(ffd->dir_name, ffd->entries[0].d_name, lpFindFileData);
-
     }
 
     free(dn);
@@ -359,17 +365,20 @@ HANDLE WINAPI FindFirstFileA( LPCTSTR lpFileName, LPWIN32_FIND_DATAA lpFindFileD
 
 BOOL WINAPI FindNextFileA(HANDLE hFindFile, LPWIN32_FIND_DATAA lpFindFileData)
 {
-    assert(hFindFile!=0);
+    assert(hFindFile != 0);
 
     FindFileData* ffd = (FindFileData*)hFindFile;
     assert(ffd->initialized);
 
     assert(ffd->last_retrieved_entry < ffd->num_entries);
 
-    if(ffd->last_retrieved_entry + 1 == ffd->num_entries) {
-        gGetLastError = ERROR_NO_MORE_FILES; 
+    if (ffd->last_retrieved_entry + 1 == ffd->num_entries)
+    {
+        gGetLastError = ERROR_NO_MORE_FILES;
         return FALSE;
-    } else {
+    }
+    else
+    {
         const int e_idx = ++ffd->last_retrieved_entry;
         FillFindData(ffd->dir_name, ffd->entries[e_idx].d_name, lpFindFileData);
         return TRUE;
@@ -378,9 +387,9 @@ BOOL WINAPI FindNextFileA(HANDLE hFindFile, LPWIN32_FIND_DATAA lpFindFileData)
 
 BOOL WINAPI FindClose(HANDLE hFindFile)
 {
-    assert(hFindFile!=0);
+    assert(hFindFile != 0);
 
-    if(hFindFile == INVALID_HANDLE_VALUE)
+    if (hFindFile == INVALID_HANDLE_VALUE)
         return TRUE;
 
     FindFileData* ffd = (FindFileData*)hFindFile;
@@ -394,7 +403,4 @@ BOOL WINAPI FindClose(HANDLE hFindFile)
 }
 
 
-#endif // PLATFORM_WINDOWS
-
-
-
+#endif  // PLATFORM_WINDOWS

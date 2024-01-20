@@ -1,4 +1,3 @@
-#define SALVAGEMECHAREA_CPP
 /*************************************************************************************************\
 SalvageMechArea.cpp			: Implementation of the SalvageMechArea component.
 //---------------------------------------------------------------------------//

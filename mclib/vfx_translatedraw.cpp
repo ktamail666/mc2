@@ -1,18 +1,17 @@
-#include"dstd.h"
-#include"vfx.h"
-#include<stdio.h>
+#include "dstd.h"
+#include "vfx.h"
+#include <cstdio>
 
-extern char AlphaTable[256*256];
+extern char AlphaTable[256 * 256];
 
 typedef struct
 {
-
-	DWORD	bounds;
-	DWORD	origin;
-	DWORD	xmin;
-	DWORD	ymin;
-	DWORD	xmax;
-	DWORD	ymax;
+    DWORD bounds;
+    DWORD origin;
+    DWORD xmin;
+    DWORD ymin;
+    DWORD xmax;
+    DWORD ymax;
 
 } SHAPEHEADER;
 
@@ -28,11 +27,9 @@ typedef struct
 //
 
 unsigned int lookaside;
-static unsigned int tempXmax,tempXmin;
-static unsigned int minX,minY,maxY,SkipLeft,NewWidth,StartofLine,StartofClip,EndofClip;
-static unsigned int lines,DestWidth,paneX0,paneX1,paneY0,paneY1;
-
-
+static unsigned int tempXmax, tempXmin;
+static unsigned int minX, minY, maxY, SkipLeft, NewWidth, StartofLine, StartofClip, EndofClip;
+static unsigned int lines, DestWidth, paneX0, paneX1, paneY0, paneY1;
 
 
 /*
@@ -50,11 +47,11 @@ static unsigned int lines,DestWidth,paneX0,paneX1,paneY0,paneY1;
 ; drawn.  The shape's hot spot will end up at the specified location.
 ;
 */
-void AG_shape_draw (PANE *pane, void *shape_table,LONG shape_number, LONG hotX, LONG hotY)
+void AG_shape_draw(PANE* pane, void* shape_table, LONG shape_number, LONG hotX, LONG hotY)
 {
 #ifdef LINUX_BUILD
 #else
-	_asm{
+        _asm{
 	mov esi,shape_table
 	mov eax,shape_number
 
@@ -788,44 +785,8 @@ acEndPacket:
 
 Exit:       
 	}
-#endif //LINUX_BUILD
+#endif  //LINUX_BUILD
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /*
@@ -842,16 +803,16 @@ Exit:
 ;
 ;----------------------------------------------------------------------------
 */
-void AG_shape_lookaside( UBYTE *table )
+void AG_shape_lookaside(UBYTE* table)
 {
 #ifdef LINUX_BUILD
 #else
 
-	_asm{
+        _asm {
 		mov eax,table
 		mov lookaside,eax
-		}
-#endif 
+        }
+#endif
 }
 
 /*
@@ -883,11 +844,11 @@ void AG_shape_lookaside( UBYTE *table )
 ;
 ;----------------------------------------------------------------------------
 */
-void AG_shape_translate_draw (PANE *pane, void *shape_table,LONG shape_number, LONG hotX, LONG hotY)
+void AG_shape_translate_draw(PANE* pane, void* shape_table, LONG shape_number, LONG hotX, LONG hotY)
 {
 #ifdef LINUX_BUILD
 #else
-	_asm{
+        _asm{
 	mov esi,shape_table
 	mov eax,shape_number
 
@@ -1699,44 +1660,38 @@ acEndPacket:
 
 assertError:
 	pop ebp
-	
+
 #ifdef CATCH_VFX_BUG
 	mov saveEdi,edi
 	}
 
-	//void *shape_table,LONG shape_number, LONG hotX, LONG hotY
-	
-	char msg[1024];
-	
-	//-------------------------------------
-	// Save off the shape data table start
-	char *shapeTable = (char *)shape_table;
-	char version[5];
-	for (long i=0;i<4;i++)
-	{
-		version[i] = *shapeTable;
-		shapeTable++;
-	}
-	version[4] = 0;
-	
-	long numShapes = (long)*shapeTable;
-	shapeTable += 4;
-	shapeTable += (shape_number * 8);
-	long shapeNumOffset = (long) *shapeTable;
-	
-	sprintf(msg,"SP: %08x  SF: %d  X: %d  Y:%d  V: %s  SN: %d  SOf: %d",shape_table,shape_number,hotX,hotY,version,numShapes,shapeNumOffset);
-	Fatal(saveEdi,msg);
+        //void *shape_table,LONG shape_number, LONG hotX, LONG hotY
+
+        char msg[1024];
+
+        //-------------------------------------
+        // Save off the shape data table start
+        char* shapeTable = (char*)shape_table;
+        char version[5];
+        for (long i = 0; i < 4; i++)
+        {
+            version[i] = *shapeTable;
+            shapeTable++;
+        }
+        version[4] = 0;
+
+        long numShapes = (long)*shapeTable;
+        shapeTable += 4;
+        shapeTable += (shape_number * 8);
+        long shapeNumOffset = (long)*shapeTable;
+
+        sprintf(msg, "SP: %08x  SF: %d  X: %d  Y:%d  V: %s  SN: %d  SOf: %d", shape_table, shape_number, hotX, hotY, version, numShapes, shapeNumOffset);
+        Fatal(saveEdi, msg);
 #else
 	}
 #endif
-	__asm
-	{
-Exit:       
-	}
-#endif // LINUX_BUILD
+        __asm {
+Exit:
+        }
+#endif  // LINUX_BUILD
 }
-
-
-
-
-

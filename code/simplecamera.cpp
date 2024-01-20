@@ -199,14 +199,16 @@ void SimpleCamera::render(long xOffset, long yOffset)
 				gos_SetRenderState( gos_State_TextureMapBlend, gos_BlendModulate);
 				gos_SetRenderState( gos_State_TextureAddress, gos_TextureWrap );
 				gos_SetRenderState( gos_State_ZCompare, 1);
-				gos_SetRenderState(	gos_State_ZWrite, 1);
+				gos_SetRenderState( gos_State_ZWrite, 1);
 	
 			}
 
 			
 			pObject->render();
 			if ( !drawOldWay )
-				mcTextureManager->renderLists();
+                        {
+                                mcTextureManager->renderLists();
+                        }
 			eye = oldCam;
 			gos_PopRenderStates();
 	}
@@ -222,15 +224,6 @@ long SimpleCamera::update()
 	{
 		turn++;			//Must increment this now or matrices NEVER change!!
 
-		//reset the TGL RAM pools.
-		colorPool->reset();
-		vertexPool->reset();
-		facePool->reset();
-		shadowPool->reset();
-		trianglePool->reset();
-
-        // sebi: why do it two times???
-        
 		//reset the TGL RAM pools.
 		colorPool->reset();
 		vertexPool->reset();
@@ -259,7 +252,7 @@ long SimpleCamera::update()
 
 			TG_Shape::SetViewport(viewMulX,viewMulY, offsetX, offsetY); 
 
-		useShadows = 0;
+		useShadows = false;
 		oldCam = eye;
 		eye = this;
 		Camera::update();
@@ -310,7 +303,7 @@ void SimpleCamera::setMech(const char* fileName, long baseColor, long highlight1
 	if ( appearanceTypeList && appearanceTypeList->pointerCanBeDeleted(pObject) )
 		delete pObject;
         */
-	// sebi: added this conition ecause  appearanceTypeList used inside destructor
+	// sebi: added this condition because  appearanceTypeList used inside destructor
 	if (appearanceTypeList)
 		delete pObject;
 

@@ -11,9 +11,7 @@
 //---------------------------------------------------------------------------
 // Include files
 
-#ifndef CELEMENT_H
 #include"celement.h"
-#endif
 
 #include<float.h>
 #include<gameos.hpp>

@@ -28,8 +28,6 @@ tgl/ammodumpenc.tgl
 tgl/ammodumpl1.tgl
 tgl/ammodumpx.tgl
 tgl/anubis.tgl
-tgl/anubisfallbackwarddam.tgl
-tgl/anubisfallforwarddam.tgl
 tgl/anubisl1.tgl
 tgl/anubisleftarm.tgl
 tgl/anubisrightarm.tgl
@@ -51,8 +49,6 @@ tgl/artillerypiecedamx.tgl
 tgl/artillerypiecel1.tgl
 tgl/artillerypiecex.tgl
 tgl/atlas.tgl
-tgl/atlasfallbackwarddam.tgl
-tgl/atlasfallforwarddam.tgl
 tgl/atlasl1.tgl
 tgl/atlasleftarm.tgl
 tgl/atlasrightarm.tgl
@@ -97,8 +93,6 @@ tgl/birch3deadx.tgl
 tgl/birch3l1.tgl
 tgl/birch3x.tgl
 tgl/bloodasp.tgl
-tgl/bloodaspfallbackwarddam.tgl
-tgl/bloodaspfallforwarddam.tgl
 tgl/bloodaspl1.tgl
 tgl/bloodaspleftarm.tgl
 tgl/bloodasprightarm.tgl
@@ -124,8 +118,6 @@ tgl/burningtrashbarreldamx.tgl
 tgl/burningtrashbarrell1.tgl
 tgl/burningtrashbarrelx.tgl
 tgl/bushwacker.tgl
-tgl/bushwackerfallbackwarddam.tgl
-tgl/bushwackerfallforwarddam.tgl
 tgl/bushwackerl1.tgl
 tgl/bushwackerleftarm.tgl
 tgl/bushwackerrightarm.tgl
@@ -157,8 +149,6 @@ tgl/cargotruckpropdam.tgl
 tgl/cargotruckpropl1.tgl
 tgl/cargotruckx.tgl
 tgl/catapult.tgl
-tgl/catapultfallbackwarddam.tgl
-tgl/catapultfallforwarddam.tgl
 tgl/catapultl1.tgl
 tgl/catapultleftarm.tgl
 tgl/catapultrightarm.tgl
@@ -256,8 +246,6 @@ tgl/corrigatedmetalbarricadedamx.tgl
 tgl/corrigatedmetalbarricadel1.tgl
 tgl/corrigatedmetalbarricadex.tgl
 tgl/cougar.tgl
-tgl/cougarfallbackwarddam.tgl
-tgl/cougarfallforwarddam.tgl
 tgl/cougarl1.tgl
 tgl/cougarleftarm.tgl
 tgl/cougarrightarm.tgl
@@ -319,8 +307,6 @@ tgl/crateswithtarpdamx.tgl
 tgl/crateswtarpl1.tgl
 tgl/crateswtarpx.tgl
 tgl/cyclops.tgl
-tgl/cyclopsfallbackwarddam.tgl
-tgl/cyclopsfallforwarddam.tgl
 tgl/cyclopsl1.tgl
 tgl/cyclopsleftarm.tgl
 tgl/cyclopsrightarm.tgl
@@ -471,8 +457,6 @@ tgl/endpipedamx.tgl
 tgl/endpipeenc.tgl
 tgl/endpipex.tgl
 tgl/enfield.tgl
-tgl/enfieldfallbackwarddam.tgl
-tgl/enfieldfallforwarddam.tgl
 tgl/enfieldl1.tgl
 tgl/enfieldleftarm.tgl
 tgl/enfieldrightarm.tgl
@@ -496,8 +480,6 @@ tgl/factorysmenc.tgl
 tgl/factorysml1.tgl
 tgl/factorysmx.tgl
 tgl/flea.tgl
-tgl/fleafallbackwarddam.tgl
-tgl/fleafallforwarddam.tgl
 tgl/fleal1.tgl
 tgl/flealeftarm.tgl
 tgl/flearightarm.tgl
@@ -591,8 +573,6 @@ tgl/heavycopter.tgl
 tgl/heavycopterdam.tgl
 tgl/heavycopterdamx.tgl
 tgl/heavycopterenc.tgl
-tgl/heavycopterfallbackwarddam.tgl
-tgl/heavycopterfallforwarddam.tgl
 tgl/heavycopterl1.tgl
 tgl/heavycopterx.tgl
 tgl/heavyindustrial.tgl
@@ -606,15 +586,11 @@ tgl/hetzerdam.tgl
 tgl/hetzerl1.tgl
 tgl/hetzerx.tgl
 tgl/highlander.tgl
-tgl/highlanderfallbackwarddam.tgl
-tgl/highlanderfallforwarddam.tgl
 tgl/highlanderl1.tgl
 tgl/highlanderleftarm.tgl
 tgl/highlanderrightarm.tgl
 tgl/highlanderx.tgl
 tgl/hollander.tgl
-tgl/hollanderfallbackwarddam.tgl
-tgl/hollanderfallforwarddam.tgl
 tgl/hollanderl1.tgl
 tgl/hollanderleftarm.tgl
 tgl/hollanderrightarm.tgl
@@ -687,8 +663,6 @@ tgl/hubenc.tgl
 tgl/hubl1.tgl
 tgl/hubx.tgl
 tgl/hunchback.tgl
-tgl/hunchbackfallbackwarddam.tgl
-tgl/hunchbackfallforwarddam.tgl
 tgl/hunchbackl1.tgl
 tgl/hunchbackleftarm.tgl
 tgl/hunchbackrightarm.tgl
@@ -711,8 +685,6 @@ tgl/industrialplantl1.tgl
 tgl/industrialplantx.tgl
 tgl/infantry.tgl
 tgl/infantrydam.tgl
-tgl/jaegermechfallbackwarddam.tgl
-tgl/jaegermechfallforwarddam.tgl
 tgl/jaegermechleftarm.tgl
 tgl/jaegermechrightarm.tgl
 tgl/jaegermechx.tgl
@@ -918,8 +890,6 @@ tgl/l_turretgenerator.tgl
 tgl/l_turretgeneratordam.tgl
 tgl/l_turretgeneratorenc.tgl
 tgl/laohu.tgl
-tgl/laohufallbackwarddam.tgl
-tgl/laohufallforwarddam.tgl
 tgl/laohul1.tgl
 tgl/laohuleftarm.tgl
 tgl/laohurightarm.tgl
@@ -949,8 +919,6 @@ tgl/lightcopter.tgl
 tgl/lightcopterdam.tgl
 tgl/lightcopterdamx.tgl
 tgl/lightcopterenc.tgl
-tgl/lightcopterfallbackwarddam.tgl
-tgl/lightcopterfallforwarddam.tgl
 tgl/lightcopterl1.tgl
 tgl/lightcopterx.tgl
 tgl/liquidstorage.tgl
@@ -990,8 +958,6 @@ tgl/lrmturret.tgl
 tgl/lrmturretenc.tgl
 tgl/lrmturretx.tgl
 tgl/madcat.tgl
-tgl/madcatfallbackwarddam.tgl
-tgl/madcatfallforwarddam.tgl
 tgl/madcatl1.tgl
 tgl/madcatleftarm.tgl
 tgl/madcatrightarm.tgl
@@ -1077,8 +1043,6 @@ tgl/mediumcopter.tgl
 tgl/mediumcopterdam.tgl
 tgl/mediumcopterdamx.tgl
 tgl/mediumcopterenc.tgl
-tgl/mediumcopterfallbackwarddam.tgl
-tgl/mediumcopterfallforwarddam.tgl
 tgl/mediumcopterl1.tgl
 tgl/mediumcopterx.tgl
 tgl/meethall.tgl
@@ -1088,8 +1052,6 @@ tgl/meethallenc.tgl
 tgl/meethalll1.tgl
 tgl/meethallx.tgl
 tgl/menshen.tgl
-tgl/menshenfallbackwarddam.tgl
-tgl/menshenfallforwarddam.tgl
 tgl/menshenl1.tgl
 tgl/menshenleftarm.tgl
 tgl/menshenrightarm.tgl
@@ -1256,8 +1218,6 @@ tgl/quonsetenc.tgl
 tgl/quonsetl1.tgl
 tgl/quonsetx.tgl
 tgl/raven.tgl
-tgl/ravenfallbackwarddam.tgl
-tgl/ravenfallforwarddam.tgl
 tgl/ravenl1.tgl
 tgl/ravenleftarm.tgl
 tgl/ravenrightarm.tgl
@@ -1413,8 +1373,6 @@ tgl/runwaylightl1.tgl
 tgl/runwaylightx.tgl
 tgl/runwaypoint.tgl
 tgl/ryoken.tgl
-tgl/ryokenfallbackwarddam.tgl
-tgl/ryokenfallforwarddam.tgl
 tgl/ryokenl1.tgl
 tgl/ryokenleftarm.tgl
 tgl/ryokenrightarm.tgl
@@ -1637,8 +1595,6 @@ tgl/scout.tgl
 tgl/scoutcopter.tgl
 tgl/scoutcopterdam.tgl
 tgl/scoutcopterenc.tgl
-tgl/scoutcopterfallbackwarddam.tgl
-tgl/scoutcopterfallforwarddam.tgl
 tgl/scoutcopterl1.tgl
 tgl/scoutcopterx.tgl
 tgl/scrubbrushpatch1.tgl
@@ -1659,8 +1615,6 @@ tgl/shackenc.tgl
 tgl/shackl1.tgl
 tgl/shackx.tgl
 tgl/shadowcat.tgl
-tgl/shadowcatfallbackwarddam.tgl
-tgl/shadowcatfallforwarddam.tgl
 tgl/shadowcatl1.tgl
 tgl/shadowcatleftarm.tgl
 tgl/shadowcatrightarm.tgl
@@ -1670,8 +1624,6 @@ tgl/shantyfencedam.tgl
 tgl/shantyfenceenc.tgl
 tgl/shantyfencex.tgl
 tgl/shayu.tgl
-tgl/shayufallbackwarddam.tgl
-tgl/shayufallforwarddam.tgl
 tgl/shayul1.tgl
 tgl/shayuleftarm.tgl
 tgl/shayurightarm.tgl
@@ -1685,8 +1637,6 @@ tgl/shiloneparkedx.tgl
 tgl/shilonepdam.tgl
 tgl/shilonepenc.tgl
 tgl/shootist.tgl
-tgl/shootistfallbackwarddam.tgl
-tgl/shootistfallforwarddam.tgl
 tgl/shootistl1.tgl
 tgl/shootistleftarm.tgl
 tgl/shootistrightarm.tgl
@@ -1764,8 +1714,6 @@ tgl/srmturret.tgl
 tgl/srmturretenc.tgl
 tgl/srmturretx.tgl
 tgl/starslayer.tgl
-tgl/starslayerfallbackwarddam.tgl
-tgl/starslayerfallforwarddam.tgl
 tgl/starslayerl1.tgl
 tgl/starslayerleftarm.tgl
 tgl/starslayerrightarm.tgl
@@ -1841,8 +1789,6 @@ tgl/terminal2damx.tgl
 tgl/terminal2enc.tgl
 tgl/terminal2l1.tgl
 tgl/thor.tgl
-tgl/thorfallbackwarddam.tgl
-tgl/thorfallforwarddam.tgl
 tgl/thorl1.tgl
 tgl/thorleftarm.tgl
 tgl/thorrightarm.tgl
@@ -1901,15 +1847,11 @@ tgl/truckx.tgl
 tgl/turretbasedam.tgl
 tgl/turretbasedamx.tgl
 tgl/uller.tgl
-tgl/ullerfallbackwarddam.tgl
-tgl/ullerfallforwarddam.tgl
 tgl/ullerl1.tgl
 tgl/ullerleftarm.tgl
 tgl/ullerrightarm.tgl
 tgl/ullerx.tgl
 tgl/urbanmech.tgl
-tgl/urbanmechfallbackwarddam.tgl
-tgl/urbanmechfallforwarddam.tgl
 tgl/urbanmechl1.tgl
 tgl/urbanmechleftarm.tgl
 tgl/urbanmechrightarm.tgl
@@ -1931,8 +1873,6 @@ tgl/vehiclehangarl1.tgl
 tgl/vehiclehangarx.tgl
 tgl/vtol.tgl
 tgl/vulture.tgl
-tgl/vulturefallbackwarddam.tgl
-tgl/vulturefallforwarddam.tgl
 tgl/vulturel1.tgl
 tgl/vultureleftarm.tgl
 tgl/vulturerightarm.tgl
@@ -1961,8 +1901,6 @@ tgl/weaponsfacilityenc.tgl
 tgl/weaponsfacilityl1.tgl
 tgl/weaponsfacilityx.tgl
 tgl/werewolf.tgl
-tgl/werewolffallbackwarddam.tgl
-tgl/werewolffallforwarddam.tgl
 tgl/werewolfl1.tgl
 tgl/werewolfleftarm.tgl
 tgl/werewolfrightarm.tgl
@@ -1996,8 +1934,6 @@ tgl/wirefencediagx.tgl
 tgl/wirefencel1.tgl
 tgl/wirefencex.tgl
 tgl/wolfhound.tgl
-tgl/wolfhoundfallbackwarddam.tgl
-tgl/wolfhoundfallforwarddam.tgl
 tgl/wolfhoundl1.tgl
 tgl/wolfhoundleftarm.tgl
 tgl/wolfhoundrightarm.tgl
@@ -2022,8 +1958,6 @@ tgl/yieldsigndamx.tgl
 tgl/yieldsignl1.tgl
 tgl/yieldsignx.tgl
 tgl/zeus.tgl
-tgl/zeusfallbackwarddam.tgl
-tgl/zeusfallforwarddam.tgl
 tgl/zeusl1.tgl
 tgl/zeusleftarm.tgl
 tgl/zeusrightarm.tgl

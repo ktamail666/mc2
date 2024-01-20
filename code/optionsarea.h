@@ -1,5 +1,4 @@
-#ifndef OPTIONSAREA_H
-#define OPTIONSAREA_H
+#pragma once
 /*************************************************************************************************\
 OptionsArea.h			: Interface for the OptionsArea component.
 //---------------------------------------------------------------------------//
@@ -7,17 +6,10 @@ OptionsArea.h			: Interface for the OptionsArea component.
 //===========================================================================//
 \*************************************************************************************************/
 
-//*************************************************************************************************
-#ifndef LOGISTICSSCREEN_H
-#include"logisticsscreen.h"
-#endif
-
-#ifndef SIMPLECAMERA_H
-#include"simplecamera.h"
-#endif
-
-#include"alistbox.h"
-#include"attributemeter.h"
+#include "logisticsscreen.h"
+#include "simplecamera.h"
+#include "alistbox.h"
+#include "attributemeter.h"
 
 class aButton;
 
@@ -27,202 +19,195 @@ class CPrefs;
 class OptionsXScreen : public LogisticsScreen
 {
 public:
-	
-	OptionsXScreen();
-	virtual ~OptionsXScreen();
-	
-	void init(FitIniFile* file);
-	bool isDone();
-	virtual void render();
-	virtual void update();
-	virtual int			handleMessage( unsigned long, unsigned long );
+    OptionsXScreen();
+    virtual ~OptionsXScreen();
 
-	void updateOptions(); // put into inventory
+    void init(FitIniFile* file);
+    bool isDone();
+    virtual void render();
+    virtual void update();
+    virtual int handleMessage(unsigned long, unsigned long);
 
-	bool				bDone;
+    void updateOptions();  // put into inventory
+
+    bool bDone;
 
 
 private:
+    int indexOfButtonWithID(int id);
 
-	int indexOfButtonWithID(int id);
-
-	LogisticsScreen*		tabAreas[4];
-	int						curTab;
-	bool			bShowWarning;
-
-
+    LogisticsScreen* tabAreas[4];
+    int curTab;
+    bool bShowWarning;
 };
 
 class ScrollX : public aObject
 {
 public:
+    ScrollX();
+    long init(aButton* pLeft, aButton* pRight, aButton* pTab);
+    virtual void update();
 
-	ScrollX();
-	long	init(aButton* pLeft, aButton* pRight, aButton* pTab );
-	virtual void	update();
+    virtual int handleMessage(unsigned long message, unsigned long fromWho);
 
-	virtual int		handleMessage( unsigned long message, unsigned long fromWho );
-
-	void			SetScrollMax(float newMax);
-	void			SetScrollPos(float newPos);
-	float			GetScrollMax(void){return scrollMax;};
-	float			GetScrollPos(void){return scrollPos;};
+    void SetScrollMax(float newMax);
+    void SetScrollPos(float newPos);
+    float GetScrollMax(void)
+    {
+        return scrollMax;
+    };
+    float GetScrollPos(void)
+    {
+        return scrollPos;
+    };
     // sebi unused
-	//long			SetSrollInc( long newInc ){ scrollInc = (float)newInc; } // amount you move for one arrow click
-	//long			SetScrollPage(long newInc){ pageInc = (float)newInc;} // amount you move if you click on the bar itself
-	void			ScrollUp(void);
-	void			ScrollPageUp(void);
-	void			ScrollDown(void);
-	void			ScrollPageDown(void);
-	void			SetScroll( long newScrollPos );	
-	void			Enable( bool enable );
+    //long			SetSrollInc( long newInc ){ scrollInc = (float)newInc; } // amount you move for one arrow click
+    //long			SetScrollPage(long newInc){ pageInc = (float)newInc;} // amount you move if you click on the bar itself
+    void ScrollUp(void);
+    void ScrollPageUp(void);
+    void ScrollDown(void);
+    void ScrollPageDown(void);
+    void SetScroll(long newScrollPos);
+    void Enable(bool enable);
 
 private:
+    void ResizeAreas();
 
-	void ResizeAreas();
 
-	 
-	aButton*		buttons[3];
-	float			scrollMax;
-	float			scrollPos;
-	float			scrollInc;
-	float			pageInc;
+    aButton* buttons[3];
+    float scrollMax;
+    float scrollPos;
+    float scrollInc;
+    float pageInc;
 
-	long			lastX;
-
+    long lastX;
 };
 
 class OptionsGraphics : public LogisticsScreen
 {
-
 public:
-
-    typedef struct 
+    typedef struct
     {
-    	int xRes;
-    	int yRes;
-    	int bitDepth;
+        int xRes;
+        int yRes;
+        int bitDepth;
     } ResModes;
 
     OptionsGraphics();
 
-	void init(long xOffset, long yOffset);
-	virtual void render();
-	virtual void update();
-	virtual void begin();
-	virtual void end();
-	void reset( const CPrefs& newPrefs);
+    void init(long xOffset, long yOffset);
+    virtual void render();
+    virtual void update();
+    virtual void begin();
+    virtual void end();
+    void reset(const CPrefs& newPrefs);
 
-	virtual int		handleMessage( unsigned long message, unsigned long fromWho );
+    virtual int handleMessage(unsigned long message, unsigned long fromWho);
 
 private:
-	aDropList		resolutionList;
-	aDropList		cardList;
-	bool			bExpanded;
+    aDropList resolutionList;
+    aDropList cardList;
+    bool bExpanded;
 
-    ResModes        *resolutionModes;
-    char            **resolutionModesStr;
-    int             numResolutionModes;
-
+    ResModes* resolutionModes;
+    char** resolutionModesStr;
+    int numResolutionModes;
 };
 
 class OptionsAudio : public LogisticsScreen
 {
-	public:
-		void init(long xOffset, long yOffset);
-		virtual void render();
-		virtual void update();
-		virtual void begin();
-		virtual void end();
-		void reset(const CPrefs& newPrefs);
+public:
+    void init(long xOffset, long yOffset);
+    virtual void render();
+    virtual void update();
+    virtual void begin();
+    virtual void end();
+    void reset(const CPrefs& newPrefs);
 
-		virtual int		handleMessage( unsigned long message, unsigned long fromWho );
+    virtual int handleMessage(unsigned long message, unsigned long fromWho);
 
-	private:
-
-		ScrollX		scrollBars[5];
-
+private:
+    ScrollX scrollBars[5];
 };
 
 class OptionsHotKeys : public LogisticsScreen
 {
-
 public:
-		void init(long xOffset, long yOffset);
-		virtual void render();
-		virtual void update();
-		virtual void begin();
-		virtual void end();
-		void reset(bool bUseOld);
+    void init(long xOffset, long yOffset);
+    virtual void render();
+    virtual void update();
+    virtual void begin();
+    virtual void end();
+    void reset(bool bUseOld);
 
-		virtual int		handleMessage( unsigned long message, unsigned long fromWho );
+    virtual int handleMessage(unsigned long message, unsigned long fromWho);
 
 private:
+    static void makeKeyString(long hotKey, char* buffer);
+    static int makeInputKeyString(long& hotKey, char* buffer);
 
-	static void makeKeyString( long hotKey, char* buffer );
-	static int makeInputKeyString( long& hotKey, char* buffer );
 
-
-	aListBox		hotKeyList;
-	bool			bShowDlg;
-	long			curHotKey;
+    aListBox hotKeyList;
+    bool bShowDlg;
+    long curHotKey;
 };
 
 class OptionsGamePlay : public LogisticsScreen
 {
 public:
-	void init(long xOffset, long yOffset);
-	virtual void render();
-	virtual void update();
-	virtual void begin();
-	virtual void end();
-	void reset(const CPrefs& newPrefs);
+    void init(long xOffset, long yOffset);
+    virtual void render();
+    virtual void update();
+    virtual void begin();
+    virtual void end();
+    void reset(const CPrefs& newPrefs);
 
-	virtual int		handleMessage( unsigned long message, unsigned long fromWho );
+    virtual int handleMessage(unsigned long message, unsigned long fromWho);
 
-	void resetCamera();
+    void resetCamera();
 
-	private:
-
-	SimpleCamera	camera;
+private:
+    SimpleCamera camera;
 };
 
 class HotKeyListItem : public aListItem
 {
 public:
+    static void init();
+    virtual void render();
+    virtual void update();
 
-	static void init();
-	virtual void render();
-	virtual void update();
-	
-	void setDescription( const char* pText );
-	void setKey( const char* pText );
+    void setDescription(const char* pText);
+    void setKey(const char* pText);
 
-	HotKeyListItem( );
-	~HotKeyListItem();
+    HotKeyListItem();
+    ~HotKeyListItem();
 
-	void	setHotKey( long lNew ){ hotKey = lNew; }
-	void	setCommand( long lCommand ) { command = lCommand; }
+    void setHotKey(long lNew)
+    {
+        hotKey = lNew;
+    }
+    void setCommand(long lCommand)
+    {
+        command = lCommand;
+    }
 
-	long	getCommand() const { return command; }
-	long	getHotKey() const { return hotKey; }
+    long getCommand() const
+    {
+        return command;
+    }
+    long getHotKey() const
+    {
+        return hotKey;
+    }
 
 private:
+    aText description;
+    aText text;
+    aAnimGroup animations[3];
+    aRect rects[2];
+    long hotKey;
+    long command;
 
-	aText		description;
-	aText		text;
-	aAnimGroup	animations[3];
-	aRect		rects[2];
-	long		hotKey;
-	long		command;
-
-	static		HotKeyListItem* s_item;
-	
+    static HotKeyListItem* s_item;
 };
-
-
-
-
-
-//*************************************************************************************************
-#endif  // end of file ( OptionsArea.h )

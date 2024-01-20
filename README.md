@@ -97,6 +97,7 @@ On Debian 11:
  $ cmake -H. -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PWD/install
  $ cmake --build build --target install # install target is optional if you wanna do a package
  $ export MC2_BIN=$PWD/build/bin
+ $ export BUILD_PLATFORM=linux
  $ cd mc2srcdata/build_scripts
  $ make all
  $ cpack -G DEB # optional

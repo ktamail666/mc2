@@ -1,0 +1,7 @@
+#!/bin/bash
+clang-tidy-17 --checks=-*,fuchsia-statically-constructed-objects,modernize-use-bool-literals,modernize-use-auto,readability-braces-around-statements,modernize-use-nullptr,modernize-redundant-void-arg --fix  -p=cmake-build-debug/compile_commands.json \
+Viewer/View.cpp
+#gui/*.cpp
+#code/mechcmd2.cpp \
+#gui/abutton.cpp
+

@@ -1,10 +1,9 @@
-#ifndef RENDER_CONSTANTS_H
-#define RENDER_CONSTANTS_H
+#pragma once
 
 #ifdef PLATFORM_WINDOWS
 	#include<stdint.h>
 #endif
-#include <inttypes.h>
+#include <cinttypes>
 
 #include "utils/graphics.h"
 
@@ -124,5 +123,3 @@ typedef int ShaderID;       /**< Shader handle. */
 typedef int VertexFormatID; /**< Vertex format handle. */
 typedef int VertexBufferID; /**< Vertex buffer handle. */
 typedef int IndexBufferID;  /**< Index buffer handle. */
-
-#endif // RENDER_CONSTANTS_H

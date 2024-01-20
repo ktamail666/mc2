@@ -1,41 +1,41 @@
-//ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-//ÛÛ                                                                        ÛÛ
-//ÛÛ  VFX.H: C type definitions & API function prototypes                   ÛÛ
-//ÛÛ                                                                        ÛÛ
-//ÛÛ  Source compatible with 32-bit 80386 C/C++                             ÛÛ
-//ÛÛ                                                                        ÛÛ
-//ÛÛ  V0.10 of 10-Dec-92: Initial version                                   ÛÛ
-//ÛÛ  V1.01 of 12-May-93: Added VFX_shape_lookaside(), new polygon calls    ÛÛ
-//ÛÛ                      PCX_draw() returns void                           ÛÛ
-//ÛÛ  V1.02 of 18-Jun-93: Added rotation/scaling calls                      ÛÛ
-//ÛÛ                      intervals parameter added to window_fade()        ÛÛ
-//ÛÛ                      Added VFX_RECT structure                              ÛÛ
-//ÛÛ  V1.03 of 28-Jul-93: VERTEX2D structure changed to SCRNVERTEX          ÛÛ
-//ÛÛ                      Fixed-VFX_POINT data types renamed                    ÛÛ
-//ÛÛ                      Added VFX_bank_reset() call                       ÛÛ
-//ÛÛ  V1.04 of  4-Sep-93: Indirect function prototypes changed for C++ use  ÛÛ
-//ÛÛ  V1.05 of 26-Sep-93: Added FLOAT typedef                               ÛÛ
-//ÛÛ                      VFX_RGB BYTE members changed to UBYTEs                ÛÛ
-//ÛÛ  V1.06 of 13-Oct-93: Added VFX_pane_refresh(), other new calls         ÛÛ
-//ÛÛ  V1.07 of 17-Nov-93: Added MetaWare High C support                     ÛÛ
-//ÛÛ  V1.10 of  3-Dec-93: Modified VFX_pane_refresh(), WINDOW structure     ÛÛ
-//ÛÛ  V1.15 of 13-Mar-94: Added new VFX.C function prototypes               ÛÛ
-//ÛÛ                      Added new WINDOW members, PANE_LIST structure     ÛÛ
-//ÛÛ                                                                        ÛÛ
-//ÛÛ  Project: 386FX Sound & Light(TM)                                      ÛÛ
-//ÛÛ   Author: Ken Arnold, John Miles, John Lemberger                       ÛÛ
-//ÛÛ                                                                        ÛÛ
-//ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-//ÛÛ                                                                        ÛÛ
-//ÛÛ  Copyright (C) 1992-1994 Non-Linear Arts, Inc.                         ÛÛ
-//ÛÛ                                                                        ÛÛ
-//ÛÛ  Non-Linear Arts, Inc.                                                 ÛÛ
-//ÛÛ  3415 Greystone #200                                                   ÛÛ
-//ÛÛ  Austin, TX 78731                                                      ÛÛ
-//ÛÛ                                                                        ÛÛ
-//ÛÛ  (512) 346-9595 / FAX (512) 346-9596 / BBS (512) 454-9990              ÛÛ
-//ÛÛ                                                                        ÛÛ
-//ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//ï¿½ï¿½                                                                        ï¿½ï¿½
+//ï¿½ï¿½  VFX.H: C type definitions & API function prototypes                   ï¿½ï¿½
+//ï¿½ï¿½                                                                        ï¿½ï¿½
+//ï¿½ï¿½  Source compatible with 32-bit 80386 C/C++                             ï¿½ï¿½
+//ï¿½ï¿½                                                                        ï¿½ï¿½
+//ï¿½ï¿½  V0.10 of 10-Dec-92: Initial version                                   ï¿½ï¿½
+//ï¿½ï¿½  V1.01 of 12-May-93: Added VFX_shape_lookaside(), new polygon calls    ï¿½ï¿½
+//ï¿½ï¿½                      PCX_draw() returns void                           ï¿½ï¿½
+//ï¿½ï¿½  V1.02 of 18-Jun-93: Added rotation/scaling calls                      ï¿½ï¿½
+//ï¿½ï¿½                      intervals parameter added to window_fade()        ï¿½ï¿½
+//ï¿½ï¿½                      Added VFX_RECT structure                              ï¿½ï¿½
+//ï¿½ï¿½  V1.03 of 28-Jul-93: VERTEX2D structure changed to SCRNVERTEX          ï¿½ï¿½
+//ï¿½ï¿½                      Fixed-VFX_POINT data types renamed                    ï¿½ï¿½
+//ï¿½ï¿½                      Added VFX_bank_reset() call                       ï¿½ï¿½
+//ï¿½ï¿½  V1.04 of  4-Sep-93: Indirect function prototypes changed for C++ use  ï¿½ï¿½
+//ï¿½ï¿½  V1.05 of 26-Sep-93: Added FLOAT typedef                               ï¿½ï¿½
+//ï¿½ï¿½                      VFX_RGB BYTE members changed to UBYTEs                ï¿½ï¿½
+//ï¿½ï¿½  V1.06 of 13-Oct-93: Added VFX_pane_refresh(), other new calls         ï¿½ï¿½
+//ï¿½ï¿½  V1.07 of 17-Nov-93: Added MetaWare High C support                     ï¿½ï¿½
+//ï¿½ï¿½  V1.10 of  3-Dec-93: Modified VFX_pane_refresh(), WINDOW structure     ï¿½ï¿½
+//ï¿½ï¿½  V1.15 of 13-Mar-94: Added new VFX.C function prototypes               ï¿½ï¿½
+//ï¿½ï¿½                      Added new WINDOW members, PANE_LIST structure     ï¿½ï¿½
+//ï¿½ï¿½                                                                        ï¿½ï¿½
+//ï¿½ï¿½  Project: 386FX Sound & Light(TM)                                      ï¿½ï¿½
+//ï¿½ï¿½   Author: Ken Arnold, John Miles, John Lemberger                       ï¿½ï¿½
+//ï¿½ï¿½                                                                        ï¿½ï¿½
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//ï¿½ï¿½                                                                        ï¿½ï¿½
+//ï¿½ï¿½  Copyright (C) 1992-1994 Non-Linear Arts, Inc.                         ï¿½ï¿½
+//ï¿½ï¿½                                                                        ï¿½ï¿½
+//ï¿½ï¿½  Non-Linear Arts, Inc.                                                 ï¿½ï¿½
+//ï¿½ï¿½  3415 Greystone #200                                                   ï¿½ï¿½
+//ï¿½ï¿½  Austin, TX 78731                                                      ï¿½ï¿½
+//ï¿½ï¿½                                                                        ï¿½ï¿½
+//ï¿½ï¿½  (512) 346-9595 / FAX (512) 346-9596 / BBS (512) 454-9990              ï¿½ï¿½
+//ï¿½ï¿½                                                                        ï¿½ï¿½
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 #ifndef VFX_H
 #define VFX_H
@@ -108,7 +108,7 @@ typedef signed   long  FIXED30;   // 2:30 fixed-VFX_POINT type [-1.999,+1.999]
 
 //
 // VFX_line_draw() modes
-//  
+//
 
 #define LD_DRAW      0
 #define LD_TRANSLATE 1
@@ -154,7 +154,7 @@ typedef struct _window
 
    STENCIL *stencil;
    UBYTE   *shadow;
-} 
+}
 WINDOW;
 
 typedef struct _pane
@@ -164,7 +164,7 @@ typedef struct _pane
 	LONG y0;
 	LONG x1;
 	LONG y1;
-} 
+}
 PANE;
 
 typedef struct _pane_list
@@ -181,7 +181,7 @@ typedef union
    UBYTE *b;
    UWORD *w;
    ULONG *d;
-} 
+}
 FLEX_PTR;
 
 typedef struct
@@ -237,7 +237,7 @@ typedef struct            // Vertex structure used by polygon primitives
    FIXED16 v;             // Texture source Y
    FIXED30 w;             // Homogeneous perspective divisor (unused by VFX3D)
 }
-SCRNVERTEX;               
+SCRNVERTEX;
 
 typedef struct
 {
@@ -272,7 +272,7 @@ extern void  (*VFX_init_driver)(void);
 extern void  (*VFX_shutdown_driver)(void);
 extern void  (*VFX_wait_vblank)(void);
 extern void  (*VFX_wait_vblank_leading)(void);
-extern void  (*VFX_area_wipe)(LONG x0, LONG y0, LONG x1, LONG y1, 
+extern void  (*VFX_area_wipe)(LONG x0, LONG y0, LONG x1, LONG y1,
    LONG color);
 extern void  (*VFX_window_refresh)(WINDOW *target, LONG x0, LONG y0,
    LONG x1, LONG y1);
@@ -322,7 +322,7 @@ extern BYTE * VFX_driver_name(void *VFXScanDLL);
 
 extern LONG  VFX_register_driver(void *DLLbase);
 
-extern LONG  VFX_line_draw (PANE *pane, LONG x0, LONG y0, 
+extern LONG  VFX_line_draw (PANE *pane, LONG x0, LONG y0,
                                  LONG x1, LONG y1, LONG mode, void* parm);
 
 extern long  VFX_shape_draw (PANE *pane, void *shape_table,
@@ -334,7 +334,7 @@ extern long VFX_newShape_count (void *shape);
 
 extern void  VFX_shape_lookaside (UBYTE *table);
 extern long  VFX_shape_translate_draw (PANE *pane, void *shape_table,
-                                       LONG shape_number, 
+                                       LONG shape_number,
                                        LONG hotX, LONG hotY);
 
 extern void  VFX_shape_remap_colors(void *shape_table,
@@ -346,12 +346,12 @@ void  VFX_shape_visible_rectangle(void *shape_table,
 
 extern LONG  VFX_shape_scan (PANE *pane, ULONG transparentColor,
                                   LONG hotX, LONG hotY, void *buffer);
-								  
+
 extern long VFX_newShape_scan (PANE *shapePane, UBYTE xparentColor, UBYTE Hsx, UBYTE Hsy, unsigned char* *shapeBuffer);
 extern long VFX_deltaShape_scan (PANE *shapePane, UBYTE xparentColor, UBYTE Hsx, UBYTE Hsy, unsigned char* *shapeBuffer);
 
 extern long VFX_tile_scan (PANE *shapePane, UBYTE xparentColor, UBYTE Hsx, UBYTE Hsy, unsigned char* *shapeBuffer);
-								  
+
 extern int VFX_shape_bounds(void *shape_table, LONG shape_num);
 extern LONG  VFX_shape_origin(void *shape_table, LONG shape_num);
 extern LONG  VFX_shape_resolution(void *shape_table, LONG shape_num);
@@ -379,9 +379,9 @@ extern LONG  VFX_pane_copy (PANE *source, LONG sx, LONG sy,
 extern LONG  VFX_pane_scroll (PANE *pane, LONG dx, LONG dy,
                                    LONG mode, LONG parm);
 
-extern void  VFX_ellipse_draw(PANE *pane, LONG xc, LONG yc, 
+extern void  VFX_ellipse_draw(PANE *pane, LONG xc, LONG yc,
    LONG width, LONG height, LONG color);
-extern void  VFX_ellipse_fill(PANE *pane, LONG xc, LONG yc, 
+extern void  VFX_ellipse_fill(PANE *pane, LONG xc, LONG yc,
    LONG width, LONG height, LONG color);
 
 extern void  VFX_point_transform(VFX_POINT *in, VFX_POINT *out, VFX_POINT *origin,
@@ -428,7 +428,7 @@ extern void  VFX_shape_transform(PANE *pane,
 
 extern void VFX_flat_polygon(PANE *pane, LONG vcnt, SCRNVERTEX *vlist);
 
-extern void VFX_Gouraud_polygon(PANE *pane, LONG vcnt, 
+extern void VFX_Gouraud_polygon(PANE *pane, LONG vcnt,
    SCRNVERTEX *vlist);
 
 extern void VFX_dithered_Gouraud_polygon(PANE *pane, FIXED16
@@ -442,7 +442,7 @@ extern void VFX_map_polygon(PANE *pane, LONG vcnt, SCRNVERTEX *vlist,
 extern void VFX_translate_polygon(PANE *pane, LONG vcnt, SCRNVERTEX *vlist,
    void *lookaside);
 
-extern void VFX_illuminate_polygon(PANE *pane, FIXED16 dither_amount, 
+extern void VFX_illuminate_polygon(PANE *pane, FIXED16 dither_amount,
    LONG vcnt, SCRNVERTEX *vlist);
 
 #ifdef __cplusplus

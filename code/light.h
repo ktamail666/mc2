@@ -8,26 +8,12 @@
 // Copyright (C) Microsoft Corporation. All rights reserved.                 //
 //===========================================================================//
 
-#ifndef LIGHT_H
-#define LIGHT_H
+#pragma once
 
-//---------------------------------------------------------------------------
-
-#ifndef DCARNAGE_H
-#include"dcarnage.h"
-#endif
-
-#ifndef GAMEOBJ_H
-#include"gameobj.h"
-#endif
-
-#ifndef OBJMGR_H
-#include"objmgr.h"
-#endif
-
-#ifndef OBJTYPE_H
-#include"objtype.h"
-#endif
+#include "dcarnage.h"
+#include "gameobj.h"
+#include "objmgr.h"
+#include "objtype.h"
 
 //---------------------------------------------------------------------------
 /*
@@ -37,73 +23,69 @@
 */
 //---------------------------------------------------------------------------
 
-class LightType : public ObjectType {
+class LightType : public ObjectType
+{
+public:
+    bool oneShotFlag;
+    float altitudeOffset;
 
-	public:
+public:
+    void init()
+    {
+        ObjectType::init();
+    }
 
-		bool		oneShotFlag;
-		float		altitudeOffset;
-	
-	public:
+    LightType()
+    {
+        init();
+    }
 
-		void init (void) {
-			ObjectType::init();
-		}
-		
-		LightType (void) {
-			init();
-		}
-		
-		virtual long init (FilePtr objFile, unsigned long fileSize);
+    virtual long init(FilePtr objFile, unsigned long fileSize);
 
-		long init (FitIniFilePtr objFile);
-		
-		~LightType (void) {
-			destroy();
-		}
-		
-		virtual void destroy (void);
-		
-		virtual GameObjectPtr createInstance (void);
-		
-		virtual bool handleCollision (GameObjectPtr collidee, GameObjectPtr collider);
+    long init(FitIniFilePtr objFile);
 
-		virtual bool handleDestruction (GameObjectPtr collidee, GameObjectPtr collider);
+    ~LightType()
+    {
+        destroy();
+    }
+
+    virtual void destroy();
+
+    virtual GameObjectPtr createInstance();
+
+    virtual bool handleCollision(GameObjectPtr collidee, GameObjectPtr collider);
+
+    virtual bool handleDestruction(GameObjectPtr collidee, GameObjectPtr collider);
 };
 
 //---------------------------------------------------------------------------
 
-class Light : public GameObject {
+class Light : public GameObject
+{
+public:
+    void init(bool create) override;
 
-	public:
+    Light()
+        : GameObject()
+    {
+        init(true);
+    }
 
-		virtual void init (bool create);
+    ~Light()
+    {
+        destroy();
+    }
 
-	   	Light (void) : GameObject() {
-			init(true);
-		}
+    void destroy() override;
 
-		~Light (void) {
-			destroy();
-		}
+    long update() override;
 
-		virtual void destroy (void);
-				
-		virtual long update (void);
+    void render() override;
 
-		virtual void render (void);
-		
-		virtual void init (bool create, ObjectTypePtr _type);
+    void init(bool create, ObjectTypePtr _type) override;
 
-		virtual long kill (void) {
-			return(NO_ERR);
-		}
+    long kill() override
+    {
+        return (NO_ERR);
+    }
 };
-
-//***************************************************************************
-
-#endif
-
-
-
-

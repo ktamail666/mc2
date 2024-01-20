@@ -1,5 +1,4 @@
 //#version 300 es
-
 #define PREC highp
 
 in PREC vec4 Color;

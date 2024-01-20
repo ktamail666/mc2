@@ -45,17 +45,17 @@ unsigned long CollisionSystem::maxCollisions = 0;
 
 
 //------------------------------------------------------------------------------
-// class CollisionGrid 
+// class CollisionGrid
 //------------------------------------------------------------------------------
 long GlobalCollisionAlert::init (unsigned long maxCollisionAlerts)
 {
 	maxAlerts = maxCollisionAlerts;
-	
+
 	collisionAlerts = (CollisionAlertRecordPtr)systemHeap->Malloc(sizeof(CollisionAlertRecord) * maxAlerts);
 	gosASSERT(collisionAlerts != NULL);
 
 	purgeRecords();
-	
+
 	return(NO_ERR);
 }
 
@@ -77,14 +77,14 @@ long GlobalCollisionAlert::addRecord (GameObjectPtr obj1, GameObjectPtr obj2, fl
 
 		collisionAlerts[nextRecord].currentDistance = distance;
 		collisionAlerts[nextRecord].timeToImpact = time;
-		nextRecord++;	
-		
+		nextRecord++;
+
 		return(NO_ERR);
 	}
-	
+
 	return(-1);
 }
-		
+
 //------------------------------------------------------------------------------
 CollisionAlertRecordPtr GlobalCollisionAlert::findAlert (GameObjectPtr object, CollisionAlertRecordPtr startRecord)
 {
@@ -99,10 +99,10 @@ CollisionAlertRecordPtr GlobalCollisionAlert::findAlert (GameObjectPtr object, C
 				break;
 			}
 		}
-		
+
 		startIndex = i+1;
 	}
-	
+
 	if (startIndex < nextRecord)
 	{
 		for (unsigned long i=startIndex;i<nextRecord;i++)
@@ -114,7 +114,7 @@ CollisionAlertRecordPtr GlobalCollisionAlert::findAlert (GameObjectPtr object, C
 			}
 		}
 	}
-		
+
 	return(NULL);
 }
 
@@ -122,7 +122,7 @@ CollisionAlertRecordPtr GlobalCollisionAlert::findAlert (GameObjectPtr object, C
 void GlobalCollisionAlert::purgeRecords (void)
 {
 	nextRecord = 0;
-	
+
 	for (long i=0;i<(long)maxAlerts;i++)
 	{
 		collisionAlerts[i].object1 = NULL;
@@ -190,13 +190,13 @@ long CollisionGrid::init (Stuff::Vector3D &newOrigin)
 	}
 
 	//-----------------------------
-	// Reset all of the grid data.	
+	// Reset all of the grid data.
 	memset(grid,0,gridSize);
 	memset(nodes,0,nodeSize);
-		
+
 	nextAvailableNode = 0;
 	gridOrigin = newOrigin;
-	
+
 	giantObjects = NULL;
 
 	return(NO_ERR);
@@ -497,20 +497,20 @@ void CollisionSystem::checkObjects (void)
 			// no more are getting added!  We should probably Inform
 			// the debug crowd of this!!
 			gosASSERT(result == NO_ERR);
-				
+
 			//-----------------------------------------------------
 			//-- For right now, just explosions and artillery
 			//-- Movers need a revised check for the code to work.
 			//-- Code is in.  Away we go.
 			objNode->handleStaticCollision();
-			
+
 			objNode = objNode->next;
 		}
 		else
 		{
 			objNode = objList->head;
 		}
-		
+
 		if (objNode == NULL)
 		{
 			objList = objList->next;
@@ -518,7 +518,7 @@ void CollisionSystem::checkObjects (void)
 		}
 	}
 #endif
-	
+
 	collisionGrid->createGrid();
 }
 
@@ -547,7 +547,7 @@ void CollisionSystem::detectCollision (GameObjectPtr obj1, GameObjectPtr obj2)
 		int obj1Vertex, obj2Vertex;
 		obj1->getBlockAndVertexNumber(obj1Block,obj1Vertex);
 		obj2->getBlockAndVertexNumber(obj2Block,obj2Vertex);
-		
+
 		if ((obj1Block == obj2Block) && (obj1Vertex == obj2Vertex))
 			if ((obj1Pos[0] == obj2Pos[0]) && (obj1Pos[1] == obj2Pos[1])) {
 	   			//------------------------------------------------
@@ -582,7 +582,7 @@ void CollisionSystem::detectCollision (GameObjectPtr obj1, GameObjectPtr obj2)
 	   		// further for Honor Bound.
 			checkExtents(obj1,obj2,timeOfClosest);
 	   	}
-		
+
 	}
 }
 
@@ -633,7 +633,7 @@ void CollisionSystem::checkExtents (GameObjectPtr obj1, GameObjectPtr obj2, floa
 	// We may not need any more information for MechCommander2
 	// At this point, simply build a CollisionRecord.
 	// If we do need more info, add extent checks here.
-	
+
 	//------------------------------------------------------------
 	// If we are an explosion, handle our collisions here and
 	// DO NOT add our record.  Fuel Tank Farms will completely
@@ -669,7 +669,7 @@ void CollisionSystem::checkExtents (GameObjectPtr obj1, GameObjectPtr obj2, floa
 
 	ObjectTypePtr	obj1Type = obj1->getObjectType();
 	ObjectTypePtr	obj2Type = obj2->getObjectType();
-				
+
 	bool obj1Result = obj1Type->handleCollision(obj1,obj2);
 	bool obj2Result = obj2Type->handleCollision(obj2,obj1);
 	

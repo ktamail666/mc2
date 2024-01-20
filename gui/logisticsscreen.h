@@ -7,7 +7,7 @@ LogisticsScreen.h			: Interface for the LogisticsScreen component.
 //===========================================================================//
 \*************************************************************************************************/
 
-#include"asystem.h"
+#include "asystem.h"
 //*************************************************************************************************
 class FitIniFile;
 class aObject;
@@ -23,103 +23,112 @@ LogisticsScreen:
 **************************************************************************************************/
 class LogisticsScreen : public aObject
 {
-	public:
+public:
+    enum Status
+    {
+        RUNNING  = 0,
+        NEXT     = 1,
+        PREVIOUS = 2,
+        DONE     = 3,
+        PAUSED   = 4,
+        UP,
+        DOWN,
+        YES,
+        NO,
+        MAINMENU,
+        RESTART,
+        MULTIPLAYERRESTART,
+        SKIPONENEXT,
+        SKIPONEPREVIOUS,
+        FADEDOWN,
+        FADEUP,
+        READYTOLOAD,
+        GOTOSPLASH
+    };
 
-	enum Status
-	{
-		RUNNING = 0,
-		NEXT = 1,
-		PREVIOUS = 2,
-		DONE = 3,
-		PAUSED = 4,
-		UP,
-		DOWN,
-		YES,
-		NO,
-		MAINMENU,
-		RESTART,
-		MULTIPLAYERRESTART,
-		SKIPONENEXT,
-		SKIPONEPREVIOUS,
-		FADEDOWN,
-		FADEUP,
-		READYTOLOAD,
-		GOTOSPLASH
-	};
+    LogisticsScreen();
+    virtual ~LogisticsScreen();
+    LogisticsScreen(const LogisticsScreen& src);
+    LogisticsScreen& operator=(const LogisticsScreen& src);
 
-	LogisticsScreen();
-	virtual ~LogisticsScreen();
-	LogisticsScreen( const LogisticsScreen& src );
-	LogisticsScreen& operator=( const LogisticsScreen& src );
+    void init(
+        FitIniFile& file,
+        const char* staticName,
+        const char* textName,
+        const char* rectName,
+        const char* buttonName,
+        const char* editName       = "Edit",
+        const char* animObjectName = "AnimObject",
+        DWORD neverFlush           = 0);
 
-	void init(FitIniFile& file, const char* staticName, const char* textName, const char* rectName,
-					  const char* buttonName, const char* editName = "Edit",
-					  const char* animObjectName = "AnimObject", DWORD neverFlush = 0 );
+    virtual void update();
+    virtual void render();
 
-	virtual void update();
-	virtual void render();
+    virtual void begin();
+    virtual void end()
+    {
+    }
 
-	virtual void begin();
-	virtual void end(){}
+    virtual void render(int xOffset, int yOffset);
 
-	virtual void render( int xOffset, int yOffset );
+    long getStatus();
 
-	long getStatus();
+    aButton* getButton(long who);
+    aRect* getRect(long who);
 
-	aButton* getButton( long who );
-	aRect* getRect( long who );
-
-	virtual void  moveTo( long xPos, long yPos );
-	virtual void  move( long xPos, long yPos );
-
-
-	bool	inside( long x, long y);
-
-	void	beginFadeIn( float fNewTime ){ fadeInTime = fNewTime; fadeOutTime = fadeTime = 0.f; }
-	void	beginFadeOut( float fNewTime ) { fadeInTime = 0.f; fadeOutTime = fNewTime; fadeTime = 0.f; }
-
-
-	void	clear(); // remove everything
+    virtual void moveTo(long xPos, long yPos);
+    virtual void move(long xPos, long yPos);
 
 
-	
-	aObject*			statics;
-	aRect*				rects;
-	long				rectCount;
-	long				staticCount;
+    bool inside(long x, long y);
 
-	aText*				textObjects;
-	long				textCount;
-
-	aAnimButton*			buttons;
-	long				buttonCount;
-
-	aEdit*				edits;
-	long				editCount;
-
-	aAnimObject*		animObjects;
-	long				animObjectsCount;
-
-	float				fadeInTime;
-	float				fadeOutTime;
-	float				fadeTime;
+    void beginFadeIn(float fNewTime)
+    {
+        fadeInTime  = fNewTime;
+        fadeOutTime = fadeTime = 0.f;
+    }
+    void beginFadeOut(float fNewTime)
+    {
+        fadeInTime  = 0.f;
+        fadeOutTime = fNewTime;
+        fadeTime    = 0.f;
+    }
 
 
-	protected:
-
-	long				status;
-	long				fadeOutMaxColor;
-
-	long				helpTextArrayID;
-	private:
-
-	void copyData( const LogisticsScreen& );
-	void destroy();
+    void clear();  // remove everything
 
 
+    aObject* statics;
+    aRect* rects;
+    long rectCount;
+    long staticCount;
+
+    aText* textObjects;
+    long textCount;
+
+    aAnimButton* buttons;
+    long buttonCount;
+
+    aEdit* edits;
+    long editCount;
+
+    aAnimObject* animObjects;
+    long animObjectsCount;
+
+    float fadeInTime;
+    float fadeOutTime;
+    float fadeTime;
 
 
+protected:
+    long status;
+    long fadeOutMaxColor;
 
+    long helpTextArrayID;
+
+private:
+    void copyData(const LogisticsScreen&);
+    void destroy();
 };
 
 

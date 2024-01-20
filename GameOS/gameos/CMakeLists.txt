@@ -25,15 +25,31 @@ add_library(gameos
     utils/timing.cpp
     utils/string_utils.cpp
     utils/file_utils.cpp
+
+    ${CMAKE_SOURCE_DIR}/include/glad/gl.c
 )
-target_include_directories(gameos PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../include ${CMAKE_CURRENT_SOURCE_DIR})
+find_package(glm REQUIRED)
+target_include_directories(gameos
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/../include
+        ${CMAKE_CURRENT_SOURCE_DIR}
+    PUBLIC
+        ${CMAKE_SOURCE_DIR}/include
+)
+
+find_package(mimalloc REQUIRED)
+
+
 target_link_libraries(gameos PUBLIC
     SDL2::SDL2
     SDL2_mixer::SDL2_mixer
-    GLEW::GLEW
-    )
-
+    glm::glm
+    mimalloc
+)
 
 add_library(gameos_main gameosmain.cpp)
-target_include_directories(gameos_main PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../include ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(gameos_main PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../include
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
 target_link_libraries(gameos_main PUBLIC gameos)

@@ -8,19 +8,10 @@
 
 #ifndef APPEAR_H
 #define APPEAR_H
-//---------------------------------------------------------------------------
-// Include Files
-#ifndef DAPPEAR_H
+
 #include"dappear.h"
-#endif
-
-#ifndef DAPRTYPE_H
 #include"daprtype.h"
-#endif
-
-#ifndef FLOATHELP_H
 #include"floathelp.h"
-#endif
 
 #include<stuff/stuff.hpp>
 //---------------------------------------------------------------------------
@@ -65,16 +56,16 @@ class Appearance
 
 		bool						visible;		//Current FOW status to help draw
 		bool						seen;			//Current FOW status to help draw
-		
+
 	public:
 
 		bool						inView;			//Can I be Seen?
 		Stuff::Vector4D				upperLeft;		//used to draw select boxes.  Can be 3D Now!
 		Stuff::Vector4D				lowerRight;		//used to draw select boxes.
-		
+
 		float						barStatus;		//Status Bar Length.
 		DWORD						barColor;		//Status Bar Color.
-	
+
 	//Member Functions
 	//-----------------
 	public:
@@ -93,7 +84,7 @@ class Appearance
 
 			visible = seen = false;
 		}
-		
+
 		virtual void init (AppearanceTypePtr tree = NULL, GameObjectPtr obj = NULL)
 		{
 			inView = FALSE;
@@ -105,7 +96,7 @@ class Appearance
 
 			visible = seen = false;
 		}
-		
+
 		virtual void initFX (void)
 		{
 		}
@@ -114,18 +105,18 @@ class Appearance
 		{
 			init();
 		}
-		
+
 		virtual ~Appearance (void)
 		{
 			destroy();
 		}
-		
+
 		virtual long update (bool animate = true)
 		{
 			//Perform any frame by frame tasks.  Animations, etc.
 			return NO_ERR;
 		}
-		
+
 		virtual long render (long depthFixup = 0)
 		{
 			//Decide whether or not I can be seen and add me to render list.
@@ -146,12 +137,12 @@ class Appearance
 		{
 			return(inView);
 		}
-		
+
 		void setInView (bool viewStatus)
 		{
 			inView = viewStatus;
 		}
-				
+
 		Stuff::Vector4D getScreenPos (void)
 		{
 			return screenPos;
@@ -161,7 +152,7 @@ class Appearance
 		{
 			return FALSE;		//Never over a base appearance
 		}
-				
+
 		virtual void drawSelectBox (DWORD color);
 
 		virtual void drawSelectBrackets (DWORD color);
@@ -173,7 +164,7 @@ class Appearance
 
 		void drawPilotName(char *text, unsigned long color ); // next line below drawTextHelp
 
-		
+
 		virtual bool recalcBounds (void)
 		{
 			//-------------------------------------------------------
@@ -190,11 +181,11 @@ class Appearance
 		{
 			return 0;
 		}
-		
+
 		virtual void setVelocityPercentage (float percent)
 		{
 		}
-		
+
 		virtual long getFrameNumber (void)
 		{
 			return 0;
@@ -204,7 +195,7 @@ class Appearance
 		{
 			return BASE_APPEARANCE;
 		}
-		
+
 		virtual void setBarStatus (float stat)
 		{
 			barStatus = stat;
@@ -231,7 +222,7 @@ class Appearance
 		{
 			return -1;
 		}
-		
+
 		virtual long getCurrentGestureGoal (void)
 		{
 			return -1;
@@ -279,12 +270,12 @@ class Appearance
 		{
 			return 0;
 		}
-		
+
 		virtual long getWeaponNode (long weapontype)
 		{
 			return 0;
 		}
-		
+
 		virtual float getWeaponNodeRecycle (long node)
 		{
 			return 0.0f;
@@ -297,7 +288,7 @@ class Appearance
 		virtual void setWeaponNodeRecycle(long nodeId, float time)
 		{
 		}
-		
+
 		virtual Stuff::Vector3D getSmokeNodePosition (long nodeId)
 		{
 			Stuff::Vector3D position;
@@ -305,7 +296,7 @@ class Appearance
 
 			return position;
 		}
-		
+
 		virtual Stuff::Vector3D getDustNodePosition (long nodeId)
 		{
 			Stuff::Vector3D position;
@@ -313,7 +304,7 @@ class Appearance
 
 			return position;
 		}
-		
+
  		virtual Stuff::Vector3D getWeaponNodePosition (long node)
 		{
 			Stuff::Vector3D position;
@@ -329,7 +320,7 @@ class Appearance
 
 			return position;
 		}
-		
+
 		virtual Stuff::Vector3D getNodeNamePosition (const char *nodeName)
 		{
 			Stuff::Vector3D position;
@@ -337,7 +328,7 @@ class Appearance
 
 			return position;
 		}
-		
+
 		virtual Stuff::Vector3D getNodeIdPosition (long nodeId)
 		{
 			Stuff::Vector3D position;
@@ -390,7 +381,7 @@ class Appearance
 		virtual void resetPaintScheme (DWORD red, DWORD green, DWORD blue)
 		{
 		}
-		
+
 		virtual void setDebugMoveMode (void)
 		{
 		}
@@ -398,11 +389,11 @@ class Appearance
 		virtual void setSingleStepMode (void)
 		{
 		}
-		
+
 		virtual void setPrevFrame (void)
 		{
 		}
-		
+
 		virtual void setNextFrame (void)
 		{
 		}
@@ -416,15 +407,15 @@ class Appearance
 		virtual void setSensorLevel (long lvl)
 		{
 		}
-		
+
 		virtual void hitFront (void)
 		{
 		}
-	
+
 		virtual void hitBack (void)
 		{
 		}
-		
+
 		virtual void hitLeft (void)
 		{
 		}
@@ -432,11 +423,11 @@ class Appearance
 		virtual void hitRight (void)
 		{
 		}
-		
+
 		virtual void setObjStatus (long oStatus)
 		{
 		}
-		
+
 		virtual long calcCellsCovered (Stuff::Vector3D& pos, short* cellList) {
 			return(0);
 		}
@@ -444,7 +435,7 @@ class Appearance
 		virtual void markTerrain (_ScenarioMapCellInfo* pInfo, int type, int counter)
 		{
 		}
-		
+
 		virtual long markMoveMap (bool passable, long* lineOfSightRect, bool useheight = false, short* cellList = NULL)
 		{
 			return(0);
@@ -452,40 +443,40 @@ class Appearance
 
 		virtual void markLOS (bool clearIt = false)
 		{
-		
+
 		}
-		
+
 		virtual void scale (float scaleFactor)
 		{
 		}
-		
+
 		virtual bool playDestruction (void)
 		{
 			return false;
 		}
-		
+
 		virtual float getRadius (void)
 		{
 			return 0.0f;
 		}
-		
+
 		virtual void flashBuilding (float duration, float flashDuration, DWORD color)
 		{
 		}
-		
+
 		virtual void setHighlightColor( long argb )
 		{
 		}
-	
+
 		virtual float getTopZ (void)
 		{
 			return 0.0f;
 		}
-		
+
 		virtual void blowLeftArm (void)
 		{
 		}
-		
+
 		virtual void blowRightArm (void)
 		{
 		}
@@ -493,7 +484,7 @@ class Appearance
 		virtual void setFilterState (bool state)
 		{
 		}
-		
+
 		virtual Stuff::Vector3D getVelocity (void)
 		{
 			Stuff::Vector3D result;
@@ -505,7 +496,7 @@ class Appearance
 		{
 			return true;
 		}
-		
+
 		virtual void setIsHudElement (void)
 		{
 		}
@@ -519,10 +510,10 @@ class Appearance
 		{
 			return false;
 		}
-		
+
 		virtual void setLightsOut (bool lightFlag)
 		{
-		
+
 		}
 
 		virtual bool PerPolySelect (long mouseX, long mouseY)
@@ -531,51 +522,51 @@ class Appearance
 		}
 
 		virtual bool isForestClump (void)
-		{	
+		{
 			return false;
 		}
-		
+
 		virtual Stuff::Point3D getRootNodeCenter (void)
 		{
 			Stuff::Point3D result;
 			result.Zero();
 			return result;
 		}
-		
+
 		virtual void setAlphaValue (BYTE aVal)
 		{
 		}
 
 		void drawIcon(  unsigned long bmpHandle, unsigned long bmpWidth,
-						  unsigned long bmpHeight, unsigned long color, 
+						  unsigned long bmpHeight, unsigned long color,
 						  unsigned long where = 0 );
-						  
+
 		virtual void setSkyNumber (long skyNum)
 		{
 		}
 
 		virtual void setMechName( const char* pName ){}
-		
+
 		virtual void startSmoking (long smokeLvl)
 		{
 		}
-		
+
 		virtual void startWaterWake (void)
 		{
 		}
-		
+
 		virtual void stopWaterWake (void)
 		{
 		}
-		
+
 		virtual void playEjection (void)
 		{
 		}
-		
+
 		virtual void startActivity (long effectId, bool loop)
 		{
 		}
-		
+
 		virtual void stopActivity (void)
 		{
 		}
@@ -615,7 +606,7 @@ class Appearance
 		{
 			return false;
 		}
-};		
+};
 
 //---------------------------------------------------------------------------
 #endif

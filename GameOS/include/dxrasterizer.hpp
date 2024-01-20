@@ -60,7 +60,6 @@ enum
 	RenderEqualZ=1<<8,				// Render bit depth must equal Z bit depth (nVidia cards)
 	NoParallelism=1<<9,				// Lock the back buffer after rendering (Voodoo3 - queueing up too many blits)
 	BadMouse=1<<10,					// Card can never used GDI mouse
-	LowEndCard=1<<11,				// This is a 'low end' card - the application can request this is not supported in hardware (Environment.DisableLowEndCard)
 	NoMipMap=1<<12,					// Disable mipmaps
 	Bad4444=1<<13,					// Disable 4444 textures  (Chromatic Mpact)
 	BadAGP=1<<14,					// Disable AGP textures   (Chromatic Mpact)

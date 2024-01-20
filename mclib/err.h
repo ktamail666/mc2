@@ -7,15 +7,7 @@
 //
 //***************************************************************************
 
-#ifndef ERR_H
-#define	ERR_H
+#pragma once
+void Fatal(long errCode, const char* errMessage);
 
-//***************************************************************************
-
-void Fatal (long errCode, const char* errMessage);
-
-void Assert (bool test, long errCode, const char* errMessage);
-
-//***************************************************************************
-
-#endif
+void Assert(bool test, long errCode, const char* errMessage);

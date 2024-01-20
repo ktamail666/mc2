@@ -1,7 +1,8 @@
-BasedOnStyle:  Chromium
-Standard:        c++17
-IndentWidth:     4
+BasedOnStyle: Chromium
+Standard: c++20
+IndentWidth: 4
 AccessModifierOffset: -4
+UseTab: Never
 
 BreakBeforeBraces: Custom
 BraceWrapping:
@@ -13,13 +14,16 @@ BraceWrapping:
   AfterNamespace: false
   BeforeElse: true
   AfterCaseLabel: true
-  AfterUnion:      true
+  AfterUnion: true
 
 ColumnLimit: 160
 MaxEmptyLinesToKeep: 2
 BreakConstructorInitializersBeforeComma: true
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
 AlignAfterOpenBracket: AlwaysBreak
+AlignConsecutiveAssignments: true
+AlignConsecutiveMacros:
+  Enabled: true
 Cpp11BracedListStyle: false
 BreakBeforeBinaryOperators: NonAssignment
 AllowShortFunctionsOnASingleLine: false

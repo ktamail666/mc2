@@ -47,7 +47,7 @@ void * Appearance::operator new (size_t mySize)
 	{
 		result = AppearanceTypeList::appearanceHeap->Malloc(mySize);
 	}
-		
+
 	return(result);
 }
 
@@ -110,10 +110,10 @@ void Appearance::drawSelectBox (DWORD color)
 
 	AppearanceType *appearType = getAppearanceType();
 	if (appearType && appearType->typeBoundExists())
-	{		   
+	{
 		eye->projectZ(appearType->typeUpperLeft,ul);
 		ul.z = HUD_DEPTH;
-		
+
 		eye->projectZ(appearType->typeLowerRight,br);
 		br.z = HUD_DEPTH;
 	}
@@ -140,12 +140,12 @@ void Appearance::drawSelectBox (DWORD color)
 	pos2.y = float(ul.y);
 	pos2.z = ul.z;
 	pos2.w = pos1.w = 1.0f;
-	
+
 	{
 		LineElement newElement(pos1,pos2,color,NULL,-1);
 		newElement.draw();
 	}
-	
+
 	pos1.x = float(ul.x-offsets);
 	pos1.y = float(ul.y-offsets);
 	pos1.z = ul.z;
@@ -154,12 +154,12 @@ void Appearance::drawSelectBox (DWORD color)
 	pos2.y = float(ul.y-offsets);
 	pos2.z = ul.z;
 	pos2.w = pos1.w = 1.0f;
-	
+
 	{
 		LineElement newElement(pos1,pos2,color,NULL,-1);
 		newElement.draw();
 	}
-	
+
 	pos1.x = float(br.x+offsets);
 	pos1.y = float(ul.y-offsets);
 	pos1.z = ul.z;
@@ -168,12 +168,12 @@ void Appearance::drawSelectBox (DWORD color)
 	pos2.y = float(ul.y);
 	pos2.z = ul.z;
 	pos2.w = pos1.w = 1.0f;
-	
+
 	{
 		LineElement newElement(pos1,pos2,color,NULL,-1);
 		newElement.draw();
 	}
-	
+
 	pos1.x = float(br.x+offsets);
 	pos1.y = float(ul.y-offsets);
 	pos1.z = ul.z;
@@ -182,12 +182,12 @@ void Appearance::drawSelectBox (DWORD color)
 	pos2.y = float(ul.y-offsets);
 	pos2.z = ul.z;
 	pos2.w = pos1.w = 1.0f;
-	
+
 	{
 		LineElement newElement(pos1,pos2,color,NULL,-1);
 		newElement.draw();
 	}
-	
+
 	pos1.x = float(br.x+offsets);
 	pos1.y = float(br.y+offsets);
 	pos1.z = ul.z;
@@ -196,12 +196,12 @@ void Appearance::drawSelectBox (DWORD color)
 	pos2.y = float(br.y);
 	pos2.z = ul.z;
 	pos2.w = pos1.w = 1.0f;
-	
+
 	{
 		LineElement newElement(pos1,pos2,color,NULL,-1);
 		newElement.draw();
 	}
-	
+
 	pos1.x = float(br.x+offsets);
 	pos1.y = float(br.y+offsets);
 	pos1.z = ul.z;
@@ -210,12 +210,12 @@ void Appearance::drawSelectBox (DWORD color)
 	pos2.y = float(br.y+offsets);
 	pos2.z = ul.z;
 	pos2.w = pos1.w = 1.0f;
-	
+
 	{
 		LineElement newElement(pos1,pos2,color,NULL,-1);
 		newElement.draw();
 	}
-	
+
 	pos1.x = float(ul.x-offsets);
 	pos1.y = float(br.y+offsets);
 	pos1.z = ul.z;
@@ -224,12 +224,12 @@ void Appearance::drawSelectBox (DWORD color)
 	pos2.y = float(br.y);
 	pos2.z = ul.z;
 	pos2.w = pos1.w = 1.0f;
-	
+
 	{
 		LineElement newElement(pos1,pos2,color,NULL,-1);
 		newElement.draw();
 	}
-	
+
 	pos1.x = float(ul.x-offsets);
 	pos1.y = float(br.y+offsets);
 	pos1.z = ul.z;
@@ -238,13 +238,13 @@ void Appearance::drawSelectBox (DWORD color)
 	pos2.y = float(br.y+offsets);
 	pos2.z = ul.z;
 	pos2.w = pos1.w = 1.0f;
-	
+
 	{
 		LineElement newElement(pos1,pos2,color,NULL,-1);
 		newElement.draw();
 	}
 }
-	
+
 //---------------------------------------------------------------------------
 void Appearance::drawSelectBrackets (DWORD color)
 {
@@ -269,7 +269,7 @@ void Appearance::drawSelectBrackets (DWORD color)
 	pos2.y = ul.y;
 	pos2.z = ul.z;
 	pos2.w = pos1.w = 1.0f;
-	
+
 	{
 		LineElement newElement(pos1,pos2,color,NULL,-1);
 		newElement.draw();
@@ -283,12 +283,12 @@ void Appearance::drawSelectBrackets (DWORD color)
 	pos2.y = ul.y+offsets;
 	pos2.z = ul.z;
 	pos2.w = pos1.w = 1.0f;
-	
+
 	{
 		LineElement newElement(pos1,pos2,color,NULL,-1);
 		newElement.draw();
 	}
-	
+
 	pos1.x = br.x;
 	pos1.y = ul.y;
 	pos1.z = ul.z;
@@ -297,12 +297,12 @@ void Appearance::drawSelectBrackets (DWORD color)
 	pos2.y = ul.y+offsets;
 	pos2.z = ul.z;
 	pos2.w = pos1.w = 1.0f;
-	
+
 	{
 		LineElement newElement(pos1,pos2,color,NULL,-1);
 		newElement.draw();
 	}
-	
+
 	pos1.x = br.x;
 	pos1.y = ul.y;
 	pos1.z = ul.z;
@@ -311,7 +311,7 @@ void Appearance::drawSelectBrackets (DWORD color)
 	pos2.y = ul.y;
 	pos2.z = ul.z;
 	pos2.w = pos1.w = 1.0f;
-	
+
 	{
 		LineElement newElement(pos1,pos2,color,NULL,-1);
 		newElement.draw();
@@ -325,12 +325,12 @@ void Appearance::drawSelectBrackets (DWORD color)
 	pos2.y = br.y-offsets;
 	pos2.z = br.z;
 	pos2.w = pos1.w = 1.0f;
-	
+
 	{
 		LineElement newElement(pos1,pos2,color,NULL,-1);
 		newElement.draw();
 	}
-	
+
 	pos1.x = ul.x;
 	pos1.y = br.y;
 	pos1.z = br.z;
@@ -339,13 +339,13 @@ void Appearance::drawSelectBrackets (DWORD color)
 	pos2.y = br.y;
 	pos2.z = br.z;
 	pos2.w = pos1.w = 1.0f;
-	
+
 	{
 		LineElement newElement(pos1,pos2,color,NULL,-1);
 		newElement.draw();
 	}
-	
-	
+
+
  	pos1.x = br.x;
 	pos1.y = br.y;
 	pos1.z = br.z;
@@ -354,12 +354,12 @@ void Appearance::drawSelectBrackets (DWORD color)
 	pos2.y = br.y-offsets;
 	pos2.z = ul.z;
 	pos2.w = pos1.w = 1.0f;
-	
+
 	{
 		LineElement newElement(pos1,pos2,color,NULL,-1);
 		newElement.draw();
 	}
-	
+
  	pos1.x = br.x;
 	pos1.y = br.y;
 	pos1.z = br.z;
@@ -368,13 +368,13 @@ void Appearance::drawSelectBrackets (DWORD color)
 	pos2.y = br.y;
 	pos2.z = ul.z;
 	pos2.w = pos1.w = 1.0f;
-	
+
 	{
 		LineElement newElement(pos1,pos2,color,NULL,-1);
 		newElement.draw();
 	}
 }
-	
+
 //-----------------------------------------------------------------------------
 void DrawBox(float l, float t, float r, float b)
 {
@@ -430,7 +430,7 @@ void DrawBox(float l, float t, float r, float b)
 }
 
 void Appearance::drawIcon( unsigned long bmpHandle, unsigned long bmpWidth,
-						  unsigned long bmpHeight, unsigned long color, 
+						  unsigned long bmpHeight, unsigned long color,
 						  unsigned long where )
 {
 	// ignoring where for now
@@ -439,7 +439,7 @@ void Appearance::drawIcon( unsigned long bmpHandle, unsigned long bmpWidth,
 	float			Y = upperLeft.y - offset - trueHeight -  2 * bmpHeight;
 	float			X = (upperLeft.x + lowerRight.x)/2.f - bmpWidth/2.f;
 
-	gos_VERTEX v[4]; 
+	gos_VERTEX v[4];
 
 	for ( int i = 0; i < 4; i ++ )
 	{
@@ -463,9 +463,9 @@ void Appearance::drawIcon( unsigned long bmpHandle, unsigned long bmpWidth,
 	v1[1] = v[2];
 	v1[2] = v[3];
 	mcTextureManager->addVertices(bmpHandle,v,MC2_ISHUDLMNT);
-	mcTextureManager->addVertices(bmpHandle,v1,MC2_ISHUDLMNT); 
+	mcTextureManager->addVertices(bmpHandle,v1,MC2_ISHUDLMNT);
 }
-	
+
 //---------------------------------------------------------------------------
 void Appearance::drawBars (void)
 {
@@ -476,9 +476,9 @@ void Appearance::drawBars (void)
 	float			trueHeight = HEIGHT * eye->getScaleFactor();
 	float			topY = upperLeft.y - offset - trueHeight;
 	float			leftX = floor((upperLeft.x + lowerRight.x)/2.f - trueWidth / 2);
-	
+
 	DWORD					color;
-	
+
 	if (barStatus > 1.0f)
 		barStatus = 1.0f;
 
@@ -495,11 +495,11 @@ void Appearance::drawBars (void)
 	}
 	else
 		color = barColor;
-		
+
 	float barLength = trueWidth * barStatus;
 
 	gos_VERTEX vertices[4];
-	
+
 	vertices[0].x 		= leftX - 1.0;
 	vertices[0].y 		= topY - 1.0;
 	vertices[0].z		= HUD_DEPTH;
@@ -507,42 +507,42 @@ void Appearance::drawBars (void)
 	vertices[0].u		= 0.0;
 	vertices[0].v		= 0.0;
 	vertices[0].argb	= color | 0xff000000;	  //Factor out the alpha color!!
-	vertices[0].frgb	= 0x00000000; 
-	
+	vertices[0].frgb	= 0x00000000;
+
 	vertices[1].x 		= leftX + barLength + 1.0;
 	vertices[1].y 		= topY - 1.0;
 	vertices[1].z		= HUD_DEPTH;
 	vertices[1].rhw		= 0.5;
 	vertices[1].u		= 0.0;
 	vertices[1].v		= 0.0;
-	vertices[1].argb	= color | 0xff000000;     //Factor out the alpha color!! 
-	vertices[1].frgb	= 0x00000000; 
-	
+	vertices[1].argb	= color | 0xff000000;     //Factor out the alpha color!!
+	vertices[1].frgb	= 0x00000000;
+
 	vertices[2].x 		= leftX + barLength + 1.0;
 	vertices[2].y 		= topY + trueHeight + 1.0;
 	vertices[2].z		= HUD_DEPTH;
 	vertices[2].rhw		= 0.5;
 	vertices[2].u		= 0.0;
 	vertices[2].v		= 0.0;
-	vertices[2].argb	= color | 0xff000000;     //Factor out the alpha color!! 
-	vertices[2].frgb	= 0x00000000; 
-	
+	vertices[2].argb	= color | 0xff000000;     //Factor out the alpha color!!
+	vertices[2].frgb	= 0x00000000;
+
 	vertices[3].x 		= leftX - 1.0;
 	vertices[3].y 		= topY + trueHeight + 1.0;
 	vertices[3].z		= HUD_DEPTH;
 	vertices[3].rhw		= 0.5;
 	vertices[3].u		= 0.0;
 	vertices[3].v		= 0.0;
-	vertices[3].argb	= color | 0xff000000;     //Factor out the alpha color!! 
-	vertices[3].frgb	= 0x00000000; 
-		
+	vertices[3].argb	= color | 0xff000000;     //Factor out the alpha color!!
+	vertices[3].frgb	= 0x00000000;
+
 	PolygonQuadElement newElement;
 	newElement.init(vertices);
 
 	gos_SetRenderState( gos_State_Fog, 0);
 
 	newElement.draw();
-	
+
 	DrawBox(vertices[0].x,vertices[0].y,(leftX + trueWidth + 1.0),vertices[2].y);
 
 	DWORD fogColor = eye->fogColor;

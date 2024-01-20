@@ -2,24 +2,20 @@
 #include "toolos.hpp"
 #include "fileio.hpp"
 
-#include<string.h>
-
 // gos_FileSize
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 //#include <unistd.h> // close()
 #include "platform_io.h"
-//
 
-#include <stdio.h> // fopen
-#include "platform_io.h"
+#include <cerrno>
+#include <cstring>
+#include <cstdio>  // fopen
 
-#include <errno.h>
+#include "platform_io.h"  // will be removed
 
-#include "platform_io.h" // will be removed
-
-gosFileStream::gosFileStream( const char *FileName, gosEnum_FileWriteStatus fwstatus )
+gosFileStream::gosFileStream(const char* FileName, gosEnum_FileWriteStatus fwstatus)
 {
     gosASSERT(FileName);
     gosASSERT(strlen(FileName) < MAX_PATH);
@@ -30,7 +26,8 @@ gosFileStream::gosFileStream( const char *FileName, gosEnum_FileWriteStatus fwst
     pNext = 0;
 
     const char* mode = 0;
-    switch(fwstatus) {
+    switch (fwstatus)
+    {
         case READONLY:
             mode = "rb";
             break;
@@ -46,19 +43,20 @@ gosFileStream::gosFileStream( const char *FileName, gosEnum_FileWriteStatus fwst
     }
 
     m_hFile = fopen(m_Filename, mode);
-    if(!m_hFile)
+    if (!m_hFile)
     {
-        int err = errno; // save errno from being possible overwritten by sprintf
+        int err = errno;  // save errno from being possible overwritten by sprintf
         fprintf(stderr, "gosFileStream: failed to open file: %s : %s\n", m_Filename, strerror(err));
         STOP(("Failed to open file"));
     }
 }
 
-DWORD gosFileStream::Seek( int where, gosEnum_FileSeekType seek_type)
+DWORD gosFileStream::Seek(int where, gosEnum_FileSeekType seek_type)
 {
     gosASSERT(m_hFile);
     int whence = 0;
-    switch(seek_type) {
+    switch (seek_type)
+    {
         case FROMSTART:
             whence = SEEK_SET;
             break;
@@ -76,23 +74,23 @@ DWORD gosFileStream::Seek( int where, gosEnum_FileSeekType seek_type)
     return fseek((FILE*)m_hFile, where, whence);
 }
 
-DWORD gosFileStream::Read( void *buffer, DWORD length )
+DWORD gosFileStream::Read(void* buffer, DWORD length)
 {
     gosASSERT(m_hFile);
-    size_t size = 1;
-    size_t nmemb = length;
+    size_t size      = 1;
+    size_t nmemb     = length;
     size_t num_items = fread(buffer, size, nmemb, (FILE*)m_hFile);
-    gosASSERT(num_items == nmemb); // .. can trigger if eof
+    gosASSERT(num_items == nmemb);  // .. can trigger if eof
     return num_items * size;
 }
 
-DWORD gosFileStream::Write( const void *buffer, DWORD length )
+DWORD gosFileStream::Write(const void* buffer, DWORD length)
 {
     gosASSERT(m_hFile);
-    size_t size = 1;
-    size_t nmemb = length;
+    size_t size      = 1;
+    size_t nmemb     = length;
     size_t num_items = fwrite(buffer, size, nmemb, (FILE*)m_hFile);
-    gosASSERT(num_items == nmemb); // .. can trigger if eof
+    gosASSERT(num_items == nmemb);  // .. can trigger if eof
     return num_items * size;
 }
 
@@ -110,8 +108,9 @@ void __stdcall gos_FileSetReadWrite(char const* FileName)
 
 DWORD __stdcall gos_FileSize(char const* FileName)
 {
-	int fd = _open(FileName, O_RDONLY);
-    if(fd == -1) {
+    int fd = _open(FileName, O_RDONLY);
+    if (fd == -1)
+    {
         STOP(("gos_FileSize failed"));
         return 0;
     }
@@ -119,7 +118,7 @@ DWORD __stdcall gos_FileSize(char const* FileName)
     struct stat buf;
     fstat(fd, &buf);
     _close(fd);
-    
+
     return buf.st_size;
 }
 __int64 __stdcall gos_FileTimeStamp(char const* FileName)
@@ -192,7 +191,8 @@ char* __stdcall gos_FindFilesNext()
 void __stdcall gos_GetCurrentPath(char* Buffer, int buf_len)
 {
     gosASSERT(Buffer);
-    if(getcwd(Buffer, buf_len) == NULL) {
+    if (getcwd(Buffer, buf_len) == NULL)
+    {
         int last_error = errno;
         STOP(("Current path is longer than buffer provided for it, getwd: %s\n", strerror(last_error)));
     }
@@ -206,9 +206,7 @@ void __stdcall gos_GetFile(char const* FileName, BYTE** MemoryImage, SIZE_T* Siz
 // sebi
 bool __stdcall gos_FileExists(char const* FileName)
 {
-    if(0 == access(FileName, F_OK))
+    if (0 == access(FileName, F_OK))
         return true;
     return false;
 }
-
-////////////////////////////////////////////////////////////////////////////////

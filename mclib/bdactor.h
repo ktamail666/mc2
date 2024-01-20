@@ -11,8 +11,6 @@
 #ifndef BDACTOR_H
 #define BDACTOR_H
 
-//---------------------------------------------------------------------------
-// Include files
 #ifndef APPEAR_H
 #include"appear.h"
 #endif

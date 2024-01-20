@@ -132,7 +132,6 @@ void
 		gEnableDetailTexture = 0;
 	}
 
-	MLRState::SetAGPAvailable(TRUE==gos_GetMachineInformation(gos_Info_HasAGPAvailable));
 	MLRState::SetMaxUV(static_cast<float>(gos_GetMachineInformation(gos_Info_GetMaximumUVSize, 256)));
 
   if(MLRState::GetHasMaxUVs() && MLRState::GetMaxUV() < 128.0f)

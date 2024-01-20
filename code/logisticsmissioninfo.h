@@ -1,5 +1,3 @@
-#ifndef LOGISTICSMISSIONINFO_H
-#define LOGISTICSMISSIONINFO_H
 /*************************************************************************************************\
 LogisticsMissionInfo.h			: Interface for the LogisticsMissionInfo component.
 //---------------------------------------------------------------------------//
@@ -7,11 +5,9 @@ LogisticsMissionInfo.h			: Interface for the LogisticsMissionInfo component.
 //===========================================================================//
 \*************************************************************************************************/
 
-#ifndef ELIST_H
-#include"elist.h"
-#endif
-
-#include"estring.h"
+#pragma once
+#include "elist.h"
+#include "estring.h"
 
 #define MAX_PLAYER_NAME_LENGTH 64
 
@@ -23,183 +19,192 @@ LogisticsMissionInfo:
 **************************************************************************************************/
 class LogisticsMissionInfo
 {
-	public:
+public:
+    LogisticsMissionInfo();
+    ~LogisticsMissionInfo();
 
-		LogisticsMissionInfo();
-		~LogisticsMissionInfo();
-		
-		
-		long init( FitIniFile& file ); // init campaign
-		void save( FitIniFile& file );
-		long load( FitIniFile& file );// init previously saved stuff
+    long init(FitIniFile& file);  // init campaign
+    void save(FitIniFile& file);
+    long load(FitIniFile& file);  // init previously saved stuff
 
 
-		long getAvailableMissions( const char** missions, int& numberOfEm );
-		long getCurrentMissions( const char** missions, int& numberOfEm );
+    long getAvailableMissions(const char** missions, int& numberOfEm);
+    long getCurrentMissions(const char** missions, int& numberOfEm);
 
-		bool getMissionAvailable( const char* missionName );
+    bool getMissionAvailable(const char* missionName);
 
-		bool isMissionComplete( const char* missionName );
-		bool isSingleMission() const;
+    bool isMissionComplete(const char* missionName);
+    bool isSingleMission() const;
 
-		long setNextMission( const char* missionName );
-		void setMissionComplete( );
+    long setNextMission(const char* missionName);
+    void setMissionComplete();
 
-		long getCurrentLogisticsTuneId();
+    long getCurrentLogisticsTuneId();
 
-		long getCurrentMissionId();
-		
-		const EString& getCurrentPurchaseFile() const;
-		const EString& getCurrentMission() const { return currentMissionName; }
-		const EString& getLastMission() const { return lastMissionName; }
+    long getCurrentMissionId();
 
-		long				getCurrentDropWeight() const;
-		const char*			getCurrentVideo() const;
-		const char*			getCurrentOperationFile() const;
-		const char*			getCurrentMissionDescription() const;
-		const char*			getCurrentMissionFriendlyName() const;
-		const char*			getMissionFriendlyName( const char* missionName ) const;
-		const char*			getCurrentABLScriptName() const;
+    const EString& getCurrentPurchaseFile() const;
+    const EString& getCurrentMission() const
+    {
+        return currentMissionName;
+    }
+    const EString& getLastMission() const
+    {
+        return lastMissionName;
+    }
 
-		int					getCurrentRP() const;
-		int					getCBills() const { return CBills; }
-		void				incrementCBills(int amount) { CBills += amount; }
-		void				decrementCBills(int amount) { CBills -= amount; }
+    long getCurrentDropWeight() const;
+    const char* getCurrentVideo() const;
+    const char* getCurrentOperationFile() const;
+    const char* getCurrentMissionDescription() const;
+    const char* getCurrentMissionFriendlyName() const;
+    const char* getMissionFriendlyName(const char* missionName) const;
+    const char* getCurrentABLScriptName() const;
 
-		const EString& 		getCampaignName( ) const { return campaignName; }
-		const EString&		getCampaignDisplayName() const { return campaignDisplayName; }
+    int getCurrentRP() const;
+    int getCBills() const
+    {
+        return CBills;
+    }
+    void incrementCBills(int amount)
+    {
+        CBills += amount;
+    }
+    void decrementCBills(int amount)
+    {
+        CBills -= amount;
+    }
 
-		bool				campaignOver() const;
+    const EString& getCampaignName() const
+    {
+        return campaignName;
+    }
+    const EString& getCampaignDisplayName() const
+    {
+        return campaignDisplayName;
+    }
 
-		const char*			getCurrentBigVideo() const;
-		const char*			getFinalVideo() const;
+    bool campaignOver() const;
 
-		void				setMultiplayer();
-		void				setPurchaseFile( const char* fileName );
+    const char* getCurrentBigVideo() const;
+    const char* getFinalVideo() const;
 
-//		long				getMaxTeams() const { return maxTeams; }
-//		long				getMaxPlayers() const { return maxPlayers; }
+    void setMultiplayer();
+    void setPurchaseFile(const char* fileName);
 
-		int					getAdditionalPurachaseFiles( const char** list, long& maxCount );
-		void				addBonusPurchaseFile( const char* fileName ); // extra bonus
+    //		long				getMaxTeams() const { return maxTeams; }
+    //		long				getMaxPlayers() const { return maxPlayers; }
 
-		bool				skipLogistics();
-		bool				showChooseMission();
+    int getAdditionalPurachaseFiles(const char** list, long& maxCount);
+    void addBonusPurchaseFile(const char* fileName);  // extra bonus
 
-		bool				skipPilotReview();
-		bool				skipSalvageScreen();
-		bool				skipPurchasing();
+    bool skipLogistics();
+    bool showChooseMission();
 
-		void				setSingleMission( const char* pName );
+    bool skipPilotReview();
+    bool skipSalvageScreen();
+    bool skipPurchasing();
 
-		bool				canHaveSalavageCraft();
-		bool				canHaveRepairTruck();
-		bool				canHaveScoutCopter();
-		bool				canHaveArtilleryPiece();
-		bool				canHaveAirStrike();
-		bool				canHaveSensorStrike();
-		bool				canHaveMineLayer();
-		bool				getVideoShown();
-		void				setVideoShown();
+    void setSingleMission(const char* pName);
 
-		long				getCurrentMissionNumber()
-		{
-			return currentMission;
-		}
+    bool canHaveSalavageCraft();
+    bool canHaveRepairTruck();
+    bool canHaveScoutCopter();
+    bool canHaveArtilleryPiece();
+    bool canHaveAirStrike();
+    bool canHaveSensorStrike();
+    bool canHaveMineLayer();
+    bool getVideoShown();
+    void setVideoShown();
 
-		void				setCurrentMissionNumber(long cMission)
-		{
-			currentMission = cMission;
-		}
+    long getCurrentMissionNumber()
+    {
+        return currentMission;
+    }
 
-
-	
-	private:
-
-	
-		class MissionInfo
-		{
-		public:
-			~MissionInfo();
-			EString missionDescriptiveName;
-			EString fileName;
-			EString description;
-			EString purchaseFileName;
-			EString videoName;
-			bool mandatory;
-			bool completePrevious;
-			bool completed;
-			long resourcePoints;
-			long additionalCBills;
-			long dropWeight;
-			bool playLogistics;
-			bool playSalvage;
-			bool playPilotPromotion;
-			bool playPurchasing;
-			bool playMissionSelection;
-			bool hidden;
-			bool enableSalavageCraft;
-			bool enableRepairTruck;
-			bool enableScoutCopter;
-			bool enableArtilleryPiece;
-			bool enableAirStrike;
-			bool enableSensorStrike;
-			bool enableMineLayer;
-		};	
-
-		typedef EList<MissionInfo*, MissionInfo*> MISSION_LIST;
-		typedef EList< char*, char* > FILE_LIST;
+    void setCurrentMissionNumber(long cMission)
+    {
+        currentMission = cMission;
+    }
 
 
-		class MissionGroup
-		{
-		public:
-			long numberToBeCompleted;
-			EString videoFileName;
-			EString operationFileName;
-			EString bigVideoName;
-			EString ablBrainName;
-			long logisticsTuneId;
-			MISSION_LIST infos;
-			bool	bigVideoShown;
-			bool	videoShown;
-		};
+private:
+    class MissionInfo
+    {
+    public:
+        ~MissionInfo();
+        EString missionDescriptiveName;
+        EString fileName;
+        EString description;
+        EString purchaseFileName;
+        EString videoName;
+        bool mandatory;
+        bool completePrevious;
+        bool completed;
+        long resourcePoints;
+        long additionalCBills;
+        long dropWeight;
+        bool playLogistics;
+        bool playSalvage;
+        bool playPilotPromotion;
+        bool playPurchasing;
+        bool playMissionSelection;
+        bool hidden;
+        bool enableSalavageCraft;
+        bool enableRepairTruck;
+        bool enableScoutCopter;
+        bool enableArtilleryPiece;
+        bool enableAirStrike;
+        bool enableSensorStrike;
+        bool enableMineLayer;
+    };
+
+    typedef EList<MissionInfo*, MissionInfo*> MISSION_LIST;
+    typedef EList<char*, char*> FILE_LIST;
 
 
-		// DATA
-
-		EString					campaignName;
-		EString					campaignDisplayName;
-		EString					playerName;
-		EString					currentMissionName;
-		EString					finalVideoName;
-		long					currentStage;
-		long					currentMission;
-
-		long					lastStage;
-		long					lastMission;
-		EString					lastMissionName;
-
-		MissionGroup*			groups;
-		long					groupCount;
-
-		long					CBills;
-
-		void					clear();
-		bool					bMultiplayer;
-
-		FILE_LIST				additionalPurchaseFiles;
-
-		LogisticsMissionInfo::MissionInfo* getPreviousMission();
-		void readMissionInfo( FitIniFile& file, LogisticsMissionInfo::MissionInfo* pInfo );
+    class MissionGroup
+    {
+    public:
+        long numberToBeCompleted;
+        EString videoFileName;
+        EString operationFileName;
+        EString bigVideoName;
+        EString ablBrainName;
+        long logisticsTuneId;
+        MISSION_LIST infos;
+        bool bigVideoShown;
+        bool videoShown;
+    };
 
 
+    // DATA
+
+    EString campaignName;
+    EString campaignDisplayName;
+    EString playerName;
+    EString currentMissionName;
+    EString finalVideoName;
+    long currentStage;
+    long currentMission;
+
+    long lastStage;
+    long lastMission;
+    EString lastMissionName;
+
+    MissionGroup* groups;
+    long groupCount;
+
+    long CBills;
+
+    void clear();
+    bool bMultiplayer;
+
+    FILE_LIST additionalPurchaseFiles;
+
+    LogisticsMissionInfo::MissionInfo* getPreviousMission();
+    void readMissionInfo(FitIniFile& file, LogisticsMissionInfo::MissionInfo* pInfo);
 
 
-		// HELPER FUNCTIONS
-
+    // HELPER FUNCTIONS
 };
-
-
-//*************************************************************************************************
-#endif  // end of file ( LogisticsMissionInfo.h )

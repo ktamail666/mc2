@@ -46,7 +46,6 @@
 #include<gameos.hpp>
 #pragma warning(pop)
 
-//#define USE_ASSEMBLER_CODE	1
 
 namespace Stuff {
 

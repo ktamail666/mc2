@@ -1,7 +1,7 @@
 //#version 300 es
-// using this because it is required if we want to use "binding" qualifier in layout (can be set in cpp code but it is easier to do in shader, so procedd like this and maybe change later)
+// using this because it is required if we want to use "binding" qualifier
+// in layout (can be set in cpp code but it is easier to do in shader, so procedd like this and maybe change later)
 //#version 420
-
 #include <include/lighting.hglsl>
 
 layout(location = 0) in vec3 pos;
@@ -51,8 +51,7 @@ void main(void)
 
     // something is wrong with this: check later
     //CameraPos = (inverse(view_) * vec4(0,0,0,1)).xyz;
-
-    vec4 p2 = projection_ * vec4(p.xyz,1);
+    vec4 p2 = projection_ * vec4(p.xyz, 1.0);
 
     //mat4 norm_view_mat = inverse(view_);
 

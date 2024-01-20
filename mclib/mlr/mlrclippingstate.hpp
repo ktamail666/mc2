@@ -120,28 +120,10 @@ namespace MidLevelRenderer {
 			SetClip(int mask, int flag)
 		{
 			Check_Pointer(this); 
-#if USE_ASSEMBLER_CODE
-			_asm {
-				xor		ecx, ecx
-
-				mov		ebx, mask
-
-				test	ebx, 0ffffffffh
-
-				seta	cl
-
-				xor		eax, eax
-				sub		eax, ecx
-
-				and		flag, eax
-			}
-			clippingState |= flag;
-#else
 			if(mask != 0)
 			{
 				clippingState |= flag;
 			}
-#endif
 		}
 
 		bool
@@ -238,73 +220,6 @@ namespace MidLevelRenderer {
 	inline void
 		MLRClippingState::Clip4dVertex(Stuff::Vector4D *v4d)
 	{
-#if USE_ASSEMBLER_CODE
-
-		int _ret = 0;
-
-		_asm {
-			mov		edi, v4d
-
-			xor		ecx,ecx
-			xor		edx, edx
-			test	dword ptr [edi], 080000000h
-			setne	cl
-			sub		edx, ecx
-			and		edx, 8	// RightClipFlag
-
-			xor		ebx, ebx
-			test	dword ptr [edi+4], 080000000h
-			setne	cl
-			sub		ebx, ecx
-			and		ebx, 2	// BottomClipFlag
-
-			or		edx, ebx
-
-			xor		ebx, ebx
-			test	dword ptr [edi+8], 080000000h
-			setne	cl
-			sub		ebx, ecx
-			and		ebx, 16	// NearClipFlag
-
-			or		edx, ebx
-
-			fld		dword ptr [edi+0Ch]
-
-			xor		ebx, ebx
-			fcom	dword ptr [edi]
-			fnstsw	ax
-			test	ah, 1
-			setne	cl
-			sub		ebx, ecx
-			and		ebx, 4	// LeftClipFlag
-
-			or		edx, ebx
-
-			xor		ebx, ebx
-			fcom	dword ptr [edi+4]
-			fnstsw	ax
-			test	ah, 1
-			setne	cl
-			sub		ebx, ecx
-			and		ebx, 1	// TopClipFlag
-
-			or		edx, ebx
-
-			xor		ebx, ebx
-			fcomp	dword ptr [edi+8]
-			fnstsw	ax
-			test	ah, 41h
-			setne	cl
-			sub		ebx, ecx
-			and		ebx, 32	// FarClipFlag
-
-			or		edx, ebx
-
-			mov		_ret, edx
-		}
-		
-		clippingState = _ret;
-#else
 		clippingState = 0;
 
 		if(v4d->w <= v4d->z)
@@ -336,7 +251,6 @@ namespace MidLevelRenderer {
 		{
 			SetTopClip();
 		}
-#endif
 	}
 
 }

@@ -1,4 +1,6 @@
 .cache
+.idea/
+cmake-build-*
 .ccls-cache/
 tags
 install/*

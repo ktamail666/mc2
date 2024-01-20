@@ -8,25 +8,9 @@
 // Copyright (C) Microsoft Corporation. All rights reserved.                 //
 //===========================================================================//
 
-#ifndef DWEAPONBOLT_H
-#define DWEAPONBOLT_H
-//---------------------------------------------------------------------------
-// Include Files
-
-//---------------------------------------------------------------------------
-// Class Definitions
+#pragma once
 class WeaponBoltType;
-typedef WeaponBoltType *WeaponBoltTypePtr;
+typedef WeaponBoltType* WeaponBoltTypePtr;
 
 class WeaponBolt;
-typedef WeaponBolt *WeaponBoltPtr;
-
-//---------------------------------------------------------------------------
-// Macro Definitions
-
-//---------------------------------------------------------------------------
-// Enum Definitions
-
-//---------------------------------------------------------------------------
-#endif
-
+typedef WeaponBolt* WeaponBoltPtr;

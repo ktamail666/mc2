@@ -13,10 +13,9 @@ out vec2 Texcoord;
 
 void main(void)
 {
-    vec4 p = mvp * vec4(pos.xyz, 1);
-    gl_Position = p;
+    gl_Position = mvp * vec4(pos.xyz, 1);
     Color = color;
-	FogValue = fog.w;
+    FogValue = fog.w;
     Texcoord = texcoord;
 }
 

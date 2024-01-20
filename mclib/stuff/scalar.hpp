@@ -110,19 +110,7 @@ namespace Stuff {
 			{
 				Verify(f >= 0.0f);
 
-#if USE_ASSEMBLER_CODE
-				float temp;
-				_asm {
-			// __int32 i = (AsInt32(f) >> 1) + (INT32_FLOAT_ONE >> 1);
-					mov         eax, f
-					sar         eax, 1
-					add         eax, 1FC00000h
-					mov			temp,eax
-				}
-				return temp;
-#else
 				return static_cast<Scalar>(sqrt(f));
-#endif
 			}
 
 	static inline float
@@ -130,17 +118,7 @@ namespace Stuff {
 			{
 				Verify(f != 0.0f);
 
-#if USE_ASSEMBLER_CODE
-				float temp;
-
-				int _i = 2 * FP_ONE_BITS - *(int *)&(f);
-				temp = *(float *)&_i;
-				temp = temp * (2.0f - (f) * temp);
-
-				return temp;
-#else
 				return 1.0f/f;
-#endif
 			}
 
 	void

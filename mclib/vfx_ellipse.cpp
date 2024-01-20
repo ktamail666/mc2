@@ -1,5 +1,5 @@
-#include"vfx.h"
-#include <cstddef> // size_t
+#include "vfx.h"
+#include <cstddef>  // size_t
 extern char AlphaTable[];
 extern char SpecialColor[];
 
@@ -8,35 +8,36 @@ extern char SpecialColor[];
 //extern void AG_ellipse_fill(PANE *pane, LONG xc, LONG yc, LONG width, LONG height, LONG color);
 
 #ifndef LINUX_BUILD
-static signed int paneY0,paneY1,paneX0,paneX1,DestWidth,DestBuffer,x_top,y_top,Bsquared,TwoBsquared,Asquared,TwoAsquared,var_dx,var_dy,x_vector,line_left,line_right;
+static signed int paneY0, paneY1, paneX0, paneX1, DestWidth, DestBuffer, x_top, y_top, Bsquared, TwoBsquared, Asquared, TwoAsquared, var_dx, var_dy, x_vector,
+    line_left, line_right;
 static int DrawRoutine;
 #endif
 
 
-void AG_ellipse_draw(PANE *pane, LONG xc, LONG yc, LONG width, LONG height, LONG color)
+void AG_ellipse_draw(PANE* pane, LONG xc, LONG yc, LONG width, LONG height, LONG color)
 {
-	if( width==0 || height==0 )
-	{
-		size_t ll = color;
-		VFX_line_draw( pane, xc-width, yc-height, xc+width, yc+height, 0, reinterpret_cast<void*>(ll) );
-		return;
-	}
+    if (width == 0 || height == 0)
+    {
+        size_t ll = color;
+        VFX_line_draw(pane, xc - width, yc - height, xc + width, yc + height, 0, reinterpret_cast<void*>(ll));
+        return;
+    }
 
 
 #ifdef LINUX_BUILD
 #else
-	long paneX0 = (pane->x0 < 0) ? 0 : pane->x0;
-	long paneY0 = (pane->y0 < 0) ? 0 : pane->y0;
-	long paneX1 = (pane->x1 >= DestWidth) ? pane->window->x_max : pane->x1;
-	long paneY1 = (pane->y1 >= (pane->window->y_max+1)) ? pane->window->y_max : pane->y1;
+    long paneX0 = (pane->x0 < 0) ? 0 : pane->x0;
+    long paneY0 = (pane->y0 < 0) ? 0 : pane->y0;
+    long paneX1 = (pane->x1 >= DestWidth) ? pane->window->x_max : pane->x1;
+    long paneY1 = (pane->y1 >= (pane->window->y_max + 1)) ? pane->window->y_max : pane->y1;
 
-	UBYTE* DestBuffer = pane->window->buffer;
-	DestWidth = pane->window->x_max+1;
+    UBYTE* DestBuffer = pane->window->buffer;
+    DestWidth         = pane->window->x_max + 1;
 
-	xc+=paneX0;
-	yc+=paneY0;
+    xc += paneX0;
+    yc += paneY0;
 
-	_asm{
+    _asm {
 
 		mov eax,color
 		mov ebx,offset ALPHA_ELLIPSE_PIXELS
@@ -80,7 +81,7 @@ __until_pos:
 		sub eax,var_dy
 		jns __dx_ge_dy					;jmp if dx >= dy
 
-//__plot_neg:
+                //__plot_neg:
 		call DrawRoutine
 
 		cmp x_vector,0                  
@@ -305,39 +306,36 @@ TP4:
 		pop ebx
 		ret
 
-__end_ellipse:  
-	}
-#endif // LINUX_BUILD
+__end_ellipse:
+    }
+#endif  // LINUX_BUILD
 }
 
 
-
-
-
-void AG_ellipse_fill(PANE *pane, LONG xc, LONG yc, LONG width, LONG height, LONG color)
+void AG_ellipse_fill(PANE* pane, LONG xc, LONG yc, LONG width, LONG height, LONG color)
 {
-	if( width==0 || height==0 )
-	{
-		size_t ll = color;
-		VFX_line_draw( pane, xc-width, yc-height, xc+width, yc+height, 0, reinterpret_cast<void*>(ll) );
-		return;
-	}
+    if (width == 0 || height == 0)
+    {
+        size_t ll = color;
+        VFX_line_draw(pane, xc - width, yc - height, xc + width, yc + height, 0, reinterpret_cast<void*>(ll));
+        return;
+    }
 
 #ifdef LINUX_BUILD
 #else
 
-	DestWidth = pane->window->x_max+1;
+    DestWidth = pane->window->x_max + 1;
 
-	long paneX0 = (pane->x0 < 0) ? 0 : pane->x0;
-	long paneY0 = (pane->y0 < 0) ? 0 : pane->y0;
-	long paneX1 = (pane->x1 >= DestWidth) ? pane->window->x_max : pane->x1;
-	long paneY1 = (pane->y1 >= (pane->window->y_max+1)) ? pane->window->y_max : pane->y1;
+    long paneX0 = (pane->x0 < 0) ? 0 : pane->x0;
+    long paneY0 = (pane->y0 < 0) ? 0 : pane->y0;
+    long paneX1 = (pane->x1 >= DestWidth) ? pane->window->x_max : pane->x1;
+    long paneY1 = (pane->y1 >= (pane->window->y_max + 1)) ? pane->window->y_max : pane->y1;
 
-	UBYTE* DestBuffer = pane->window->buffer;
+    UBYTE* DestBuffer = pane->window->buffer;
 
-	xc+=paneX0;
-	yc+=paneY0;
-	_asm{
+    xc += paneX0;
+    yc += paneY0;
+    _asm {
 
 		mov eax,color
 		mov ebx,offset ALPHA_ELLIPSE_LINES
@@ -602,46 +600,48 @@ ALN2:
 
 
 __end_ellipse:
-	}
-#endif // LINUX_BUILD
+    }
+#endif  // LINUX_BUILD
 }
 
-PANE *xorgPane = 0;
+PANE* xorgPane       = 0;
 unsigned char gColor = 0;
 
-void orLineCallback (int x, int y)
+void orLineCallback(int x, int y)
 {
-	long result = VFX_pixel_read(xorgPane,x,y);
-	result |= gColor;
-	VFX_pixel_write(xorgPane,x,y,result);
+    long result = VFX_pixel_read(xorgPane, x, y);
+    result |= gColor;
+    VFX_pixel_write(xorgPane, x, y, result);
 }
 
-void AG_ellipse_fillOr(PANE *pane, LONG xc, LONG yc, LONG width, LONG height, LONG color)
+void AG_ellipse_fillOr(PANE* pane, LONG xc, LONG yc, LONG width, LONG height, LONG color)
 {
-	if( width==0 || height==0 )
-	{
-		xorgPane = pane;
-		gColor = (unsigned char)color;
-		VFX_line_draw( pane, xc-width, yc-height, xc+width, yc+height,LD_EXECUTE, &orLineCallback);
-		return;
-	}
+    if (width == 0 || height == 0)
+    {
+        xorgPane = pane;
+        gColor   = (unsigned char)color;
+#ifndef __clang__
+        VFX_line_draw(pane, xc - width, yc - height, xc + width, yc + height, LD_EXECUTE, &orLineCallback);
+#endif
+        return;
+    }
 
 
 #ifdef LINUX_BUILD
 #else
 
-	DestWidth = pane->window->x_max+1;
+    DestWidth = pane->window->x_max + 1;
 
-	long paneX0 = (pane->x0 < 0) ? 0 : pane->x0;
-	long paneY0 = (pane->y0 < 0) ? 0 : pane->y0;
-	long paneX1 = (pane->x1 >= DestWidth) ? pane->window->x_max : pane->x1;
-	long paneY1 = (pane->y1 >= (pane->window->y_max+1)) ? pane->window->y_max : pane->y1;
+    long paneX0 = (pane->x0 < 0) ? 0 : pane->x0;
+    long paneY0 = (pane->y0 < 0) ? 0 : pane->y0;
+    long paneX1 = (pane->x1 >= DestWidth) ? pane->window->x_max : pane->x1;
+    long paneY1 = (pane->y1 >= (pane->window->y_max + 1)) ? pane->window->y_max : pane->y1;
 
-	UBYTE* DestBuffer = pane->window->buffer;
+    UBYTE* DestBuffer = pane->window->buffer;
 
-	xc+=paneX0;
-	yc+=paneY0;
-	_asm{
+    xc += paneX0;
+    yc += paneY0;
+    _asm {
 
 		mov eax,color
 		mov ebx,offset XOR_ELLIPSE_LINES
@@ -817,50 +817,51 @@ LN2:
 		ret
 
 __end_ellipse:
-	}
-#endif // LINUX_BUILD
+    }
+#endif  // LINUX_BUILD
 }
 
-void andLineCallback (int x, int y)
+void andLineCallback(int x, int y)
 {
-	long result = VFX_pixel_read(xorgPane,x,y);
-	result &= gColor;
-	VFX_pixel_write(xorgPane,x,y,result);
-}	
+    long result = VFX_pixel_read(xorgPane, x, y);
+    result &= gColor;
+    VFX_pixel_write(xorgPane, x, y, result);
+}
 
-void AG_ellipse_fillXor(PANE *pane, LONG xc, LONG yc, LONG width, LONG height, LONG color)
+void AG_ellipse_fillXor(PANE* pane, LONG xc, LONG yc, LONG width, LONG height, LONG color)
 {
-	
-	if( width==0 || height==0 )
-	{
-		xorgPane = pane;
-		gColor = (unsigned char)color;
-		VFX_line_draw( pane, xc-width, yc-height, xc+width, yc+height, LD_EXECUTE, &andLineCallback);
-		return;
-	}
+    if (width == 0 || height == 0)
+    {
+        xorgPane = pane;
+        gColor   = (unsigned char)color;
+#ifndef __clang__
+        VFX_line_draw(pane, xc - width, yc - height, xc + width, yc + height, LD_EXECUTE, &andLineCallback);
+#endif
+        return;
+    }
 
 
 #ifdef LINUX_BUILD
     // sebi !NB (checkk othes _asm in this file)
 #else
 
-	long xorResult = color ^ 0xff;
+    long xorResult = color ^ 0xff;
 
-	unsigned char xorColor = (unsigned char)xorResult;
+    unsigned char xorColor = (unsigned char)xorResult;
 
-	DestWidth = pane->window->x_max+1;
+    DestWidth = pane->window->x_max + 1;
 
-	long paneX0 = (pane->x0 < 0) ? 0 : pane->x0;
-	long paneY0 = (pane->y0 < 0) ? 0 : pane->y0;
-	long paneX1 = (pane->x1 >= DestWidth) ? pane->window->x_max : pane->x1;
-	long paneY1 = (pane->y1 >= (pane->window->y_max+1)) ? pane->window->y_max : pane->y1;
+    long paneX0 = (pane->x0 < 0) ? 0 : pane->x0;
+    long paneY0 = (pane->y0 < 0) ? 0 : pane->y0;
+    long paneX1 = (pane->x1 >= DestWidth) ? pane->window->x_max : pane->x1;
+    long paneY1 = (pane->y1 >= (pane->window->y_max + 1)) ? pane->window->y_max : pane->y1;
 
-	UBYTE* DestBuffer = pane->window->buffer;
+    UBYTE* DestBuffer = pane->window->buffer;
 
-	xc+=paneX0;
-	yc+=paneY0;
+    xc += paneX0;
+    yc += paneY0;
 
-	_asm{
+    _asm {
 
 		mov eax,color
 		mov ebx,offset XOR_ELLIPSE_LINES
@@ -1036,13 +1037,6 @@ LN2:
 		ret
 
 __end_ellipse:
-	}
-#endif // LINUX_BUILD
+    }
+#endif  // LINUX_BUILD
 }
-
-
-
-
-
-
-

@@ -1,87 +1,105 @@
 #include "gameos.hpp"
 #include "strres.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <SDL2/SDL_loadso.h>
+#include <cstdio>
 
 #ifdef PLATFORM_WINDOWS
-static void* DL_Open(const char* name) {
-	return SDL_LoadObject(name);
+#include <SDL2/SDL_loadso.h>
+
+static void* DL_Open(const char* name)
+{
+    return SDL_LoadObject(name);
 }
-static void DL_Close(void* handle) {
-	SDL_UnloadObject(handle);
+
+static void DL_Close(void* handle)
+{
+    SDL_UnloadObject(handle);
 }
-static void* DL_LoadFunction(void* handle, const char* name) {
-	return SDL_LoadFunction(handle, name);
+
+static void* DL_LoadFunction(void* handle, const char* name)
+{
+    return SDL_LoadFunction(handle, name);
 }
+
 // mimic dlerror
-static const char* DL_GetError() {
-	const char* err = SDL_GetError();
-	SDL_ClearError();
-	return strlen(err)==0 ? NULL : err;
+static const char* DL_GetError()
+{
+    const char* err = SDL_GetError();
+    SDL_ClearError();
+    return strlen(err) == 0 ? NULL : err;
 }
 #else
 #include <dlfcn.h>
 
-static void* DL_Open(const char* name) {
+static void* DL_Open(const char* name)
+{
     return dlopen(name, RTLD_LAZY);
 }
-static void DL_Close(void* handle) {
-	dlclose(handle);
+
+static void DL_Close(void* handle)
+{
+    dlclose(handle);
 }
-static void* DL_LoadFunction(void* handle, const char* name) {
-	return dlsym(handle, name);
+
+static void* DL_LoadFunction(void* handle, const char* name)
+{
+    return dlsym(handle, name);
 }
-static const char* DL_GetError() {
-	 const char* err = dlerror();
-	 return err;
+
+static const char* DL_GetError()
+{
+    const char* err = dlerror();
+    return err;
 }
 #endif
 
 HSTRRES __stdcall gos_OpenResourceDLL(char const* FileName, const char** strings, int num)
 {
-    const char *error;
-    void *module;
+    const char* error;
+    void* module;
     get_string_by_id_fptr fptr;
 
-	DL_GetError();
+    DL_GetError();
 
     /* Load dynamically loaded library */
     module = DL_Open(FileName);
     gosASSERT(module);
-    if (!module) {
+    if (!module)
+    {
         fprintf(stderr, "Couldn't open resourse dll: %s\n", DL_GetError());
         return NULL;
     }
 
-	DL_GetError();    /* Clear any existing error */
+    DL_GetError(); /* Clear any existing error */
 
     /* Get symbol */
     fptr = (get_string_by_id_fptr)DL_LoadFunction(module, "getStringById");
-    if ((error = DL_GetError())) {
+    if ((error = DL_GetError()))
+    {
         fprintf(stderr, "Couldn't find hello: %s\n", error);
         return NULL;
     }
 
     init_string_resources_fptr init_fptr;
     init_fptr = (init_string_resources_fptr)DL_LoadFunction(module, "initStringResources");
-    if ((error = DL_GetError())) {
+    if ((error = DL_GetError()))
+    {
         fprintf(stderr, "Couldn't find hello: %s\n", error);
         return NULL;
     }
     init_fptr();
 
-    gos_StringRes* pstrres = new gos_StringRes();
+    gos_StringRes* pstrres     = new gos_StringRes();
     pstrres->getStringByIdFptr = fptr;
-    pstrres->module = module;
+    pstrres->module            = module;
 
     /* deprecated */
-    pstrres->strings = NULL;
+    pstrres->strings     = NULL;
     pstrres->num_strings = 0;
 
     return pstrres;
 }
+
 void __stdcall gos_CloseResourceDLL(HSTRRES handle)
 {
     gos_StringRes* pstrres = (gos_StringRes*)handle;
@@ -90,11 +108,14 @@ void __stdcall gos_CloseResourceDLL(HSTRRES handle)
     free_string_resources_fptr free_fptr;
     DL_GetError();
 
-    const char *error;
+    const char* error;
     free_fptr = (free_string_resources_fptr)DL_LoadFunction(pstrres->module, "freeStringResources");
-    if ((error = DL_GetError())) {
+    if ((error = DL_GetError()))
+    {
         fprintf(stderr, "Couldn't find hello: %s\n", error);
-    } else {
+    }
+    else
+    {
         free_fptr();
     }
 
@@ -107,9 +128,11 @@ const char* __stdcall gos_GetResourceString(HSTRRES handle, DWORD id)
     static const char* dummy_string_res = "missing string res";
     gosASSERT(handle);
     gos_StringRes* pstrres = (gos_StringRes*)(handle);
-    const char* str = pstrres->getStringByIdFptr(id);
+    gosASSERT(pstrres);
+    const char* str        = pstrres->getStringByIdFptr(id);
 
-    if(NULL == str) {
+    if (NULL == str)
+    {
         fprintf(stderr, "Requested string id: %d not found, return dummy string\n", id);
         return dummy_string_res;
     }

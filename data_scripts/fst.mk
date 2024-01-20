@@ -15,7 +15,7 @@ effect.fst:
 insignia.fst:
 	$(MC2_BIN)/makefst -f insignia.fst -p $(SRC_DATA_ROOT)/multiplayer/insignia/ -m data/multiplayer/insignia
 
-misc.fst: ../misc.rsp
+misc.fst: $(SRC_DATA_ROOT)/misc.rsp
 	$(MC2_BIN)/makefst -f misc.fst -p $(SRC_DATA_ROOT) -rsp $(SRC_DATA_ROOT)/misc.rsp -m data
 
 textures.fst:

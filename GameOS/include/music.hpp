@@ -13,7 +13,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////
-// An enumeration of the various commands to the Music playback API. 
+// An enumeration of the various commands to the Music playback API.
 enum gosMusic_Command
 {
 	gosMusic_SeekTime = 1, 			// Seek to a frame or timestamp in hMusic
@@ -33,9 +33,9 @@ enum gosMusic_PlayMode
 };
 
 //////////////////////////////////////////////////////////////////////////////////
-// This structure is used to send and receive information about a particular stream music 
-// resource. Each command (above) requires specific info to be initialized in the 
-// structure below in order to properly carry out that command. For this data, 
+// This structure is used to send and receive information about a particular stream music
+// resource. Each command (above) requires specific info to be initialized in the
+// structure below in order to properly carry out that command. For this data,
 // consult the comments listed under the appropriate command (listed above).
 typedef struct _gosMusic_Info
 {
@@ -64,7 +64,7 @@ void __stdcall gosMusic_Command( HGOSMUSIC Handle, enum gosMusic_Command gmc, fl
 struct gos_Music
 {
 	public:
-		static bool gos_Music::m_hasDirectShow;
+		static bool m_hasDirectShow;
 
 		IMultiMediaStream *	m_pMMStream;
 		IMediaStream * m_pPrimaryAudStream;
@@ -92,7 +92,7 @@ struct gos_Music
 		void Seek(float time);
 		void Restore();
 		void FF(double time);
-};			
+};
 
 
 

@@ -1,4 +1,4 @@
-OTHER_INPUT = ..$(PATH_SEPARATOR)root
+OTHER_INPUT = $(SRC_DATA_ROOT)$(PATH_SEPARATOR)root
 OTHER_OUTPUT = $(DST_DATA_ROOT)$(PATH_SEPARATOR)..
 
 #TODO add *pref.cfg (any others?) here

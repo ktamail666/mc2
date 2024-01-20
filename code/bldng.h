@@ -11,383 +11,376 @@
 #ifndef BLDNG_H
 #define BLDNG_H
 
-#ifndef DBLDNG_H
-#include"dbldng.h"
-#endif
-
-#ifndef TERROBJ_H
-#include"terrobj.h"
-#endif
-
-#ifndef GAMEOBJ_H
-#include"gameobj.h"
-#endif
-
-#ifndef OBJTYPE_H
-#include"objtype.h"
-#endif
-
-#ifndef DWARRIOR_H
-#include"dwarrior.h"
-#endif
+#include "dbldng.h"
+#include "terrobj.h"
+#include "gameobj.h"
+#include "objtype.h"
+#include "dwarrior.h"
 
 //---------------------------------------------------------------------------
 
-#define NO_RAM_FOR_BUILDING				0xDCDC0006
-#define NO_APPEARANCE_TYPE_FOR_BLD		0xDCDC0007
-#define NO_APPEARANCE_FOR_BLD			0xDCDC0008
-#define APPEARANCE_NOT_VFX_APPEAR		0xDCDC0009
+#define NO_RAM_FOR_BUILDING        0xDCDC0006
+#define NO_APPEARANCE_TYPE_FOR_BLD 0xDCDC0007
+#define NO_APPEARANCE_FOR_BLD      0xDCDC0008
+#define APPEARANCE_NOT_VFX_APPEAR  0xDCDC0009
 
-#define	MAX_PRISONERS					4
+#define MAX_PRISONERS 4
 
-typedef enum {
-	BUILDING_SUBTYPE_NONE,
-	BUILDING_SUBTYPE_WALL,
-	BUILDING_SUBTYPE_LANDBRIDGE,
-	NUM_BUILDING_SUBTYPES
+typedef enum
+{
+    BUILDING_SUBTYPE_NONE,
+    BUILDING_SUBTYPE_WALL,
+    BUILDING_SUBTYPE_LANDBRIDGE,
+    NUM_BUILDING_SUBTYPES
 } BuildingSubType;
 
 //---------------------------------------------------------------------------
 
-class BuildingType : public ObjectType {
+class BuildingType : public ObjectType
+{
+public:
+    float damageLevel;
+    float sensorRange;
+    long teamId;
+    float baseTonnage;
+    float explDmg;
+    float explRad;
+    long buildingTypeName;
+    long buildingDescriptionID;
+    long startBR;
+    long numMarines;
+    long resourcePoints;
+    bool marksImpassableWhenDestroyed;
 
-	public:
+    bool canRefit;
+    bool mechBay;  // otherwise it's a vehicle bay.
+    bool capturable;
+    bool powerSource;
+    float perimeterAlarmRange;
+    float perimeterAlarmTimer;
+    float lookoutTowerRange;
 
-		float			damageLevel;
-		float			sensorRange;
-		long			teamId;
-		float			baseTonnage;
-		float			explDmg;
-		float			explRad;
-		long			buildingTypeName;
-		long			buildingDescriptionID;
-		long			startBR;
-		long			numMarines;
-		long			resourcePoints;
-		bool			marksImpassableWhenDestroyed;
+    unsigned long activityEffectId;
 
-		bool			canRefit;
-		bool			mechBay;							// otherwise it's a vehicle bay.
-		bool			capturable;
-		bool			powerSource;
-		float			perimeterAlarmRange;
-		float			perimeterAlarmTimer;
-		float			lookoutTowerRange;
-		
-		unsigned long	activityEffectId;
-		
-	public:
+public:
+    void init(void);
 
-		void init (void);
-		
-		BuildingType (void) {
-			ObjectType::init();
-			init();
-		}
-		
-		virtual long init (FilePtr objFile, unsigned long fileSize);
+    BuildingType(void)
+    {
+        ObjectType::init();
+        init();
+    }
 
-		long init (FitIniFilePtr objFile);
-		
-		~BuildingType (void) {
-			destroy();
-		}
+    virtual long init(FilePtr objFile, unsigned long fileSize);
 
-		float getDamageLevel (void) {
-			return(damageLevel);
-		}
-				
-		virtual void destroy (void);
-		
-		virtual GameObjectPtr createInstance (void);
+    long init(FitIniFilePtr objFile);
+
+    ~BuildingType(void)
+    {
+        destroy();
+    }
+
+    float getDamageLevel(void)
+    {
+        return (damageLevel);
+    }
+
+    virtual void destroy(void);
+
+    virtual GameObjectPtr createInstance(void);
 
 
-		virtual bool handleCollision (GameObjectPtr collidee, GameObjectPtr collider);
+    virtual bool handleCollision(GameObjectPtr collidee, GameObjectPtr collider);
 
-		virtual bool handleDestruction (GameObjectPtr collidee, GameObjectPtr collider);
+    virtual bool handleDestruction(GameObjectPtr collidee, GameObjectPtr collider);
 };
 
 //---------------------------------------------------------------------------
 typedef struct _BuildingData : public TerrainObjectData
 {
-	char					teamId;
-	unsigned char			baseTileId;
-	char					commanderId;
-	GameObjectWatchID		refitBuddyWID;
-	DWORD					parentId;
-	GameObjectWatchID		parent;
-	unsigned char			listID;
-	float					captureTime;
+    char teamId;
+    unsigned char baseTileId;
+    char commanderId;
+    GameObjectWatchID refitBuddyWID;
+    DWORD parentId;
+    GameObjectWatchID parent;
+    unsigned char listID;
+    float captureTime;
 
-	//PerimeterAlarms 		
-	bool					moverInProximity;
-	float					proximityTimer;
-	int32_t					updatedTurn;
+    //PerimeterAlarms
+    bool moverInProximity;
+    float proximityTimer;
+    int32_t updatedTurn;
 } BuildingData;
 
-class Building : public TerrainObject 
+class Building : public TerrainObject
 {
-	public:
-			
-		char					teamId;
-		unsigned char			baseTileId;
-		SensorSystemPtr			sensorSystem;
-		char					commanderId;									//If capturable, who last captured it...
-		GameObjectWatchID		refitBuddyWID;
-		DWORD					parentId;
-		GameObjectWatchID		parent;
-		unsigned char			listID;
-		float					captureTime;
-		float					scoreTime;
+public:
+    char teamId;
+    unsigned char baseTileId;
+    SensorSystemPtr sensorSystem;
+    char commanderId;  //If capturable, who last captured it...
+    GameObjectWatchID refitBuddyWID;
+    DWORD parentId;
+    GameObjectWatchID parent;
+    unsigned char listID;
+    float captureTime;
+    float scoreTime;
 
-		//PerimeterAlarms 		
-		bool					moverInProximity;
-		float					proximityTimer;
-		long					updatedTurn;
+    //PerimeterAlarms
+    bool moverInProximity;
+    float proximityTimer;
+    long updatedTurn;
 
-	public:
+public:
+    virtual void init(bool create)
+    {
+        sensorSystem = NULL;
+        setFlag(OBJECT_FLAG_JUSTCREATED, true);
+        appearance       = NULL;
+        vertexNumber     = 0;
+        blockNumber      = 0;
+        baseTileId       = 0;
+        commanderId      = -1;
+        teamId           = -1;
+        refitBuddyWID    = 0;
+        parentId         = 0xffffffff;
+        parent           = 0;
+        powerSupply      = 0;
+        numSubAreas0     = 0;
+        numSubAreas1     = 0;
+        subAreas0        = NULL;
+        subAreas1        = NULL;
+        listID           = 255;
+        captureTime      = 0.0;
+        scoreTime        = 0.0;
+        moverInProximity = false;
+        proximityTimer   = 0.0f;
+        updatedTurn      = -1;
+    }
 
-		virtual void init (bool create) {
-			sensorSystem = NULL;
-			setFlag(OBJECT_FLAG_JUSTCREATED, true);
-			appearance = NULL;
-			vertexNumber = 0;
-			blockNumber = 0;
-			baseTileId = 0;
-			commanderId = -1;
-			teamId = -1;
-			refitBuddyWID = 0;
-			parentId = 0xffffffff;
-			parent = 0;
-			powerSupply = 0;
-			numSubAreas0 = 0;
-			numSubAreas1 = 0;
-			subAreas0 = NULL;
-			subAreas1 = NULL;
-			listID = 255;
-			captureTime = 0.0;
-			scoreTime = 0.0;
-			moverInProximity = false;
-			proximityTimer = 0.0f;
-			updatedTurn = -1;
-		}
+    Building(void)
+        : TerrainObject()
+    {
+        init(true);
+    }
 
-	   	Building (void) : TerrainObject() {
-			init(true);
-		}
+    ~Building(void)
+    {
+        destroy();
+    }
 
-		~Building (void) {
-			destroy();
-		}
-		
-		virtual void destroy (void);
-		
-		virtual long update (void);
+    virtual void destroy(void);
 
-		virtual void render (void);
-		
-		virtual void init (bool create, ObjectTypePtr objType);
+    virtual long update(void);
 
-		virtual void setSensorRange (float range);
+    virtual void render(void);
 
-		void setSensorData (TeamPtr team, float range = -1.0, bool setTeam = true);
+    virtual void init(bool create, ObjectTypePtr objType);
 
-		virtual long setTeamId (long _teamId, bool setup);
-		
-		virtual long getTeamId (void) {
-			return(teamId);
-		}
+    virtual void setSensorRange(float range);
 
-		virtual long getDescription(){ return ((BuildingType*)getObjectType())->buildingDescriptionID; }
+    void setSensorData(TeamPtr team, float range = -1.0, bool setTeam = true);
 
-		virtual TeamPtr getTeam (void);
+    virtual long setTeamId(long _teamId, bool setup);
 
-		virtual bool isFriendly (TeamPtr team);
+    virtual long getTeamId(void)
+    {
+        return (teamId);
+    }
 
-		virtual bool isEnemy (TeamPtr team);
+    virtual long getDescription()
+    {
+        return ((BuildingType*)getObjectType())->buildingDescriptionID;
+    }
 
-		virtual bool isNeutral (TeamPtr team);
+    virtual TeamPtr getTeam(void);
 
-		void lightOnFire (float timeToBurn);
+    virtual bool isFriendly(TeamPtr team);
 
-		long updateAnimations (void);
-		
-		virtual long handleWeaponHit (WeaponShotInfoPtr shotInfo, bool addMultiplayChunk = false);
+    virtual bool isEnemy(TeamPtr team);
 
-		virtual void setDamage (float newDamage);		//Damage encodes which groundtile to use, too.
-		
-		virtual long kill (void) {
-			return(NO_ERR);
-		}
+    virtual bool isNeutral(TeamPtr team);
 
-		virtual char* getName (void);
+    void lightOnFire(float timeToBurn);
 
-		virtual Stuff::Vector3D getPositionFromHS (long weaponType) 
-		{
-			//-----------------------------------------
-			// Hotspot for buildings is position plus 
-			// some Z based on OBB to make Effect visible.
-			// If this doesn't work, replace with art defined site.
-			Stuff::Vector3D hsPos = position;
-			if (appearance)
-			{
-				hsPos = appearance->getHitNode();
-				if (hsPos == position)
-				{
-					hsPos.z += appearance->getTopZ() * 0.5f;
-				}
-			}
+    long updateAnimations(void);
 
-			return(hsPos);
-		}
+    virtual long handleWeaponHit(WeaponShotInfoPtr shotInfo, bool addMultiplayChunk = false);
 
-		virtual Stuff::Vector3D getLOSPosition (void) 
-		{
-			//-----------------------------------------
-			// Hotspot for buildings is position plus 
-			// some Z based on OBB to make Effect visible.
-			//
-			// Use THIS position for LOS Calc!!!
-			Stuff::Vector3D hsPos = position;
+    virtual void setDamage(float newDamage);  //Damage encodes which groundtile to use, too.
 
-			if (appearance)
-				hsPos.z += appearance->getTopZ() * 0.5f;
+    virtual long kill(void)
+    {
+        return (NO_ERR);
+    }
 
-			BuildingTypePtr bldgType = ((BuildingTypePtr)getObjectType());
-			if ((bldgType->lookoutTowerRange > 0.0f) ||
-				(bldgType->sensorRange > 0.0f))
-			{
-				hsPos.z = position.z + 75.0f;
-			}
+    virtual char* getName(void);
 
-			return(hsPos);
-		}
+    virtual Stuff::Vector3D getPositionFromHS(long weaponType)
+    {
+        //-----------------------------------------
+        // Hotspot for buildings is position plus
+        // some Z based on OBB to make Effect visible.
+        // If this doesn't work, replace with art defined site.
+        Stuff::Vector3D hsPos = position;
+        if (appearance)
+        {
+            hsPos = appearance->getHitNode();
+            if (hsPos == position)
+            {
+                hsPos.z += appearance->getTopZ() * 0.5f;
+            }
+        }
 
-		virtual float getDestructLevel (void)
-		{
-			return (getDamageLevel() - damage);
-		}
+        return (hsPos);
+    }
 
-		virtual void setRefitBuddy (GameObjectWatchID objWID) {
-			refitBuddyWID = objWID;
-		}
+    virtual Stuff::Vector3D getLOSPosition(void)
+    {
+        //-----------------------------------------
+        // Hotspot for buildings is position plus
+        // some Z based on OBB to make Effect visible.
+        //
+        // Use THIS position for LOS Calc!!!
+        Stuff::Vector3D hsPos = position;
 
-		virtual void openFootPrint (void);
+        if (appearance)
+            hsPos.z += appearance->getTopZ() * 0.5f;
 
-		virtual void closeFootPrint (void);
+        BuildingTypePtr bldgType = ((BuildingTypePtr)getObjectType());
+        if ((bldgType->lookoutTowerRange > 0.0f) || (bldgType->sensorRange > 0.0f))
+        {
+            hsPos.z = position.z + 75.0f;
+        }
 
-		bool isVisible (void);
+        return (hsPos);
+    }
 
-		virtual bool isCaptureable (long capturingTeamID);
+    virtual float getDestructLevel(void)
+    {
+        return (getDamageLevel() - damage);
+    }
 
-		virtual void setCommanderId (long _commanderId);
+    virtual void setRefitBuddy(GameObjectWatchID objWID)
+    {
+        refitBuddyWID = objWID;
+    }
 
-		virtual long getCommanderId (void) {
-			return(commanderId);
-		}
+    virtual void openFootPrint(void);
 
-		virtual float getDamageLevel (void);
+    virtual void closeFootPrint(void);
 
-		virtual void getBlockAndVertexNumber (int& blockNum, int& vertexNum) {
-			blockNum = blockNumber;
-			vertexNum = vertexNumber;
-		}
+    bool isVisible(void);
 
-		virtual bool isBuilding(void) {
-			return(true);
-		}
+    virtual bool isCaptureable(long capturingTeamID);
 
-		virtual bool isTerrainObject (void) {
-			return(true);
-		}
-		
-		void createBuildingMarines (void);
+    virtual void setCommanderId(long _commanderId);
 
-		virtual bool isLinked (void);
+    virtual long getCommanderId(void)
+    {
+        return (commanderId);
+    }
 
-		virtual GameObjectPtr getParent (void);
+    virtual float getDamageLevel(void);
 
-		virtual void setParentId (DWORD pId);
+    virtual void getBlockAndVertexNumber(int& blockNum, int& vertexNum)
+    {
+        blockNum  = blockNumber;
+        vertexNum = vertexNumber;
+    }
 
-		virtual SensorSystem* getSensorSystem(){ return sensorSystem; }
-		
-		virtual float getAppearRadius (void)
-		{
-			return appearance->getRadius();
-		}
+    virtual bool isBuilding(void)
+    {
+        return (true);
+    }
 
-		virtual bool canBeCaptured (void)
-		{
-			return ((BuildingTypePtr)getObjectType())->capturable;
-		}
+    virtual bool isTerrainObject(void)
+    {
+        return (true);
+    }
 
-		virtual bool isSelectable()
-		{
-			return appearance->isSelectable();
-		}
+    void createBuildingMarines(void);
 
-		virtual bool isPowerSource(void)
-		{
-			return ((BuildingTypePtr)getObjectType())->powerSource;
-		}
-		
-		virtual bool isLit (void)
-		{
-			if (appearance)
-				return appearance->getIsLit();
-				
-			return false;
-		}
-		
-		virtual bool isSpecialBuilding(void)
-		{
-			BuildingTypePtr bldgType = ((BuildingTypePtr)getObjectType());
-//			if ((bldgType->getObjTypeNum() == GENERIC_HQ_BUILDING_OBJNUM) ||
-//				(bldgType->getObjTypeNum() == GENERIC_DESTRUCTIBLE_RESOURCE_BUILDING_OBJNUM) ||
-//				(bldgType->getObjTypeNum() == GENERIC_INDESTRUCTIBLE_RESOURCE_BUILDING_OBJNUM))
-//				return(true);
+    virtual bool isLinked(void);
 
-			if (((bldgType->perimeterAlarmRange > 0.0f) &&
-				(bldgType->perimeterAlarmTimer > 0.0f)) ||
-				(bldgType->lookoutTowerRange > 0.0f) ||
-				(bldgType->sensorRange > 0.0f))
-			{
-				return true;
-			}
-				
-			return false;
-		}
- 
-		virtual bool isLookoutTower (void)
-		{
-			BuildingTypePtr bldgType = ((BuildingTypePtr)getObjectType());
-			if (bldgType->lookoutTowerRange > 0.0f)
-			{
-				return true;
-			}
-				
-			return false;
-		}
-		
-		virtual float getRefitPoints(void) 
-		{
-			return getDamageLevel() - getDamage();
-		}
+    virtual GameObjectPtr getParent(void);
 
-		virtual bool burnRefitPoints(float pointsToBurn);
+    virtual void setParentId(DWORD pId);
 
-		virtual void Save (PacketFilePtr file, long packetNum);
+    virtual SensorSystem* getSensorSystem()
+    {
+        return sensorSystem;
+    }
 
-		void Load (BuildingData *data);
+    virtual float getAppearRadius(void)
+    {
+        return appearance->getRadius();
+    }
 
-		void CopyTo (BuildingData *data);
+    virtual bool canBeCaptured(void)
+    {
+        return ((BuildingTypePtr)getObjectType())->capturable;
+    }
 
+    virtual bool isSelectable()
+    {
+        return appearance->isSelectable();
+    }
+
+    virtual bool isPowerSource(void)
+    {
+        return ((BuildingTypePtr)getObjectType())->powerSource;
+    }
+
+    virtual bool isLit(void)
+    {
+        if (appearance)
+            return appearance->getIsLit();
+
+        return false;
+    }
+
+    virtual bool isSpecialBuilding(void)
+    {
+        BuildingTypePtr bldgType = ((BuildingTypePtr)getObjectType());
+        //			if ((bldgType->getObjTypeNum() == GENERIC_HQ_BUILDING_OBJNUM) ||
+        //				(bldgType->getObjTypeNum() == GENERIC_DESTRUCTIBLE_RESOURCE_BUILDING_OBJNUM) ||
+        //				(bldgType->getObjTypeNum() == GENERIC_INDESTRUCTIBLE_RESOURCE_BUILDING_OBJNUM))
+        //				return(true);
+
+        if (((bldgType->perimeterAlarmRange > 0.0f) && (bldgType->perimeterAlarmTimer > 0.0f)) || (bldgType->lookoutTowerRange > 0.0f)
+            || (bldgType->sensorRange > 0.0f))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    virtual bool isLookoutTower(void)
+    {
+        BuildingTypePtr bldgType = ((BuildingTypePtr)getObjectType());
+        if (bldgType->lookoutTowerRange > 0.0f)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    virtual float getRefitPoints(void)
+    {
+        return getDamageLevel() - getDamage();
+    }
+
+    virtual bool burnRefitPoints(float pointsToBurn);
+
+    virtual void Save(PacketFilePtr file, long packetNum);
+
+    void Load(BuildingData* data);
+
+    void CopyTo(BuildingData* data);
 };
 
 #endif
-
-//***************************************************************************
-
-
-
-

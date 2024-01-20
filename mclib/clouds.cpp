@@ -8,35 +8,13 @@
 // Copyright (C) Microsoft Corporation. All rights reserved.                 //
 //===========================================================================//
 
-//---------------------------------------------------------------------------
-// Include Files
-#ifndef CLOUDS_H
 #include"clouds.h"
-#endif
-
-#ifndef TXMMGR_H
 #include"txmmgr.h"
-#endif
-
-#ifndef CIDENT_H
 #include"cident.h"
-#endif
-
-#ifndef PATHS_H
 #include"paths.h"
-#endif
-
-#ifndef CAMERA_H
 #include"camera.h"
-#endif
-
-#ifndef CLIP_H
 #include"clip.h"
-#endif
-
-#ifndef TIMING_H
 #include"timing.h"
-#endif
 
 //---------------------------------------------------------------------------
 // Macro Definitions
@@ -358,13 +336,3 @@ void Clouds::destroy (void)
 	systemHeap->Free(cloudVertices);
 	cloudVertices = NULL;
 }
-
-//---------------------------------------------------------------------------
-
-//---------------------------------------------------------------------------
-//
-// Edit Log
-//
-//---------------------------------------------------------------------------
-
-

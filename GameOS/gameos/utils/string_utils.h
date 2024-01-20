@@ -25,4 +25,4 @@ const char* StringGetExtention(const char* pstr);
 // aka C99 snprintf
 int StringFormat(char* buf, size_t buf_size, const char* format, ...);
 
-#endif // STRING_UTILS_H
+#endif  // STRING_UTILS_H

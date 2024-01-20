@@ -8,104 +8,100 @@
 // Copyright (C) Microsoft Corporation. All rights reserved.                 //
 //===========================================================================//
 
-#ifndef DEBUGGING_H
-#define DEBUGGING_H
+#pragma once
 
-#include<stdio.h>
-#include<gameos.hpp>
-//#include<gameos/toolos.hpp>
+#include <cstdio>
+#include <gameos.hpp>
 
 //---------------------------------------------------------------------------
 
-#define	MAX_DEBUG_WINDOW_LINES		15
-#define	MAX_DEBUG_WINDOW_LINELEN	256
+#define MAX_DEBUG_WINDOW_LINES   15
+#define MAX_DEBUG_WINDOW_LINELEN 256
 
-class GameDebugWindow {
+class GameDebugWindow
+{
+public:
+    bool display;
+    long pos[2];
+    char textBuffer[MAX_DEBUG_WINDOW_LINES][MAX_DEBUG_WINDOW_LINELEN];
+    long linePos;
+    long numLines;
 
-	public:
+    static HGOSFONT3D font;
+    static long fontHeight;
 
-		bool				display;
-		long				pos[2];
-		char				textBuffer[MAX_DEBUG_WINDOW_LINES][MAX_DEBUG_WINDOW_LINELEN];
-		long				linePos;
-		long				numLines;
+public:
+    void* operator new(size_t ourSize);
 
-		static HGOSFONT3D	font;
-		static long			fontHeight;
+    void operator delete(void* us);
 
-	public:
+    void init(void)
+    {
+        display  = false;
+        pos[0]   = 0;
+        pos[1]   = 0;
+        linePos  = 0;
+        numLines = 0;
+        for (long i = 0; i < MAX_DEBUG_WINDOW_LINES; i++)
+            textBuffer[i][0] = '\0';
+    }
 
-		void* operator new (size_t ourSize);
+    GameDebugWindow(void)
+    {
+        init();
+    }
 
-		void operator delete (void* us);
+    void setPos(long x, long y)
+    {
+        pos[0] = x;
+        pos[1] = y;
+    }
 
-		void init (void) {
-			display = false;
-			pos[0] = 0;
-			pos[1] = 0;
-			linePos = 0;
-			numLines = 0;
-			for (long i = 0; i < MAX_DEBUG_WINDOW_LINES; i++)
-				textBuffer[i][0] = '\0';
-		}
-		
-		GameDebugWindow (void) {
-			init();
-		}
+    void open(long x = -1, long y = -1)
+    {
+        if ((x > -1) && (y > -1))
+            setPos(x, y);
+        display = true;
+    }
 
-		void setPos (long x, long y) {
-			pos[0] = x;
-			pos[1] = y;
-		}
-		
-		void open (long x = -1, long y = -1) {
-			if ((x > -1) && (y > -1))
-				setPos(x, y);
-			display = true;
-		}
+    void close(void)
+    {
+        display = false;
+    }
 
-		void close (void) {
-			display = false;
-		}
+    void toggle(void)
+    {
+        if (display)
+            close();
+        else
+            open();
+    }
 
-		void toggle (void) {
-			if (display)
-				close();
-			else
-				open();
-		}
+    ~GameDebugWindow(void)
+    {
+        destroy();
+    }
 
-		~GameDebugWindow (void) {
-			destroy();
-		}
-		
-		virtual void destroy (void) 
-		{
-			if (font) 
-			{
-				gos_DeleteFont(font);
-				font = NULL;
-			}
-		}
-		
-		void print (const char* s);
+    virtual void destroy(void)
+    {
+        if (font)
+        {
+            gos_DeleteFont(font);
+            font = NULL;
+        }
+    }
 
-		void render (void);
+    void print(const char* s);
 
-		void clear (void) {
-			numLines = 0;
-			linePos = 0;
-			for (long i = 0; i < MAX_DEBUG_WINDOW_LINES; i++)
-				textBuffer[i][0] = '\0';
-		}
+    void render(void);
 
-		static void setFont (const char* fontFile);
+    void clear(void)
+    {
+        numLines = 0;
+        linePos  = 0;
+        for (long i = 0; i < MAX_DEBUG_WINDOW_LINES; i++)
+            textBuffer[i][0] = '\0';
+    }
+
+    static void setFont(const char* fontFile);
 };
-
-//***************************************************************************
-
-#endif
-
-
-
-

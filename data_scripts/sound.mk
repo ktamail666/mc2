@@ -1,4 +1,4 @@
-SOUNDS_INPUT = ..$(PATH_SEPARATOR)sound
+SOUNDS_INPUT = $(SRC_DATA_ROOT)/sound
 SOUNDS_OUTPUT = $(DST_DATA_ROOT)$(PATH_SEPARATOR)sound
 
 # see https://www.gnu.org/software/make/manual/html_node/Flavors.html#Flavors for changing this to := instead

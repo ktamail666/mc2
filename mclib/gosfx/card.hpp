@@ -4,156 +4,113 @@
 
 #pragma once
 
-#include"gosfx.hpp"
-#include"singleton.hpp"
-#include<mlr/mlr.hpp>
+#include "gosfx.hpp"
+#include "singleton.hpp"
+#include <mlr/mlr.hpp>
 
-namespace MidLevelRenderer {class MLRCardCloud;}
+namespace MidLevelRenderer {
+class MLRCardCloud;
+}
 
-namespace gosFX
+namespace gosFX {
+//############################################################################
+//########################  Card__Specification  #############################
+//############################################################################
+
+class Card;
+
+class Card__Specification : public Singleton__Specification
 {
-	//############################################################################
-	//########################  Card__Specification  #############################
-	//############################################################################
+    friend class Card;
 
-	class Card;
+    //----------------------------------------------------------------------
+    // Constructors/Destructors
+    //
+protected:
+    Card__Specification(Stuff::MemoryStream* stream, int gfx_version);
 
-	class Card__Specification:
-		public Singleton__Specification
-	{
-		friend class Card;
+public:
+    Card__Specification();
 
-	//----------------------------------------------------------------------
-	// Constructors/Destructors
-	//
-	protected:
-		Card__Specification(
-			Stuff::MemoryStream *stream,
-			int gfx_version
-		);
+    void Save(Stuff::MemoryStream* stream);
 
-	public:
-		Card__Specification();
-
-		void
-			Save(Stuff::MemoryStream *stream);
-
-		void 
-			BuildDefaults();
-	
-
-		bool 
-			IsDataValid(bool fix_data=false);
+    void BuildDefaults();
 
 
-		static Card__Specification*
-			Make(
-				Stuff::MemoryStream *stream,
-				int gfx_version
-			);
+    bool IsDataValid(bool fix_data = false);
 
-		void
-			Copy(Card__Specification *spec);
 
-	//-------------------------------------------------------------------------
-	// FCurves
-	//
-	public:
-		SeededCurveOf<ConstantCurve, ComplexCurve,Curve::e_ConstantComplexType>
-			m_halfHeight,
-			m_aspectRatio;
-		SeededCurveOf<ComplexCurve, SplineCurve,Curve::e_ComplexSplineType>
-			m_index;
-		ConstantCurve
-			m_UOffset,
-			m_VOffset,
-			m_USize,
-			m_VSize;
+    static Card__Specification* Make(Stuff::MemoryStream* stream, int gfx_version);
 
-		bool
-			m_animated;
-		BYTE
-			m_width;
+    void Copy(Card__Specification* spec);
 
-		void
-			SetWidth();
-	};
+    //-------------------------------------------------------------------------
+    // FCurves
+    //
+public:
+    SeededCurveOf<ConstantCurve, ComplexCurve, Curve::e_ConstantComplexType> m_halfHeight, m_aspectRatio;
+    SeededCurveOf<ComplexCurve, SplineCurve, Curve::e_ComplexSplineType> m_index;
+    ConstantCurve m_UOffset, m_VOffset, m_USize, m_VSize;
 
-	//############################################################################
-	//#############################  Card  #################################
-	//############################################################################
+    bool m_animated;
+    BYTE m_width;
 
-	class Card : public Singleton
-	{
-	//----------------------------------------------------------------------------
-	// Class Registration Support
-	//
-	public:
-		static void InitializeClass();
-		static void	TerminateClass();
+    void SetWidth();
+};
 
-		typedef Card__Specification Specification;
+//############################################################################
+//#############################  Card  #################################
+//############################################################################
 
-	//----------------------------------------------------------------------------
-	// Class Data Support
-	//
-	protected:
-		Card(
-			Specification *spec,
-			unsigned flags
-		);
-		~Card();
+class Card : public Singleton
+{
+    //----------------------------------------------------------------------------
+    // Class Registration Support
+    //
+public:
+    static void InitializeClass();
+    static void TerminateClass();
 
-		Stuff::Scalar
-			m_halfX,
-			m_halfY;
-		MidLevelRenderer::MLRCardCloud
-			*m_cardCloud;
-		Stuff::Point3D
-			m_vertices[4];
-		Stuff::RGBAColor
-			m_colors[4];
-		Stuff::Vector2DOf<Stuff::Scalar>
-			m_uvs[4];
-		const int
-			m_cardCount;
+    typedef Card__Specification Specification;
 
-	public:
-		static Card*
-			Make(
-				Specification *spec,
-				unsigned flags
-			);
+    //----------------------------------------------------------------------------
+    // Class Data Support
+    //
+protected:
+    Card(Specification* spec, unsigned flags);
+    ~Card();
 
-		Specification*
-			GetSpecification()
-				{
-					Check_Object(this);
-					return
-						Cast_Object(Specification*, m_specification);
-				}
+    Stuff::Scalar m_halfX, m_halfY;
+    MidLevelRenderer::MLRCardCloud* m_cardCloud;
+    Stuff::Point3D m_vertices[4];
+    Stuff::RGBAColor m_colors[4];
+    Stuff::Vector2DOf<Stuff::Scalar> m_uvs[4];
+    const int m_cardCount;
 
-		static ClassData
-			*DefaultData;
+public:
+    static Card* Make(Specification* spec, unsigned flags);
 
-	//----------------------------------------------------------------------------
-	// Testing
-	//
-	public:
-		void
-			TestInstance() const;
+    Specification* GetSpecification()
+    {
+        Check_Object(this);
+        return Cast_Object(Specification*, m_specification);
+    }
 
-	//----------------------------------------------------------------------------
-	// API
-	//
-	public:
-		void
-			Start(ExecuteInfo *info);
-		bool
-			Execute(ExecuteInfo *info);
-		void
-			Draw(DrawInfo *info);
-		void
-			Kill();
-	};
+    static ClassData* DefaultData;
+
+    //----------------------------------------------------------------------------
+    // Testing
+    //
+public:
+    void TestInstance() const;
+
+    //----------------------------------------------------------------------------
+    // API
+    //
+public:
+    void Start(ExecuteInfo* info);
+    bool Execute(ExecuteInfo* info);
+    void Draw(DrawInfo* info);
+    void Kill();
+};
 }

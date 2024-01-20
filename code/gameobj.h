@@ -1025,7 +1025,7 @@ class GameObject {
 		
 		virtual long getCaptureBlocker (GameObjectPtr capturingMover, GameObjectPtr* blockerList = NULL);
 
-		virtual long kill (void);
+		virtual long kill ();
 
 		virtual bool isMarine(void) {
 			return(false);

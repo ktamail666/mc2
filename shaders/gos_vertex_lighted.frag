@@ -21,8 +21,9 @@ void main(void)
 #ifdef ENABLE_TEXTURE1
     c *= texture(tex1, Texcoord);
 #endif
-	if(fog_color.x>0.0 || fog_color.y>0.0 || fog_color.z>0.0 || fog_color.w>0.0)
-    	c.rgb = mix(fog_color.rgb, c.rgb, FogValue);
+    if (fog_color.x > 0.0 || fog_color.y > 0.0 || fog_color.z > 0.0 || fog_color.w > 0.0)
+    {
+        c.rgb = mix(fog_color.rgb, c.rgb, FogValue);
+    }
     FragColor = c;
 }
-

@@ -8,29 +8,12 @@
 // Copyright (C) Microsoft Corporation. All rights reserved.                 //
 //===========================================================================//
 
-#ifndef TGL_H
 #include"tgl.h"
-#endif
-
-#ifndef CLIP_H
 #include"clip.h"
-#endif
-
-#ifndef TIMING_H
 #include"timing.h"
-#endif
-
-#ifndef TERRAIN_H
 #include"terrain.h"
-#endif
-
-#ifndef CAMERA_H
 #include"camera.h"
-#endif
-
-#ifndef TXMMGR_H
 #include"txmmgr.h"
-#endif
 
 #include "platform_str.h"
 #include <stddef.h> // linux offsetof()
@@ -39,7 +22,6 @@
 // Include Files
 #include<toolos.hpp>
 
-#define USE_ASSEMBLY
 //-------------------------------------------------------------------------------
 // Statics
 Stuff::LinearMatrix4D 	*TG_Shape::s_cameraOrigin = NULL;
@@ -350,8 +332,8 @@ TG_ShapePtr TG_TypeShape::CreateFrom (void)
 {
 	TG_ShapePtr newShape = NULL;
 	//newShape = (TG_ShapePtr)TG_Shape::tglHeap->Malloc(sizeof(TG_Shape));
-	void* memarea = TG_Shape::tglHeap->Malloc(sizeof(TG_Shape));
-	newShape = ::new(memarea) TG_Shape();
+	//void* memarea = TG_Shape::tglHeap->Malloc(sizeof(TG_Shape));
+	newShape = new TG_Shape();
 	gosASSERT(newShape != NULL);
 	
 	//listOfVertices
@@ -1522,12 +1504,12 @@ long TG_TypeShape::SetTextureAlpha (DWORD textureNum, bool alphaFlag)
 
 //-------------------------------------------------------------------------------
 // TG_Shape
-void *TG_Shape::operator new (size_t mySize)
+void *TG_Shape::operator new (size_t mySize) noexcept
 {
 	void *result = TG_Shape::tglHeap->Malloc(mySize);
 	return result;
 }
- 
+
 //-------------------------------------------------------------------------------
  void TG_Shape::operator delete (void *us)
 {

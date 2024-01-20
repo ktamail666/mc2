@@ -28,7 +28,7 @@
 //***************************************************************
 
 
-
+#include <algorithm>
 #include"platform_windows.h"
 #include<stdio.h>
 #include"ewcharstring.h"
@@ -722,7 +722,7 @@ void EWCharString::Format( const EWCSChar* p_Str, ... )
 			else
 			{
 			   Item_Len = StrSize(p_Next_Arg);
-			   Item_Len = max(1, Item_Len);
+			   Item_Len = std::max(1, Item_Len);
 			}
 			break;
 		}
@@ -736,7 +736,7 @@ void EWCharString::Format( const EWCSChar* p_Str, ... )
 			else
 			{
 			   Item_Len = wcslen(p_Next_Arg);
-			   Item_Len = max(1, Item_Len);
+			   Item_Len = std::max(1, Item_Len);
 			}
 #else
 			const char* p_Next_Arg = va_arg(Arg_List, const char*);
@@ -745,7 +745,7 @@ void EWCharString::Format( const EWCSChar* p_Str, ... )
 			else
 			{
 			   Item_Len = lstrlenA(p_Next_Arg);
-			   Item_Len = max(1, Item_Len);
+			   Item_Len = std::max(1, Item_Len);
 			}
 #endif
 			break;
@@ -760,7 +760,7 @@ void EWCharString::Format( const EWCSChar* p_Str, ... )
 			else
 			{
 			   Item_Len = lstrlenA(p_Next_Arg);
-			   Item_Len = max(1, Item_Len);
+			   Item_Len = std::max(1, Item_Len);
 			}
 			break;
 		}
@@ -775,7 +775,7 @@ void EWCharString::Format( const EWCSChar* p_Str, ... )
 			else
 			{
 			   Item_Len = wcslen(pstrNextArg);
-			   Item_Len = max(1, Item_Len);
+			   Item_Len = std::max(1, Item_Len);
 			}
 			break;
 		}
@@ -785,10 +785,10 @@ void EWCharString::Format( const EWCSChar* p_Str, ... )
 		// adjust nItemLen for strings
 		if (Item_Len != 0)
 		{
-			Item_Len = max(Item_Len, Width);
+			Item_Len = std::max(Item_Len, Width);
 			if (Precision != 0)
 			{
-				Item_Len = min(Item_Len, Precision);
+				Item_Len = std::min(Item_Len, Precision);
 			}
 		}
 		else
@@ -804,7 +804,7 @@ void EWCharString::Format( const EWCSChar* p_Str, ... )
 			case 'o':
 				va_arg(Arg_List, int);
 				Item_Len = 32;
-				Item_Len = max(Item_Len, Width + Precision);
+				Item_Len = std::max(Item_Len, Width + Precision);
 				break;
 
 			case 'e':
@@ -813,13 +813,13 @@ void EWCharString::Format( const EWCSChar* p_Str, ... )
 			case 'G':
 				va_arg(Arg_List, double);
 				Item_Len = 128;
-				Item_Len = max(Item_Len, Width + Precision);
+				Item_Len = std::max(Item_Len, Width + Precision);
 				break;
 
 			case 'p':
 				va_arg(Arg_List, void*);
 				Item_Len = 32;
-				Item_Len = max(Item_Len, Width + Precision);
+				Item_Len = std::max(Item_Len, Width + Precision);
 				break;
 
 			// no output
@@ -1409,7 +1409,7 @@ void EWCharString::Format( const char* p_Str, ... )
 			else
 			{
 			   Item_Len = lstrlenA(p_Next_Arg);
-			   Item_Len = max(1, Item_Len);
+			   Item_Len = std::max(1, Item_Len);
 			}
 			break;
 		}
@@ -1423,7 +1423,7 @@ void EWCharString::Format( const char* p_Str, ... )
 			else
 			{
 			   Item_Len = wcslen(p_Next_Arg);
-			   Item_Len = max(1, Item_Len);
+			   Item_Len = std::max(1, Item_Len);
 			}
 #else
 			const char* p_Next_Arg = va_arg(Arg_List, const char*);
@@ -1432,7 +1432,7 @@ void EWCharString::Format( const char* p_Str, ... )
 			else
 			{
 			   Item_Len = lstrlenA(p_Next_Arg);
-			   Item_Len = max(1, Item_Len);
+			   Item_Len = std::max(1, Item_Len);
 			}
 #endif
 			break;
@@ -1447,7 +1447,7 @@ void EWCharString::Format( const char* p_Str, ... )
 			else
 			{
 			   Item_Len = lstrlenA(p_Next_Arg);
-			   Item_Len = max(1, Item_Len);
+			   Item_Len = std::max(1, Item_Len);
 			}
 			break;
 		}
@@ -1462,7 +1462,7 @@ void EWCharString::Format( const char* p_Str, ... )
 			else
 			{
 			   Item_Len = wcslen(pstrNextArg);
-			   Item_Len = max(1, Item_Len);
+			   Item_Len = std::max(1, Item_Len);
 			}
 			break;
 		}
@@ -1472,10 +1472,10 @@ void EWCharString::Format( const char* p_Str, ... )
 		// adjust nItemLen for strings
 		if (Item_Len != 0)
 		{
-			Item_Len = max(Item_Len, Width);
+			Item_Len = std::max(Item_Len, Width);
 			if (Precision != 0)
 			{
-				Item_Len = min(Item_Len, Precision);
+				Item_Len = std::min(Item_Len, Precision);
 			}
 		}
 		else
@@ -1491,7 +1491,7 @@ void EWCharString::Format( const char* p_Str, ... )
 			case 'o':
 				va_arg(Arg_List, int);
 				Item_Len = 32;
-				Item_Len = max(Item_Len, Width + Precision);
+				Item_Len = std::max(Item_Len, Width + Precision);
 				break;
 
 			case 'e':
@@ -1500,13 +1500,13 @@ void EWCharString::Format( const char* p_Str, ... )
 			case 'G':
 				va_arg(Arg_List, double);
 				Item_Len = 128;
-				Item_Len = max(Item_Len, Width + Precision);
+				Item_Len = std::max(Item_Len, Width + Precision);
 				break;
 
 			case 'p':
 				va_arg(Arg_List, void*);
 				Item_Len = 32;
-				Item_Len = max(Item_Len, Width + Precision);
+				Item_Len = std::max(Item_Len, Width + Precision);
 				break;
 
 			// no output

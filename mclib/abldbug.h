@@ -6,265 +6,266 @@
 //								ABLDBUG.H
 //
 //***************************************************************************
-
- 
 #ifndef ABLDBUG_H
 #define ABLDBUG_H
 
-#ifndef DABLDBUG_H
-#include"dabldbug.h"
-#endif
-
-#ifndef ABLENV_H
-#include"ablenv.h"
-#endif
+#include "dabldbug.h"
+#include "ablenv.h"
 
 //***************************************************************************
 
-typedef enum {
-	DEBUG_COMMAND_SET_MODULE,
-	DEBUG_COMMAND_TRACE,
-	DEBUG_COMMAND_STEP,
-	DEBUG_COMMAND_BREAKPOINT_SET,
-	DEBUG_COMMAND_BREAKPOINT_REMOVE,
-	DEBUG_COMMAND_WATCH_SET,
-	DEBUG_COMMAND_WATCH_REMOVE_ALL,
-	DEBUG_COMMAND_PRINT,
-	DEBUG_COMMAND_CONTINUE,
-	DEBUG_COMMAND_HELP,
-	DEBUG_COMMAND_INFO,
-	NUM_DEBUG_COMMANDS
+typedef enum
+{
+    DEBUG_COMMAND_SET_MODULE,
+    DEBUG_COMMAND_TRACE,
+    DEBUG_COMMAND_STEP,
+    DEBUG_COMMAND_BREAKPOINT_SET,
+    DEBUG_COMMAND_BREAKPOINT_REMOVE,
+    DEBUG_COMMAND_WATCH_SET,
+    DEBUG_COMMAND_WATCH_REMOVE_ALL,
+    DEBUG_COMMAND_PRINT,
+    DEBUG_COMMAND_CONTINUE,
+    DEBUG_COMMAND_HELP,
+    DEBUG_COMMAND_INFO,
+    NUM_DEBUG_COMMANDS
 } DebugCommandCode;
 
 //***************************************************************************
 
-typedef struct _Watch {
-	SymTableNodePtr		idPtr;
-	bool				store;
-	bool				breakOnStore;
-	bool				fetch;
-	bool				breakOnFetch;
+typedef struct _Watch
+{
+    SymTableNodePtr idPtr;
+    bool store;
+    bool breakOnStore;
+    bool fetch;
+    bool breakOnFetch;
 } Watch;
 
 typedef Watch* WatchPtr;
 
-class WatchManager {
+class WatchManager
+{
+protected:
+    long maxWatches;
+    long numWatches;
+    WatchPtr watches;
 
-	protected:
+public:
+    void* operator new(size_t mySize);
 
-		long			maxWatches;
-		long			numWatches;
-		WatchPtr		watches;
+    void operator delete(void* us);
 
-	public:
+    void init(void)
+    {
+        maxWatches = 0;
+        maxWatches = 0;
+        watches    = NULL;
+    }
 
-		void* operator new (size_t mySize);
+    long init(long max);
 
-		void operator delete (void* us);
+    void destroy(void);
 
-		void init (void) {
-			maxWatches = 0;
-			maxWatches = 0;
-			watches = NULL;
-		}
+    WatchManager(void)
+    {
+        init();
+    }
 
-		long init (long max);
+    ~WatchManager(void)
+    {
+        destroy();
+    }
 
-		void destroy (void);
+    WatchPtr add(SymTableNodePtr idPtr);
 
-		WatchManager (void) {
-			init();
-		}
+    long remove(SymTableNodePtr idPtr);
 
-		~WatchManager (void) {
-			destroy();
-		}
+    long removeAll(void);
 
-		WatchPtr add (SymTableNodePtr idPtr);
+    long setStore(SymTableNodePtr idPtr, bool state, bool breakToDebug = false);
 
-		long remove (SymTableNodePtr idPtr);
+    long setFetch(SymTableNodePtr idPtr, bool state, bool breakToDebug = false);
 
-		long removeAll (void);
-		
-		long setStore (SymTableNodePtr idPtr, bool state, bool breakToDebug = false);
-		
-		long setFetch (SymTableNodePtr idPtr, bool state, bool breakToDebug = false);
+    bool getStore(SymTableNodePtr idPtr);
 
-		bool getStore (SymTableNodePtr idPtr);
+    bool getFetch(SymTableNodePtr idPtr);
 
-		bool getFetch (SymTableNodePtr idPtr);
-
-		void print (void);
+    void print(void);
 };
 
 //---------------------------------------------------------------------------
 
-class BreakPointManager {
+class BreakPointManager
+{
+protected:
+    long maxBreakPoints;
+    long numBreakPoints;
+    long* breakPoints;
 
-	protected:
+public:
+    void* operator new(size_t mySize);
 
-		long			maxBreakPoints;
-		long			numBreakPoints;
-		long*			breakPoints;
+    void operator delete(void* us);
 
-	public:
+    void init(void)
+    {
+        maxBreakPoints = 0;
+        numBreakPoints = 0;
+        breakPoints    = NULL;
+    }
 
-		void* operator new (size_t mySize);
+    long init(long max);
 
-		void operator delete (void* us);
+    void destroy(void);
 
-		void init (void) {
-			maxBreakPoints = 0;
-			numBreakPoints = 0;
-			breakPoints = NULL;
-		}
+    BreakPointManager(void)
+    {
+        init();
+    }
 
-		long init (long max);
+    ~BreakPointManager(void)
+    {
+        destroy();
+    }
 
-		void destroy (void);
+    long add(long lineNumber);
 
-		BreakPointManager (void) {
-			init();
-		}
+    long remove(long lineNumber);
 
-		~BreakPointManager (void) {
-			destroy();
-		}
+    long removeAll(void);
 
-		long add (long lineNumber);
+    bool isBreakPoint(long lineNumber);
 
-		long remove (long lineNumber);
-
-		long removeAll (void);
-
-		bool isBreakPoint (long lineNumber);
-
-		void print (void);
+    void print(void);
 };
 
 //---------------------------------------------------------------------------
 
-#define	WATCH_STORE_OFF		1
-#define	WATCH_STORE_ON		2
-#define	WATCH_FETCH_OFF		4
-#define	WATCH_FETCH_ON		8
-#define	WATCH_BREAK			16
+#define WATCH_STORE_OFF 1
+#define WATCH_STORE_ON  2
+#define WATCH_FETCH_OFF 4
+#define WATCH_FETCH_ON  8
+#define WATCH_BREAK     16
 
-class Debugger {
+class Debugger
+{
+protected:
+    ABLModulePtr module;                     // Current executing module
+    WatchManagerPtr watchManager;            // Current executing watch manager
+    BreakPointManagerPtr breakPointManager;  // Current executing breakpt manager
 
-	protected:
+    ABLModulePtr debugModule;  // Current module being debugged
 
-		ABLModulePtr			module;					// Current executing module
-		WatchManagerPtr			watchManager;			// Current executing watch manager
-		BreakPointManagerPtr	breakPointManager;		// Current executing breakpt manager
+    bool enabled;
+    bool debugCommand;
+    bool halt;
+    bool trace;
+    bool step;
+    bool traceEntry;
+    bool traceExit;
 
-		ABLModulePtr			debugModule;			// Current module being debugged
+    static char message[512];
 
-		bool					enabled;
-		bool					debugCommand;
-		bool					halt;
-		bool					trace;
-		bool					step;
-		bool					traceEntry;
-		bool					traceExit;
+    void (*printCallback)(const char* s);
 
-		static char				message[512];
+public:
+    void* operator new(size_t mySize);
 
-		void (*printCallback)(const char* s);
+    void operator delete(void* us);
 
-	public:
+    void init(void)
+    {
+        module            = NULL;
+        watchManager      = NULL;
+        breakPointManager = NULL;
+        debugModule       = module;
+        enabled           = false;
+        debugCommand      = false;
+        halt              = false;
+        trace             = false;
+        step              = false;
+        traceEntry        = false;
+        traceExit         = false;
+        printCallback     = NULL;
+    }
 
-		void* operator new (size_t mySize);
+    long init(void (*callback)(const char* s), ABLModulePtr _module);
 
-		void operator delete (void* us);
+    void destroy(void);
 
-		void init (void) {
-			module = NULL;
-			watchManager = NULL;
-			breakPointManager = NULL;
-			debugModule = module;
-			enabled = false;
-			debugCommand = false;
-			halt = false;
-			trace = false;
-			step = false;
-			traceEntry = false;
-			traceExit = false;
-			printCallback = NULL;
-		}
+    Debugger(void)
+    {
+        init();
+    }
 
-		long init (void (*callback)(const char* s), ABLModulePtr _module);
+    ~Debugger(void)
+    {
+        destroy();
+    }
 
-		void destroy (void);
+    void enable(void)
+    {
+        enabled = true;
+    }
 
-		Debugger (void) {
-			init();
-		}
+    void disable(void)
+    {
+        enabled = false;
+    }
 
-		~Debugger (void) {
-			destroy();
-		}
+    bool isEnabled(void)
+    {
+        return (enabled);
+    }
 
-		void enable (void) {
-			enabled = true;
-		}
+    long print(const char* s);
 
-		void disable (void) {
-			enabled = false;
-		}
+    void setModule(ABLModulePtr _module);
 
-		bool isEnabled (void) {
-			return(enabled);
-		}
+    long setWatch(long states);
 
-		long print (const char* s);
+    long addBreakPoint(void);
 
-		void setModule (ABLModulePtr _module);
+    long removeBreakPoint(void);
 
-		long setWatch (long states);
+    void sprintStatement(char* dest);
 
-		long addBreakPoint (void);
+    void sprintLineNumber(char* dest);
 
-		long removeBreakPoint (void);
+    void sprintDataValue(char* dest, StackItemPtr data, TypePtr dataType);
 
-		void sprintStatement (char* dest);
+    long sprintSimpleValue(char* dest, SymTableNodePtr symbol);
 
-		void sprintLineNumber (char* dest);
+    long sprintArrayValue(char* dest, SymTableNodePtr symbol, char* subscriptString);
 
-		void sprintDataValue (char* dest, StackItemPtr data, TypePtr dataType);
+    long sprintValue(char* dest, char* exprString);
 
-		long sprintSimpleValue (char* dest, SymTableNodePtr symbol);
+    long traceStatementExecution(void);
 
-		long sprintArrayValue (char* dest, SymTableNodePtr symbol, char* subscriptString);
+    long traceRoutineEntry(SymTableNodePtr idPtr);
 
-		long sprintValue (char* dest, char* exprString);
+    long traceRoutineExit(SymTableNodePtr idPtr);
 
-		long traceStatementExecution (void);
+    long traceDataStore(SymTableNodePtr id, TypePtr idType, StackItemPtr target, TypePtr targetType);
 
-		long traceRoutineEntry (SymTableNodePtr idPtr);
+    long traceDataFetch(SymTableNodePtr id, TypePtr idType, StackItemPtr data);
 
-		long traceRoutineExit (SymTableNodePtr idPtr);
+    void showValue(void);
 
-		long traceDataStore (SymTableNodePtr id, TypePtr idType, StackItemPtr target, TypePtr targetType);
+    void assignVariable(void);
 
-		long traceDataFetch (SymTableNodePtr id, TypePtr idType, StackItemPtr data);
+    void displayModuleInstanceRegistry(void);
 
-		void showValue (void);
+    void processCommand(long commandId, char* strParam1, int numParam1, ABLModulePtr moduleParam1);
 
-		void assignVariable (void);
+    void debugMode(void);
 
-		void displayModuleInstanceRegistry (void);
-
-		void processCommand (long commandId, char* strParam1, int numParam1, ABLModulePtr moduleParam1);
-
-		void debugMode (void);
-
-		ABLModulePtr getDebugModule (void) {
-			return(debugModule);
-		}
+    ABLModulePtr getDebugModule(void)
+    {
+        return (debugModule);
+    }
 };
 
 //***************************************************************************
 
 #endif
-

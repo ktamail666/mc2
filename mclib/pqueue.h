@@ -17,68 +17,76 @@
 //--------------------------------
 // Structure and Class Definitions
 
-typedef struct _PQNode {
-	int32_t         key;			// sort value
-	uint32_t        id;				// hash value for this map position
-	int32_t         row;			// HB-specific
-	int32_t         col;			// HB-specific
+typedef struct _PQNode
+{
+    int32_t key;  // sort value
+    uint32_t id;  // hash value for this map position
+    int32_t row;  // HB-specific
+    int32_t col;  // HB-specific
 } PQNode;
 
-class PriorityQueue {
+class PriorityQueue
+{
+protected:
+    PQNode* pqList;
+    int32_t maxItems;
+    int32_t numItems;
+    int32_t keyMin;
 
-	protected:
+    void downHeap(int curIndex);
 
-		PQNode*		pqList;
-		int32_t     maxItems;
-		int32_t     numItems;
-		int32_t     keyMin;
+    void upHeap(int curIndex);
 
-		void downHeap (int curIndex);
+public:
+    void init(void)
+    {
+        pqList   = NULL;
+        numItems = 0;
+    }
 
-		void upHeap (int curIndex);
+    PriorityQueue(void)
+    {
+        init();
+    }
 
-	public:
+    int init(int maxItems, int keyMinValue = -2000000);
 
-		void init (void) {
-			pqList = NULL;
-			numItems = 0;
-		}
+    int insert(PQNode& item);
 
-		PriorityQueue (void) {
-			init();
-		}
+    void remove(PQNode& item);
 
-		int init (int maxItems, int keyMinValue = -2000000);
+    void change(int itemIndex, int newValue);
 
-		int insert (PQNode& item);
+    int find(unsigned int id);
 
-		void remove (PQNode& item);
+    int findByKey(int32_t key, uint32_t id, int startIndex = 1);
 
-		void change (int itemIndex, int newValue);
+    void clear(void)
+    {
+        numItems = 0;
+    }
 
-		int find (unsigned int id);
+    int getNumItems(void)
+    {
+        return (numItems);
+    }
 
-		int findByKey (int32_t key, uint32_t id, int startIndex = 1);
-		
-		void clear (void) {
-			numItems = 0;
-		}
+    bool isEmpty(void)
+    {
+        return (numItems == 0);
+    }
 
-		int getNumItems (void) { return(numItems); }
-		
-		bool isEmpty (void) {
-			return(numItems == 0);
-		}
-		
-		PQNode* getItem (int itemIndex) {
-			return(&pqList[itemIndex]);
-		}
+    PQNode* getItem(int itemIndex)
+    {
+        return (&pqList[itemIndex]);
+    }
 
-		void destroy (void);
+    void destroy(void);
 
-		~PriorityQueue (void) {
-			destroy();
-		}
+    ~PriorityQueue(void)
+    {
+        destroy();
+    }
 };
 
 typedef PriorityQueue* PriorityQueuePtr;

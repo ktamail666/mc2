@@ -1,7 +1,5 @@
 #include"vfx.h"
 
-//extern enum { CPU_UNKNOWN, CPU_PENTIUM, CPU_MMX, CPU_KATMAI } Processor;
-
 extern char AlphaTable[];
 static unsigned int SourceWidth,tWidth,tHeight,DestWidth;			// Used for code optimizing
 //static _int64 xmask=-1;

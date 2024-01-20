@@ -1,16 +1,15 @@
-#include<inttypes.h>
-#include <stdio.h>
-// errno + strerror
-#include <errno.h>
-#include <string.h>
-
 #include "gameos.hpp"
 #include "gos_font.h"
+
+#include <cstdio>
+#include <cerrno>
+#include <cstring>
 
 bool gos_load_glyphs(const char* glyphFile, gosGlyphInfo& gi)
 {
     FILE* glyph_info = fopen(glyphFile, "rb");
-    if(!glyph_info) {
+    if (!glyph_info)
+    {
         int last_err = errno;
         SPEW(("fopen: %s\n", strerror(last_err)));
         return false;
@@ -27,16 +26,12 @@ bool gos_load_glyphs(const char* glyphFile, gosGlyphInfo& gi)
 
     gi.glyphs_ = new gosGlyphMetrics[gi.num_glyphs_];
 
-    while(num_structs_read!= gi.num_glyphs_) {
-        num_structs_read+= fread(&gi.glyphs_[num_structs_read], 
-                sizeof(gosGlyphMetrics), 
-                gi.num_glyphs_ - num_structs_read,
-                glyph_info);
+    while (num_structs_read != gi.num_glyphs_)
+    {
+        num_structs_read += fread(&gi.glyphs_[num_structs_read], sizeof(gosGlyphMetrics), gi.num_glyphs_ - num_structs_read, glyph_info);
     }
 
     fclose(glyph_info);
 
     return true;
 }
-
-

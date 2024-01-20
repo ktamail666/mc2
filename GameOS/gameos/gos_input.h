@@ -4,14 +4,16 @@
 
 namespace input {
 
-enum KeyState {
-    KS_FREE = 0, // in not pressed state
-    KS_PRESSED, // just pressed
-    KS_HELD,    // in pressed state 
-    KS_RELEASED // just released
+enum KeyState
+{
+    KS_FREE = 0,  // in not pressed state
+    KS_PRESSED,   // just pressed
+    KS_HELD,      // in pressed state
+    KS_RELEASED   // just released
 };
 
-struct MouseInfo {
+struct MouseInfo
+{
     MouseInfo();
 
     static const int NUM_BUTTONS = 5;
@@ -24,7 +26,8 @@ struct MouseInfo {
     KeyState button_state_[NUM_BUTTONS];
 };
 
-struct KeyboardInfo {
+struct KeyboardInfo
+{
     KeyboardInfo();
     bool key_pressed_;
     bool key_released_;

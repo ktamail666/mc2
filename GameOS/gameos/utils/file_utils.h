@@ -1,20 +1,15 @@
-#ifndef __FILE_UTILS__
-#define __FILE_UTILS__
+#pragma once
 
-#include <stdint.h>
+#include <cstdint>
 #include <string>
 
 namespace filesystem {
 
 extern const char kPathSeparatorAsChar;
-extern const char *const kPathSeparator;
+extern const char* const kPathSeparator;
 
 uint64_t get_file_mod_time_ms(const char* filename);
 
-
-std::string get_path(const char* fname);
+std::string get_path(const char* filename);
 
 }
-
-#endif //__FILE_UTILS__
-

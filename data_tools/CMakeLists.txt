@@ -36,10 +36,9 @@ target_link_libraries(aseconv
     windows
     ZLIB::ZLIB
     SDL2::SDL2main
-    GLEW::GLEW
     ${SDL2_mixer}
     ${ADDITIONAL_LIBS}
-    OpenGL::GL)
+)
 
 add_executable(makersp makersp.cpp)
 target_link_libraries(makersp

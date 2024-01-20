@@ -25,7 +25,7 @@ const char* getStringById__(unsigned int id) {
     if(gpStrings->count(id)) {
         return (*gpStrings)[id];
     } else {
-        return 0;
+        return nullptr;
     }
 }
 

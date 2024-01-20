@@ -9,11 +9,7 @@
 // Copyright (C) Microsoft Corporation. All rights reserved.                 //
 //===========================================================================//
 
-#ifndef DHEAP_H
-#define DHEAP_H
-
-//---------------------------------------------------------------------------
-// Class declarations
+#pragma once
 
 struct HeapBlock;
 typedef HeapBlock *HeapBlockPtr;
@@ -23,6 +19,3 @@ typedef HeapManager *HeapManagerPtr;
 
 class UserHeap;
 typedef UserHeap *UserHeapPtr;
-
-//---------------------------------------------------------------------------
-#endif

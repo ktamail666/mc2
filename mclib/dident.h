@@ -8,24 +8,12 @@
 
 #ifndef DIDENT_H
 #define DIDENT_H
-//---------------------------------------------------------------------------
-// Include files
 
-//---------------------------------------------------------------------------
-#define ID_SIZE 8	// enough for an old DOS file name
+#define ID_SIZE 8  // enough for an old DOS file name
 
 class IDString;
-typedef IDString *IDStringPtr;
+typedef IDString* IDStringPtr;
 
 class FullPathFileName;
-typedef FullPathFileName *FullPathFileNamePtr;
-//---------------------------------------------------------------------------
+typedef FullPathFileName* FullPathFileNamePtr;
 #endif
-
-//---------------------------------------------------------------------------
-//
-// Edit Log
-//
-// $Log$
-//
-//---------------------------------------------------------------------------

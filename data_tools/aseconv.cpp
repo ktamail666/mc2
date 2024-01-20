@@ -8,13 +8,10 @@
 //#include "version.h"
 static const char versionStamp[1024] = "00.05.10.2712";
 
-
 #include "../ARM/Microsoft.Xna.Arm.h"
 using namespace Microsoft::Xna::Arm;
 
-
 #include "mclib.h"
-
 #include "common.hpp"
 
 HSTRRES gosResourceHandle = 0;
